@@ -1,11 +1,11 @@
-import './App.css'
-import { EnvConfig } from '~/configs'
+import { ToastContainer } from 'react-toastify'
+import { AppConfig } from '~/configs'
 
 function App() {
   return (
-    <div className='App'>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-      <p className='text-clip'>{EnvConfig.PLCBaseUrl}</p>
+    <div>
+      <ToastContainer />
+      <p className='text-center'>My API: {AppConfig.PLCBaseApi}</p>
     </div>
   )
 }

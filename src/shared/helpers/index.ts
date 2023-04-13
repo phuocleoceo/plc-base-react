@@ -1,1 +1,1 @@
-export * as HttpHelper from './http'
+export * as HttpHelper from './http.helper'

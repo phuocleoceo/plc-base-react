@@ -1,1 +1,1 @@
-export * from './httpStatusCode'
+export * from './httpStatusCode.enum'
