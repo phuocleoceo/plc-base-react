@@ -7,18 +7,17 @@ export const setAccessToken = (accessToken: string) => {
 }
 
 export const getAccessToken = () => {
-  return localStorage.getItem(LocalStorageConstant.AccessToken)
+  return localStorage.getItem(LocalStorageConstant.AccessToken) || ''
 }
 
 export const setRefreshToken = (refreshToken: string) => {
   localStorage.setItem(LocalStorageConstant.RefreshToken, refreshToken)
 }
 
-export const getRefreshTokenFromLS = () => {
-  return localStorage.getItem(LocalStorageConstant.RefreshToken)
+export const getRefreshToken = () => {
+  return localStorage.getItem(LocalStorageConstant.RefreshToken) || ''
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setUserInfo = (userInfor: any) => {
   localStorage.setItem(LocalStorageConstant.UserInformation, JSON.stringify(userInfor))
 }
@@ -28,7 +27,7 @@ export const getUserInfo = () => {
   return result ? JSON.parse(result) : null
 }
 
-export const clearLS = () => {
+export const clear = () => {
   localStorage.removeItem(LocalStorageConstant.AccessToken)
   localStorage.removeItem(LocalStorageConstant.RefreshToken)
   localStorage.removeItem(LocalStorageConstant.UserInformation)
