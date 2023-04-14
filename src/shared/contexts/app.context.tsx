@@ -1,5 +1,7 @@
 import { createContext, useState } from 'react'
 
+import { LocalStorageHelper } from '~/shared/helpers'
+
 interface AppContextInterface {
   isAuthenticated: boolean
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
@@ -7,7 +9,7 @@ interface AppContextInterface {
 }
 
 const initialAppContext: AppContextInterface = {
-  isAuthenticated: false,
+  isAuthenticated: Boolean(LocalStorageHelper.getAccessToken()),
   setIsAuthenticated: () => null,
   reset: () => null
 }

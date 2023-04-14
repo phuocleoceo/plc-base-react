@@ -5,4 +5,4 @@ export interface BaseResponse<T> {
   errors: { [key: string]: string[] }
 }
 
-export type PagedRespone<T> = BaseResponse<{ totalRecords: number; records: T[] }>
+export type PagedResponse<T> = BaseResponse<{ totalRecords: number; records: T[] }>
