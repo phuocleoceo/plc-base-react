@@ -6,7 +6,7 @@ import * as LocalStorageHelper from './localStorage.helper'
 import { EnvConfig, AppConfig } from '~/configs'
 import { HttpStatusCode } from '~/shared/enums'
 import { BaseResponse } from '~/shared/types'
-import { AuthAPI } from '~/data/apis'
+import { AuthAPI } from '~/features/auth/apis'
 
 class Http {
   instance: AxiosInstance
@@ -132,4 +132,4 @@ class Http {
   }
 }
 
-export const HttpHelper = new Http().instance
+export default new Http().instance

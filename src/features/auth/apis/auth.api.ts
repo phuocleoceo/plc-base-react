@@ -14,7 +14,7 @@ import {
   RegisterRequest,
   RegisterResponse,
   RevokeRefreshTokenResponse
-} from '~/data/models'
+} from '~/features/auth/models'
 import { HttpHelper } from '~/shared/helpers'
 
 export function login(body: LoginRequest) {

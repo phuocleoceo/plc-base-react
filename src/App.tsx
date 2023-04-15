@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { AppConfig } from '~/configs'
-import { AuthAPI } from './data/apis'
+import { AuthAPI } from './features/auth/apis'
 
 function App() {
   useEffect(() => {
