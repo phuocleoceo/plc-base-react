@@ -1,25 +1,15 @@
-import { useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
-import { AppConfig } from '~/configs'
-import { AuthAPI } from './features/auth/apis'
+
+import { useRouteElements } from '~/common/routings'
 
 function App() {
-  useEffect(() => {
-    async function testLogin() {
-      const data = await AuthAPI.login({
-        email: 'ht10082001@gmail.com',
-        password: 'phuocleoceo'
-      })
-      console.log(data)
-    }
-    testLogin()
-  }, [])
+  const routeElements = useRouteElements()
 
   return (
     <div>
+      {routeElements}
       <ToastContainer />
-      <p className='text-center'>My API: {AppConfig.PLCBaseApi}</p>
     </div>
   )
 }
