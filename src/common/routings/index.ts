@@ -1,2 +1,3 @@
 export { default as useRouteElements } from './useRouteElements'
-export * from './routeGuard'
+export * from './defaultRoute'
+export * from './guardRoute'

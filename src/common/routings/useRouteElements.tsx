@@ -1,13 +1,8 @@
-import { useRoutes } from 'react-router-dom'
+import { RouteObject, useRoutes } from 'react-router-dom'
 
-import { NotFound } from '~/common/components'
+import { defaultRoute } from './defaultRoute'
 
-const notFoundRoute = {
-  path: '*',
-  element: <NotFound />
-}
-
-const routes = [notFoundRoute]
+const routes: RouteObject[] = [...defaultRoute]
 
 export default function useRouteElements() {
   return useRoutes(routes)
