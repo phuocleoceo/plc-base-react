@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import React from 'react'
 
 import { AppProvider, ReactQueryProvider } from '~/common/contexts'
+import '~/common/locales/i18n/i18n'
 import App from './App'
 import './index.css'
 

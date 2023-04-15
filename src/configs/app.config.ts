@@ -1,5 +1,5 @@
 import { EnvConfig } from './env.config'
 
-export const AppConfig = Object.freeze({
+export const AppConfig = {
   PLCBaseApi: `${EnvConfig.PLCBaseUrl}/api/`
-})
+} as const
