@@ -1,4 +1,5 @@
 import { useRoutes } from 'react-router-dom'
+
 import { NotFound } from '~/common/components'
 
 const notFoundRoute = {
