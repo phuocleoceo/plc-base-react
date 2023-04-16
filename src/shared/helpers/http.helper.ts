@@ -1,8 +1,9 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { toast } from 'react-toastify'
 
-import * as TypeCheckHelper from './typeCheck.helper'
 import * as LocalStorageHelper from './localStorage.helper'
+import * as TypeCheckHelper from './typeCheck.helper'
+import * as TranslateHelper from './translate.helper'
 import { EnvConfig, AppConfig } from '~/configs'
 import { HttpStatusCode } from '~/shared/enums'
 import { BaseResponse } from '~/shared/types'
@@ -72,8 +73,7 @@ class Http {
         for (const key in validateErrors) {
           if (Object.prototype.hasOwnProperty.call(validateErrors, key)) {
             const errorList = validateErrors[key]
-            // TODO: Translate
-            validateMessage += `${key}: ${errorList.join(', ')}\n`
+            validateMessage += errorList.map((error) => TranslateHelper.translate(error)).join('\n')
           }
         }
 
@@ -103,7 +103,10 @@ class Http {
 
         // Recall error request
         return this.refreshTokenRequest.then((accessToken) => {
-          return this.instance({ ...config, headers: { ...config.headers, authorization: accessToken } })
+          return this.instance({
+            ...config,
+            headers: { ...config.headers, authorization: accessToken }
+          })
         })
       }
 

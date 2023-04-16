@@ -6,7 +6,7 @@ export const setAccessToken = (accessToken: string) => {
   localStorage.setItem(LocalStorageConstant.AccessToken, accessToken)
 }
 
-export const getAccessToken = () => {
+export const getAccessToken = (): string => {
   return localStorage.getItem(LocalStorageConstant.AccessToken) || ''
 }
 
@@ -14,7 +14,7 @@ export const setRefreshToken = (refreshToken: string) => {
   localStorage.setItem(LocalStorageConstant.RefreshToken, refreshToken)
 }
 
-export const getRefreshToken = () => {
+export const getRefreshToken = (): string => {
   return localStorage.getItem(LocalStorageConstant.RefreshToken) || ''
 }
 
@@ -22,7 +22,7 @@ export const setUserInfo = (userInfor: any) => {
   localStorage.setItem(LocalStorageConstant.UserInformation, JSON.stringify(userInfor))
 }
 
-export const getUserInfo = () => {
+export const getUserInfo = (): any => {
   const result = localStorage.getItem(LocalStorageConstant.UserInformation)
   return result ? JSON.parse(result) : null
 }
