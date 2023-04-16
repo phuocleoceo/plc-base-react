@@ -1,12 +1,15 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import AccessDeniedIMG from '~/assets/img/AccessDenied.png'
 
 export default function AccessDenied() {
+  const { t } = useTranslation()
+
   return (
     <main className='flex h-screen w-full flex-col items-center justify-center'>
       <img width='40%' height='auto' src={AccessDeniedIMG} alt='notfound' />
-      <h1 className='text-3xl font-extrabold tracking-widest text-gray-900'>Access Denied</h1>
+      <h1 className='text-3xl font-extrabold tracking-widest text-gray-900'>{t('access_denied')}</h1>
       <button className='mt-5'>
         <Link
           to='/'
@@ -14,7 +17,7 @@ export default function AccessDenied() {
         >
           <span className='absolute inset-0 translate-x-0.5 translate-y-0.5 transition-transform group-hover:translate-y-0 group-hover:translate-x-0 bg-orange-400' />
           <span className='relative block border border-current px-8 py-3 text-white'>
-            <span>Go Back</span>
+            <span>{t('go_back')}</span>
           </span>
         </Link>
       </button>
