@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom'
 
-import { AuthLayout } from '~/common/layouts'
 import { Login, Register } from '../pages'
+import { AuthLayout } from '../layouts'
 
 export const authRoute: RouteObject[] = [
   {
