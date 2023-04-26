@@ -1,5 +1,10 @@
 {
   "page_not_found": "Trang này không tồn tại",
   "access_denied": "Truy cập không được phép",
-  "go_back": "Quay lại"
+  "go_back": "Quay lại",
+  "or": "hoặc",
+  "welcome_back": "Chào mừng quay lại",
+  "login": "Đăng nhập",
+  "register": "Đăng ký",
+  "welcome_message": "Công cụ quản lý dự án số 1 cho các nhóm Agile"
 }

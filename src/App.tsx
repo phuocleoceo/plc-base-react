@@ -7,7 +7,7 @@ function App() {
   const routeElements = useRouteElements()
 
   return (
-    <div>
+    <div className='bg-c-111 flex light-theme'>
       {routeElements}
       <ToastContainer />
     </div>

@@ -1,5 +1,10 @@
 {
   "page_not_found": "Page Not Found",
   "access_denied": "Access Denied",
-  "go_back": "Go Back"
+  "go_back": "Go Back",
+  "or": "or",
+  "welcome_back": "Welcome Back",
+  "login": "Login",
+  "register": "Register",
+  "welcome_message": "The #1 software development tool used by agile teams"
 }
