@@ -34,5 +34,8 @@
   "identityInformation": "Email, phone number or identity number",
   "identityInformation_required": "Identity information is required !",
   "sending_recovery_email": "Sending recovery email...",
-  "send_recovery_email": "Send recovery email"
+  "send_recovery_email": "Send recovery email",
+  "sent_recovery_email": "Sent recovery email",
+  "recover_password": "Recover password",
+  "forgot_passord": "Forgot passord"
 }

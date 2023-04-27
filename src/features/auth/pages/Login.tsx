@@ -106,9 +106,16 @@ export default function Login() {
           <span className='my-3 block w-fit bg-white px-2 text-center'>{t('or')}</span>
           <hr className='grow border-t-[.5px] border-gray-400' />
         </div>
-        <Link to='/auth/register'>
-          <span className='block text-center text-blue-600 hover:underline'>{t('register')}</span>
-        </Link>
+
+        <div className='flex justify-center'>
+          <Link to='/auth/register' className='mr-2'>
+            <span className='block text-center text-blue-600 hover:underline'>{t('register')}</span>
+          </Link>
+          <span className='text-blue-600'>/</span>
+          <Link to='/auth/forgot-password' className='ml-2'>
+            <span className='block text-center text-blue-600 hover:underline'>{t('forgot_passord')}</span>
+          </Link>
+        </div>
       </div>
     </div>
   )
