@@ -1,10 +1,17 @@
 import { memo } from 'react'
 
-function SpinningCircle() {
+type Props = {
+  height?: number
+  width?: number
+}
+
+function SpinningCircle({ height = 20, width = 20 }: Props) {
   return (
     <svg
       aria-hidden='true'
-      className='mt-5 h-5 w-5 animate-spin fill-c-1 text-c-text'
+      height={height}
+      width={width}
+      className='mt-5 animate-spin fill-c-1 text-c-text'
       viewBox='0 0 100 101'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
