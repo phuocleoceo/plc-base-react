@@ -41,7 +41,7 @@ class Http {
 
     this.instance.interceptors.response.use(
       (response) => {
-        return response.data.data
+        return response
       },
       (error: AxiosError) => {
         this.showErrorMessage(error)
@@ -59,30 +59,12 @@ class Http {
   }
 
   private showErrorMessage(error: AxiosError) {
-    const untoastedCode = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden]
+    const untoastedCode = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden, HttpStatusCode.UnprocessableEntity]
     const errorCode = error.response?.status as number
 
     if (!untoastedCode.includes(errorCode)) {
       const data: BaseResponse<null> = error.response?.data as BaseResponse<null>
-
-      // Validate error
-      if (errorCode === HttpStatusCode.UnprocessableEntity) {
-        const validateErrors = data.errors
-        let validateMessage = ''
-
-        for (const key in validateErrors) {
-          if (Object.prototype.hasOwnProperty.call(validateErrors, key)) {
-            const errorList = validateErrors[key]
-            validateMessage += errorList.map((error) => TranslateHelper.translate(error)).join('\n')
-          }
-        }
-
-        toast.error(validateMessage)
-        return
-      }
-
-      // Other error
-      toast.error(data?.message)
+      toast.error(TranslateHelper.translate(data?.message))
     }
   }
 

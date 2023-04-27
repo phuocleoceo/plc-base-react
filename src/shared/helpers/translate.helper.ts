@@ -1,6 +1,8 @@
 import i18n, { locales } from '~/common/locales/i18n'
 
-export function translate(key: string) {
+export function translate(key: string | undefined) {
+  if (!key) return ''
+
   return i18n.t(key as unknown as TemplateStringsArray)
 }
 
