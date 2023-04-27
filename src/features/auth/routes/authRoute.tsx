@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom'
 
-import { Login, Register } from '../pages'
-import { AuthLayout } from '../layouts'
+import { ConfirmEmail, Login, Register } from '~/features/auth/pages'
+import { AuthLayout } from '~/features/auth/layouts'
 
 export const authRoute: RouteObject[] = [
   {
@@ -17,6 +17,14 @@ export const authRoute: RouteObject[] = [
     element: (
       <AuthLayout>
         <Register />
+      </AuthLayout>
+    )
+  },
+  {
+    path: '/auth/confirm-email',
+    element: (
+      <AuthLayout>
+        <ConfirmEmail />
       </AuthLayout>
     )
   }

@@ -62,7 +62,7 @@ export default function Login() {
   return (
     <div className='mb-12 w-11/12 max-w-[24rem]'>
       <div className={`h-[40vh] place-items-center ${isLoading ? 'grid' : 'hidden'}`}>
-        <SpinningCircle />
+        <SpinningCircle height={50} width={50} />
       </div>
       <div className={`w-full rounded-md bg-white py-12 px-6 ${isLoading ? 'hidden' : 'block'}`}>
         <h2 className='text-center text-3xl font-medium text-gray-800 mb-5'>{t('welcome_back')}</h2>
