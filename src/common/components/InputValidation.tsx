@@ -30,7 +30,10 @@ export default function InputValidation(props: Props) {
         {...{ placeholder, readOnly, autoFocus, type }}
         {...register}
       />
-      <span className='text-[13px] text-red-400'>{error?.message?.toString()}</span>
+      <span
+        className='text-[13px] text-red-400'
+        dangerouslySetInnerHTML={{ __html: error?.message?.toString() as TrustedHTML }}
+      ></span>
     </div>
   )
 }

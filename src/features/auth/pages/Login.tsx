@@ -16,8 +16,8 @@ type FormData = Pick<LoginRequest, 'email' | 'password'>
 
 export default function Login() {
   const { setIsAuthenticated } = useContext(AppContext)
-  const navigate = useNavigate()
 
+  const navigate = useNavigate()
   const { t } = useTranslation()
 
   const {
@@ -48,6 +48,7 @@ export default function Login() {
       },
       onError: (error) => {
         const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
+        console.log(validateErrors)
         Object.keys(validateErrors).forEach((key) => {
           setError(key as keyof FormData, validateErrors[key])
         })
@@ -68,11 +69,11 @@ export default function Login() {
             <InputValidation
               label={t('email')}
               register={register('email', {
-                // required: { value: true, message: t('email_required') },
-                // pattern: {
-                //   value: EmailValidation,
-                //   message: t('email_invalid')
-                // }
+                required: { value: true, message: t('email_required') },
+                pattern: {
+                  value: EmailValidation,
+                  message: t('email_invalid')
+                }
               })}
               error={errors.email as FieldError}
               inputClass='border-gray-500'
@@ -84,7 +85,7 @@ export default function Login() {
           <InputValidation
             label={t('password')}
             register={register('password', {
-              // required: { value: true, message: t('password_required') }
+              required: { value: true, message: t('password_required') }
             })}
             error={errors.password as FieldError}
             inputClass='border-gray-500'

@@ -11,10 +11,10 @@ export function getErrorFromServer(error: AxiosError) {
 
   if (errorCode === HttpStatusCode.UnprocessableEntity) {
     Object.keys(errorData.errors).forEach((key) => {
-      const errorContents = errorData.errors[key].map((error) => TranslateHelper.translate(error)).join('</br>')
+      const errorContents = errorData.errors[key].map((error) => TranslateHelper.translate(error)).join('<br/>')
 
       validateErrors[key] = {
-        message: `<div>${errorContents}</div>`,
+        message: errorContents,
         type: 'Server'
       }
     })
