@@ -2,6 +2,7 @@ import { FieldError, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { InputValidation, SpinningCircle } from '~/common/components'
@@ -9,7 +10,6 @@ import { RegisterRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { ValidationHelper } from '~/shared/helpers'
 import { AuthAPI } from '~/features/auth/apis'
-import { toast } from 'react-toastify'
 
 type FormData = Pick<
   RegisterRequest,

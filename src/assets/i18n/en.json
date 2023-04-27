@@ -30,5 +30,9 @@
   "verifying": "Verifying...",
   "verification_success": "Verification Success",
   "verification_failed": "Verification Failed",
-  "account_already_verified": "Account has already verified"
+  "account_already_verified": "Account has already verified",
+  "identityInformation": "Email, phone number or identity number",
+  "identityInformation_required": "Identity information is required !",
+  "sending_recovery_email": "Sending recovery email...",
+  "send_recovery_email": "Send recovery email"
 }

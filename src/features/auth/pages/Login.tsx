@@ -2,6 +2,7 @@ import { FieldError, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
@@ -11,7 +12,6 @@ import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { AuthAPI } from '~/features/auth/apis'
 import { AppContext } from '~/common/contexts'
-import { toast } from 'react-toastify'
 
 type FormData = Pick<LoginRequest, 'email' | 'password'>
 
