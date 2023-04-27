@@ -4,6 +4,7 @@
   "go_back": "Quay lại",
   "or": "hoặc",
   "welcome_back": "Chào mừng quay lại",
+  "join_now": "Tham gia ngay",
   "login": "Đăng nhập",
   "register": "Đăng ký",
   "welcome_message": "Công cụ quản lý dự án số 1 cho các nhóm Agile",
@@ -14,5 +15,16 @@
   "email_invalid": "Email này sai định dạng !",
   "password_required": "Mật khẩu là bắt buộc !",
   "invalid_password": "Sai mật khẩu",
-  "invalid_email_format": "Email sai định dạng !"
+  "invalid_email_format": "Email sai định dạng !",
+  "login_success": "Đăng nhập thành công !",
+  "register_success": "Đắng ký thành công !",
+  "registering": "Đang đăng ký...",
+  "displayName": "Tên hiển thị",
+  "displayName_required": "Tên hiển thị là bắt buộc !",
+  "identityNumber": "Mã định danh cá nhân",
+  "identityNumber_required": "Mã định danh cá nhân là bắt buộc !",
+  "phoneNumber": "Số điện thoại",
+  "phoneNumber_required": "Số điện thoại là bắt buộc !",
+  "address": "Địa chỉ",
+  "address_required": "Địa chỉ là bắt buộc !"
 }

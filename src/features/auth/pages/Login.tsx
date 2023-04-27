@@ -11,6 +11,7 @@ import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { AuthAPI } from '~/features/auth/apis'
 import { AppContext } from '~/common/contexts'
+import { toast } from 'react-toastify'
 
 type FormData = Pick<LoginRequest, 'email' | 'password'>
 
@@ -34,7 +35,9 @@ export default function Login() {
   })
 
   const handleLogin = handleSubmit((form: FormData) => {
-    loginMutation.mutate(form, {
+    const loginData: LoginRequest = { ...form }
+
+    loginMutation.mutate(loginData, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
 
@@ -44,6 +47,7 @@ export default function Login() {
         LocalStorageHelper.setRefreshToken(refreshToken)
         LocalStorageHelper.setUserInfo(userInfo)
 
+        toast.success(t('login_success'))
         navigate('/')
       },
       onError: (error) => {
@@ -79,17 +83,17 @@ export default function Login() {
               // eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus
             />
-          </div>
 
-          <InputValidation
-            label={t('password')}
-            register={register('password', {
-              required: { value: true, message: t('password_required') }
-            })}
-            error={errors.password as FieldError}
-            inputClass='border-gray-500'
-            type='password'
-          />
+            <InputValidation
+              label={t('password')}
+              register={register('password', {
+                required: { value: true, message: t('password_required') }
+              })}
+              error={errors.password as FieldError}
+              inputClass='border-gray-500'
+              type='password'
+            />
+          </div>
 
           <hr className='mt-6 border-t-[.5px] border-gray-400' />
           <button type='submit' className='btn mt-4 w-full bg-[#321898] py-2'>

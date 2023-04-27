@@ -16,7 +16,7 @@ export default function InputValidation(props: Props) {
   const { register, error, placeholder, label, defaultValue, readOnly, autoFocus, inputClass, type } = props
 
   return (
-    <div className='mt-3'>
+    <div>
       <label htmlFor={label} className='text-sm tracking-wide text-gray-800'>
         {label}
       </label>
