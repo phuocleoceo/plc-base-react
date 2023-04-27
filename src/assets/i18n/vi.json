@@ -9,5 +9,10 @@
   "welcome_message": "Công cụ quản lý dự án số 1 cho các nhóm Agile",
   "email": "Email",
   "password": "Mật khẩu",
-  "logging_in": "Đang đăng nhập..."
+  "logging_in": "Đang đăng nhập...",
+  "email_required": "Email là bắt buộc !",
+  "email_invalid": "Email này sai định dạng !",
+  "password_required": "Mật khẩu là bắt buộc !",
+  "invalid_password": "Sai mật khẩu",
+  "invalid_email_format": "Email sai định dạng !"
 }

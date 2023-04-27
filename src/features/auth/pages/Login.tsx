@@ -1,23 +1,50 @@
-import { FieldError, FieldValues, useForm } from 'react-hook-form'
+import { FieldError, useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 import { InputValidation, SpinningCircle } from '~/common/components'
+import { LocalStorageHelper } from '~/shared/helpers'
+import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
+import { AuthAPI } from '~/features/auth/apis'
+import { AppContext } from '~/common/contexts'
+import { useContext } from 'react'
+
+type FormData = Pick<LoginRequest, 'email' | 'password'>
 
 export default function Login() {
+  const { setIsAuthenticated } = useContext(AppContext)
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful }
-  } = useForm()
+  } = useForm<FormData>()
 
   const isLoading = isSubmitting && !isSubmitSuccessful
 
-  const handleLogin = handleSubmit(async (form: FieldValues) => {
-    console.log(form)
+  const loginMutation = useMutation({
+    mutationFn: (body: LoginRequest) => AuthAPI.login(body)
+  })
+
+  const handleLogin = handleSubmit(async (form: FormData) => {
+    try {
+      const data = await loginMutation.mutateAsync(form)
+      setIsAuthenticated(true)
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt, ...userInfo } = data.data.data
+      LocalStorageHelper.setAccessToken(accessToken)
+      LocalStorageHelper.setRefreshToken(refreshToken)
+      LocalStorageHelper.setUserInfo(userInfo)
+
+      navigate('/')
+    } catch {
+      /* empty */
+    }
   })
 
   return (

@@ -41,7 +41,7 @@ class Http {
 
     this.instance.interceptors.response.use(
       (response) => {
-        return response.data.data
+        return response
       },
       (error: AxiosError) => {
         this.showErrorMessage(error)
@@ -72,8 +72,8 @@ class Http {
 
         for (const key in validateErrors) {
           if (Object.prototype.hasOwnProperty.call(validateErrors, key)) {
-            const errorList = validateErrors[key]
-            validateMessage += errorList.map((error) => TranslateHelper.translate(error)).join('\n')
+            const errorContents = validateErrors[key].map((error) => TranslateHelper.translate(error)).join('\n')
+            validateMessage += errorContents + '\n'
           }
         }
 
@@ -82,7 +82,7 @@ class Http {
       }
 
       // Other error
-      toast.error(data?.message)
+      toast.error(TranslateHelper.translate(data?.message))
     }
   }
 

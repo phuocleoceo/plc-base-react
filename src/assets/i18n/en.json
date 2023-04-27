@@ -12,5 +12,7 @@
   "logging_in": "Logging in...",
   "email_required": "Email is required !",
   "email_invalid": "This email is invalid !",
-  "password_required": "Password is required !"
+  "password_required": "Password is required !",
+  "invalid_password": "Password is invalid !",
+  "invalid_email_format": "Email is invalid !"
 }
