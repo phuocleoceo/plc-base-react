@@ -14,5 +14,12 @@
   "email_invalid": "This email is invalid !",
   "password_required": "Password is required !",
   "invalid_password": "Password is invalid !",
-  "invalid_email_format": "Email is invalid !"
+  "invalid_email_format": "Email is invalid !",
+  "login_success": "Login Success !",
+  "register_success": "Register Success !",
+  "displayName": "Display Name",
+  "displayName_required": "Display Name Required !",
+  "identityNumber": "Identity Number",
+  "identityNumber_required": "Identity Number Required !",
+  "registering": "Registering..."
 }

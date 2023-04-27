@@ -11,6 +11,7 @@ import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { AuthAPI } from '~/features/auth/apis'
 import { AppContext } from '~/common/contexts'
+import { toast } from 'react-toastify'
 
 type FormData = Pick<LoginRequest, 'email' | 'password'>
 
@@ -34,7 +35,9 @@ export default function Login() {
   })
 
   const handleLogin = handleSubmit((form: FormData) => {
-    loginMutation.mutate(form, {
+    const loginData: LoginRequest = { ...form }
+
+    loginMutation.mutate(loginData, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
 
@@ -44,6 +47,7 @@ export default function Login() {
         LocalStorageHelper.setRefreshToken(refreshToken)
         LocalStorageHelper.setUserInfo(userInfo)
 
+        toast.success(t('login_success'))
         navigate('/')
       },
       onError: (error) => {
