@@ -48,7 +48,6 @@ export default function Login() {
       },
       onError: (error) => {
         const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
-        console.log(validateErrors)
         Object.keys(validateErrors).forEach((key) => {
           setError(key as keyof FormData, validateErrors[key])
         })
