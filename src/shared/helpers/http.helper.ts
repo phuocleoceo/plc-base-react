@@ -59,29 +59,11 @@ class Http {
   }
 
   private showErrorMessage(error: AxiosError) {
-    const untoastedCode = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden]
+    const untoastedCode = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden, HttpStatusCode.UnprocessableEntity]
     const errorCode = error.response?.status as number
 
     if (!untoastedCode.includes(errorCode)) {
       const data: BaseResponse<null> = error.response?.data as BaseResponse<null>
-
-      // Validate error
-      if (errorCode === HttpStatusCode.UnprocessableEntity) {
-        const validateErrors = data.errors
-        let validateMessage = ''
-
-        for (const key in validateErrors) {
-          if (Object.prototype.hasOwnProperty.call(validateErrors, key)) {
-            const errorContents = validateErrors[key].map((error) => TranslateHelper.translate(error)).join('\n')
-            validateMessage += errorContents + '\n'
-          }
-        }
-
-        toast.error(validateMessage)
-        return
-      }
-
-      // Other error
       toast.error(TranslateHelper.translate(data?.message))
     }
   }

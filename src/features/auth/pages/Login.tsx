@@ -2,24 +2,27 @@ import { FieldError, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { AxiosError } from 'axios'
+import { useContext } from 'react'
 
+import { LocalStorageHelper, ValidationHelper } from '~/shared/helpers'
 import { InputValidation, SpinningCircle } from '~/common/components'
-import { LocalStorageHelper } from '~/shared/helpers'
 import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { AuthAPI } from '~/features/auth/apis'
 import { AppContext } from '~/common/contexts'
-import { useContext } from 'react'
 
 type FormData = Pick<LoginRequest, 'email' | 'password'>
 
 export default function Login() {
   const { setIsAuthenticated } = useContext(AppContext)
-  const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const { t } = useTranslation()
 
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful }
   } = useForm<FormData>()
@@ -30,21 +33,26 @@ export default function Login() {
     mutationFn: (body: LoginRequest) => AuthAPI.login(body)
   })
 
-  const handleLogin = handleSubmit(async (form: FormData) => {
-    try {
-      const data = await loginMutation.mutateAsync(form)
-      setIsAuthenticated(true)
+  const handleLogin = handleSubmit((form: FormData) => {
+    loginMutation.mutate(form, {
+      onSuccess: (data) => {
+        setIsAuthenticated(true)
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt, ...userInfo } = data.data.data
-      LocalStorageHelper.setAccessToken(accessToken)
-      LocalStorageHelper.setRefreshToken(refreshToken)
-      LocalStorageHelper.setUserInfo(userInfo)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt, ...userInfo } = data.data.data
+        LocalStorageHelper.setAccessToken(accessToken)
+        LocalStorageHelper.setRefreshToken(refreshToken)
+        LocalStorageHelper.setUserInfo(userInfo)
 
-      navigate('/')
-    } catch {
-      /* empty */
-    }
+        navigate('/')
+      },
+      onError: (error) => {
+        const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
+        Object.keys(validateErrors).forEach((key) => {
+          setError(key as keyof FormData, validateErrors[key])
+        })
+      }
+    })
   })
 
   return (
@@ -60,11 +68,11 @@ export default function Login() {
             <InputValidation
               label={t('email')}
               register={register('email', {
-                required: { value: true, message: t('email_required') },
-                pattern: {
-                  value: EmailValidation,
-                  message: t('email_invalid')
-                }
+                // required: { value: true, message: t('email_required') },
+                // pattern: {
+                //   value: EmailValidation,
+                //   message: t('email_invalid')
+                // }
               })}
               error={errors.email as FieldError}
               inputClass='border-gray-500'
@@ -76,7 +84,7 @@ export default function Login() {
           <InputValidation
             label={t('password')}
             register={register('password', {
-              required: { value: true, message: t('password_required') }
+              // required: { value: true, message: t('password_required') }
             })}
             error={errors.password as FieldError}
             inputClass='border-gray-500'
