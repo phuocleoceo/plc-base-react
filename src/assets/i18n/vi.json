@@ -6,5 +6,8 @@
   "welcome_back": "Chào mừng quay lại",
   "login": "Đăng nhập",
   "register": "Đăng ký",
-  "welcome_message": "Công cụ quản lý dự án số 1 cho các nhóm Agile"
+  "welcome_message": "Công cụ quản lý dự án số 1 cho các nhóm Agile",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "logging_in": "Đang đăng nhập..."
 }

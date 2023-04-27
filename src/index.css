@@ -8,7 +8,7 @@
   }
 }
 
-.light-theme {
+.plc-theme {
   --c-1: #fff;
   --c-2: #f4f5f7;
   --c-4: #ebecf0;
@@ -19,19 +19,6 @@
   --primary: #3920a9;
   --secondary: #439aff;
   --c-5: #000;
-}
-
-.dark-theme {
-  --c-1: #222;
-  --c-2: #363737;
-  --c-text: #e2e2e2;
-  --c-3: #888;
-  --c-5: #fff;
-  --c-4: #ebecf0;
-  --c-6: #555;
-  --c-7: #444;
-  --primary: #3920a9;
-  --secondary: #439aff;
 }
 
 @layer components {

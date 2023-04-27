@@ -6,5 +6,11 @@
   "welcome_back": "Welcome Back",
   "login": "Login",
   "register": "Register",
-  "welcome_message": "The #1 software development tool used by agile teams"
+  "welcome_message": "The #1 software development tool used by agile teams",
+  "email": "Email",
+  "password": "Password",
+  "logging_in": "Logging in...",
+  "email_required": "Email is required !",
+  "email_invalid": "This email is invalid !",
+  "password_required": "Password is required !"
 }
