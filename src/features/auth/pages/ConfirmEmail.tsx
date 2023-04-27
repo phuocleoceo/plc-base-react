@@ -70,7 +70,7 @@ export default function ConfirmEmail() {
 
               <hr className='mt-6 border-t-[.5px] border-gray-400' />
               <Link className='btn mt-4 w-full bg-[#321898] py-2' to='/'>
-                <span className='block text-center hover:underline'>{t('go_back')}</span>
+                <span className='block text-center'>{t('go_back')}</span>
               </Link>
             </>
           )}

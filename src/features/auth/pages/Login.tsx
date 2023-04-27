@@ -2,6 +2,7 @@ import { FieldError, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
@@ -11,7 +12,6 @@ import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { AuthAPI } from '~/features/auth/apis'
 import { AppContext } from '~/common/contexts'
-import { toast } from 'react-toastify'
 
 type FormData = Pick<LoginRequest, 'email' | 'password'>
 
@@ -106,9 +106,16 @@ export default function Login() {
           <span className='my-3 block w-fit bg-white px-2 text-center'>{t('or')}</span>
           <hr className='grow border-t-[.5px] border-gray-400' />
         </div>
-        <Link to='/auth/register'>
-          <span className='block text-center text-blue-600 hover:underline'>{t('register')}</span>
-        </Link>
+
+        <div className='flex justify-center'>
+          <Link to='/auth/register' className='mr-2'>
+            <span className='block text-center text-blue-600 hover:underline'>{t('register')}</span>
+          </Link>
+          <span className='text-blue-600'>/</span>
+          <Link to='/auth/forgot-password' className='ml-2'>
+            <span className='block text-center text-blue-600 hover:underline'>{t('forgot_passord')}</span>
+          </Link>
+        </div>
       </div>
     </div>
   )
