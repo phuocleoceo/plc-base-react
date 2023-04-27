@@ -4,6 +4,7 @@
   "go_back": "Go Back",
   "or": "or",
   "welcome_back": "Welcome Back",
+  "join_now": "Join Now",
   "login": "Login",
   "register": "Register",
   "welcome_message": "The #1 software development tool used by agile teams",
@@ -17,9 +18,13 @@
   "invalid_email_format": "Email is invalid !",
   "login_success": "Login Success !",
   "register_success": "Register Success !",
-  "displayName": "Display Name",
-  "displayName_required": "Display Name Required !",
-  "identityNumber": "Identity Number",
-  "identityNumber_required": "Identity Number Required !",
-  "registering": "Registering..."
+  "registering": "Registering...",
+  "displayName": "Display name",
+  "displayName_required": "Display name is required !",
+  "identityNumber": "Identity number",
+  "identityNumber_required": "Identity number is required !",
+  "phoneNumber": "Phone number",
+  "phoneNumber_required": "Phone number is required !",
+  "address": "Address",
+  "address_required": "Address is required !"
 }
