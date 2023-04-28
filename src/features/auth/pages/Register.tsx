@@ -143,13 +143,13 @@ export default function Register() {
           <hr className='grow border-t-[.5px] border-gray-400' />
         </div>
 
-        <div className='flex justify-center'>
+        <div className='flex justify-center text-center'>
           <Link to='/auth/login' className='mr-2'>
-            <span className='block text-center text-blue-600 hover:underline'>{t('login')}</span>
+            <span className='block text-blue-600 hover:underline'>{t('login')}</span>
           </Link>
-          <span className='text-blue-600'>/</span>
+          <span className='text-black'>/</span>
           <Link to='/auth/forgot-password' className='ml-2'>
-            <span className='block text-center text-blue-600 hover:underline'>{t('forgot_passord')}</span>
+            <span className='block text-blue-600 hover:underline'>{t('forgot_passord')}</span>
           </Link>
         </div>
       </div>
