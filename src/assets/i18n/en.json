@@ -41,5 +41,6 @@
   "update_password": "Update password",
   "forgot_passord": "Forgot passord",
   "newPassword": "New password",
-  "newPassword_required": "New password is required !"
+  "newPassword_required": "New password is required !",
+  "recover_password_success": "Recover password success"
 }

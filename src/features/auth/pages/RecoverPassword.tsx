@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 
-import { RecoverPasswordRequest } from '~/features/auth/models'
 import { InputValidation, SpinningCircle } from '~/common/components'
+import { RecoverPasswordRequest } from '~/features/auth/models'
 import { ValidationHelper } from '~/shared/helpers'
 import { useQueryParams } from '~/common/hooks'
 import { AuthAPI } from '~/features/auth/apis'
 
-import SendEmailIMG from '~/assets/img/send-email.png'
+import SmileIMG from '~/assets/img/smile.png'
 
 type FormData = Pick<RecoverPasswordRequest, 'newPassword'>
 
@@ -60,9 +60,9 @@ export default function RecoverPassword() {
         {isRecovered ? (
           <>
             <div className='h-[45vh] place-items-center grid'>
-              <h2 className='text-center text-3xl font-medium text-gray-800 mb-10'>{t('sent_recovery_email')}</h2>
+              <h2 className='text-center text-3xl font-medium text-gray-800 mb-10'>{t('recover_password_success')}</h2>
 
-              <img className='text-center' width='70%' height='auto' src={SendEmailIMG} alt='sendEmail' />
+              <img className='text-center' width='70%' height='auto' src={SmileIMG} alt='sendEmail' />
 
               <hr className='mt-4 border-t-[.5px] border-gray-400' />
               <Link className='btn mt-4 w-full bg-[#321898] py-2' to='/auth/login'>
@@ -83,6 +83,9 @@ export default function RecoverPassword() {
                   })}
                   error={errors.newPassword as FieldError}
                   inputClass='border-gray-500'
+                  type='password'
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus
                 />
               </div>
 

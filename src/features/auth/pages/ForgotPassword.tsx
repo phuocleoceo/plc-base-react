@@ -79,6 +79,8 @@ export default function ForgotPassword() {
                   })}
                   error={errors.identityInformation as FieldError}
                   inputClass='border-gray-500'
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus
                 />
               </div>
 
