@@ -1,21 +1,23 @@
-import { FieldError, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 
 import { InputValidation, SpinningCircle } from '~/common/components'
-import { ForgotPasswordRequest } from '~/features/auth/models'
+import { RecoverPasswordRequest } from '~/features/auth/models'
 import { ValidationHelper } from '~/shared/helpers'
+import { useQueryParams } from '~/common/hooks'
 import { AuthAPI } from '~/features/auth/apis'
 
-import SendEmailIMG from '~/assets/img/send-email.png'
+import SmileIMG from '~/assets/img/smile.png'
 
-type FormData = Pick<ForgotPasswordRequest, 'identityInformation'>
+type FormData = Pick<RecoverPasswordRequest, 'newPassword'>
 
-export default function ForgotPassword() {
-  const [isSentEmail, setIsSentEmail] = useState<boolean>(false)
+export default function RecoverPassword() {
+  const [isRecovered, setIsRecovered] = useState<boolean>(false)
+  const queryParams = useQueryParams()
   const { t } = useTranslation()
 
   const {
@@ -27,17 +29,19 @@ export default function ForgotPassword() {
 
   const isLoading = isSubmitting && !isSubmitSuccessful
 
-  const forgotPasswordMutation = useMutation({
-    mutationFn: (body: ForgotPasswordRequest) => AuthAPI.forgotPassword(body)
+  const recoverPasswordMutation = useMutation({
+    mutationFn: (body: RecoverPasswordRequest) => AuthAPI.recoverPassword(body)
   })
 
-  const handleRegister = handleSubmit((form: FormData) => {
-    const forgotPasswordData: ForgotPasswordRequest = {
-      ...form
+  const handleRecoverPassword = handleSubmit((form: FormData) => {
+    const forgotPasswordData: RecoverPasswordRequest = {
+      ...form,
+      code: queryParams.code,
+      userId: parseInt(queryParams.userId)
     }
 
-    forgotPasswordMutation.mutate(forgotPasswordData, {
-      onSuccess: () => setIsSentEmail(true),
+    recoverPasswordMutation.mutate(forgotPasswordData, {
+      onSuccess: () => setIsRecovered(true),
       onError: (error) => {
         const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
         Object.keys(validateErrors).forEach((key) => {
@@ -53,16 +57,16 @@ export default function ForgotPassword() {
         <SpinningCircle height={50} width={50} />
       </div>
       <div className={`w-full rounded-md bg-white py-12 px-6 ${isLoading ? 'hidden' : 'block'}`}>
-        {isSentEmail ? (
+        {isRecovered ? (
           <>
             <div className='h-[45vh] place-items-center grid'>
-              <h2 className='text-center text-3xl font-medium text-gray-800 mb-10'>{t('sent_recovery_email')}</h2>
+              <h2 className='text-center text-3xl font-medium text-gray-800 mb-10'>{t('recover_password_success')}</h2>
 
-              <img className='text-center' width='70%' height='auto' src={SendEmailIMG} alt='sendEmail' />
+              <img className='text-center' width='70%' height='auto' src={SmileIMG} alt='sendEmail' />
 
               <hr className='mt-4 border-t-[.5px] border-gray-400' />
-              <Link className='btn mt-4 w-full bg-[#321898] py-2' to='/'>
-                <span className='block text-center'>{t('go_back')}</span>
+              <Link className='btn mt-4 w-full bg-[#321898] py-2' to='/auth/login'>
+                <span className='block text-center'>{t('login')}</span>
               </Link>
             </div>
           </>
@@ -70,15 +74,16 @@ export default function ForgotPassword() {
           <>
             <h2 className='text-center text-3xl font-medium text-gray-800 mb-5'>{t('recover_password')}</h2>
 
-            <form onSubmit={handleRegister}>
+            <form onSubmit={handleRecoverPassword}>
               <div className='flex flex-col gap-y-4'>
                 <InputValidation
-                  label={t('identityInformation')}
-                  register={register('identityInformation', {
-                    required: { value: true, message: t('identityInformation_required') }
+                  label={t('newPassword')}
+                  register={register('newPassword', {
+                    required: { value: true, message: t('newPassword_required') }
                   })}
-                  error={errors.identityInformation as FieldError}
+                  error={errors.newPassword as FieldError}
                   inputClass='border-gray-500'
+                  type='password'
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                 />
@@ -86,7 +91,7 @@ export default function ForgotPassword() {
 
               <hr className='mt-6 border-t-[.5px] border-gray-400' />
               <button type='submit' className='btn mt-4 w-full bg-[#321898] py-2'>
-                {isSubmitting ? t('sending_recovery_email') : t('send_recovery_email')}
+                {isSubmitting ? t('updating_password') : t('update_password')}
               </button>
             </form>
 
