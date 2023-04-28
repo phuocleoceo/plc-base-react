@@ -59,7 +59,7 @@ export default function RecoverPassword() {
       <div className={`w-full rounded-md bg-white py-12 px-6 ${isLoading ? 'hidden' : 'block'}`}>
         {isRecovered ? (
           <>
-            <div className='h-[45vh] place-items-center grid'>
+            <div className='h-[50vh] place-items-center grid'>
               <h2 className='text-center text-3xl font-medium text-gray-800 mb-10'>{t('recover_password_success')}</h2>
 
               <img className='text-center' width='70%' height='auto' src={SmileIMG} alt='sendEmail' />
