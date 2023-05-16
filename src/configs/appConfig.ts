@@ -1,4 +1,4 @@
-import { EnvConfig } from './env.config'
+import { EnvConfig } from './envConfig'
 
 export const AppConfig = {
   PLCBaseApi: `${EnvConfig.PLCBaseUrl}/api/`
