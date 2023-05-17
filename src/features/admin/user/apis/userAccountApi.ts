@@ -1,20 +1,19 @@
 import {
-  CreateProjectRequest,
-  CreateProjectResponse,
-  UpdateProjectRequest,
-  UpdateProjectResponse,
-  DeleteProjectResponse
-} from '~/features/project/models'
+  GetUserAccountListResponse,
+  GetUserAccountDetailResponse,
+  UpdateUserAccountRequest,
+  UpdateUserAccountResponse
+} from '~/features/admin/user/models'
 import { HttpHelper } from '~/shared/helpers'
 
-export function createProject(body: CreateProjectRequest) {
-  return HttpHelper.post<CreateProjectResponse>('project', body)
+export function getUserAccountListProject() {
+  return HttpHelper.get<GetUserAccountListResponse>('user')
 }
 
-export function updateProject(projectId: number, body: UpdateProjectRequest) {
-  return HttpHelper.put<UpdateProjectResponse>(`project/${projectId}`, body)
+export function getUserAccountDetailProject(userId: number) {
+  return HttpHelper.get<GetUserAccountDetailResponse>(`user/account/${userId}`)
 }
 
-export function deleteProject(projectId: number) {
-  return HttpHelper.delete<DeleteProjectResponse>(`project/${projectId}`)
+export function updateUserAccountProject(userId: number, body: UpdateUserAccountRequest) {
+  return HttpHelper.put<UpdateUserAccountResponse>(`user/account/${userId}`, body)
 }
