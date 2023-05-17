@@ -1,1 +1,1 @@
-export * as InvitationApi from './invitationApi'
+export { default as InvitationApi } from './invitationApi'

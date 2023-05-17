@@ -1,1 +1,1 @@
-export * as UserAccountApi from './userAccountApi'
+export { default as UserAccountApi } from './userAccountApi'

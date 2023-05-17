@@ -7,14 +7,16 @@ import {
 } from '~/features/admin/user/models'
 import { HttpHelper } from '~/shared/helpers'
 
-export function getUserAccountListProject(params: GetUserAccountListParams) {
-  return HttpHelper.get<GetUserAccountListResponse>('user', { params })
+const userAccountApi = {
+  getUserAccountListProject(params: GetUserAccountListParams) {
+    return HttpHelper.get<GetUserAccountListResponse>('user', { params })
+  },
+  getUserAccountDetailProject(userId: number) {
+    return HttpHelper.get<GetUserAccountDetailResponse>(`user/account/${userId}`)
+  },
+  updateUserAccountProject(userId: number, body: UpdateUserAccountRequest) {
+    return HttpHelper.put<UpdateUserAccountResponse>(`user/account/${userId}`, body)
+  }
 }
 
-export function getUserAccountDetailProject(userId: number) {
-  return HttpHelper.get<GetUserAccountDetailResponse>(`user/account/${userId}`)
-}
-
-export function updateUserAccountProject(userId: number, body: UpdateUserAccountRequest) {
-  return HttpHelper.put<UpdateUserAccountResponse>(`user/account/${userId}`, body)
-}
+export default userAccountApi
