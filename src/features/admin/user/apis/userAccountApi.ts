@@ -1,4 +1,5 @@
 import {
+  GetUserAccountListParams,
   GetUserAccountListResponse,
   GetUserAccountDetailResponse,
   UpdateUserAccountRequest,
@@ -6,8 +7,8 @@ import {
 } from '~/features/admin/user/models'
 import { HttpHelper } from '~/shared/helpers'
 
-export function getUserAccountListProject() {
-  return HttpHelper.get<GetUserAccountListResponse>('user')
+export function getUserAccountListProject(params: GetUserAccountListParams) {
+  return HttpHelper.get<GetUserAccountListResponse>('user', { params })
 }
 
 export function getUserAccountDetailProject(userId: number) {

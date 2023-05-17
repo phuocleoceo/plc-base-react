@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { toast } from 'react-toastify'
+import queryString from 'query-string'
 
 import * as LocalStorageHelper from './localStorage.helper'
 import * as TypeCheckHelper from './typeCheck.helper'
@@ -25,7 +26,8 @@ class Http {
       timeout: EnvConfig.HttpTimeout,
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      paramsSerializer: (params) => queryString.stringify(params)
     })
 
     this.instance.interceptors.request.use(

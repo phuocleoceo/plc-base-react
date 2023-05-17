@@ -1,4 +1,8 @@
-import { BaseResponse, PagedResponse } from '~/shared/types'
+import { BaseResponse, PagedResponse, BaseParams } from '~/shared/types'
+
+export type GetInvitationForProjectParams = BaseParams & {
+  stillValid: boolean
+}
 
 export type GetInvitationForProjectResponse = PagedResponse<{
   invitationId: number
@@ -17,6 +21,10 @@ export type CreateInvitationForProjectRequest = {
 export type CreateInvitationForProjectResponse = BaseResponse<boolean>
 
 export type DeleteInvitationForProjectResponse = BaseResponse<boolean>
+
+export type GetInvitationForUserParams = BaseParams & {
+  stillValid: boolean
+}
 
 export type GetInvitationForUserResponse = PagedResponse<{
   invitationId: number

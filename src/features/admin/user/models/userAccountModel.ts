@@ -1,4 +1,6 @@
-import { BaseResponse, PagedResponse } from '~/shared/types'
+import { BaseResponse, PagedResponse, BaseParams } from '~/shared/types'
+
+export type GetUserAccountListParams = BaseParams
 
 export type GetUserAccountListResponse = PagedResponse<{
   id: number
