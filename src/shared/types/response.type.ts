@@ -1,4 +1,4 @@
-export interface BaseResponse<T> {
+export type BaseResponse<T> = {
   data: T
   statusCode: number
   message: string

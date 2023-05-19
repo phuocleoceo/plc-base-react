@@ -1,1 +1,1 @@
-export * as ProjectApi from './projectApi'
+export { default as ProjectApi } from './projectApi'
