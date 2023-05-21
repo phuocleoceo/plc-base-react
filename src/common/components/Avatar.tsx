@@ -10,6 +10,7 @@ interface Props {
 
 function Avatar(props: Props) {
   const { src, name, title, className, onClick, style } = props
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div
