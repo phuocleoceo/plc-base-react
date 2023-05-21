@@ -8,7 +8,7 @@ import { ProjectApi } from '~/features/project/apis'
 import { BtnWithIcon } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 
-const Menubar = () => {
+export default function Menubar() {
   const projectId = Number(useParams().projectId)
   const [on, setOn] = useState(true)
 
@@ -61,5 +61,3 @@ const Menubar = () => {
     </motion.div>
   )
 }
-
-export default Menubar

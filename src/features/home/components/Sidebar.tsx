@@ -8,7 +8,9 @@ import { Avatar, IconBtn } from '~/common/components'
 import { ProfileApi } from '~/features/profile/apis'
 import { AppContext } from '~/common/contexts'
 
-function Sidebar() {
+import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
+
+export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate()
 
@@ -33,7 +35,7 @@ function Sidebar() {
       <div className='flex w-14 flex-col items-center justify-between bg-primary py-6'>
         <div className='flex flex-col gap-y-8'>
           <button title='Go to Home' onClick={() => navigate('/project')} className='w-8'>
-            <img className='h-8 w-12' src='/assets/jira.svg' alt='jira-clone' />
+            <img className='h-8 w-12' src={JiraWhiteIcon} alt='jira-clone' />
           </button>
         </div>
         <div className='flex flex-col gap-6'>
@@ -57,5 +59,3 @@ function Sidebar() {
     </div>
   )
 }
-
-export default Sidebar

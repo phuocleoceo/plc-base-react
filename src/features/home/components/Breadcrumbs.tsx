@@ -6,7 +6,7 @@ import { useContext } from 'react'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 
-const Breadcrumbs = () => {
+export default function Breadcrumbs() {
   const location = useLocation()
   const fragments = location.pathname.slice(1).split('/')
 
@@ -44,5 +44,3 @@ const Breadcrumbs = () => {
     </div>
   )
 }
-
-export default Breadcrumbs

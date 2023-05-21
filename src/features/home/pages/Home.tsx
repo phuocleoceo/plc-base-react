@@ -1,10 +1,11 @@
 import { Navigate, Outlet, useOutlet } from 'react-router-dom'
-import { AppContext } from '~/common/contexts'
 import { useContext } from 'react'
 
 import { Sidebar, Menubar, Breadcrumbs } from '~/features/home/components'
+import { ProjectList } from '~/features/project/pages'
+import { AppContext } from '~/common/contexts'
 
-const Home = () => {
+export default function Home() {
   const outlet = useOutlet()
   const { isAuthenticated } = useContext(AppContext)
 
@@ -22,11 +23,8 @@ const Home = () => {
           </main>
         </>
       ) : (
-        // <ProjectCatalog />
-        <></>
+        <ProjectList />
       )}
     </>
   )
 }
-
-export default Home
