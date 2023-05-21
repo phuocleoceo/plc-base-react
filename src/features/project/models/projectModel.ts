@@ -1,6 +1,6 @@
 import { BaseResponse } from '~/shared/types'
 
-export type GetProjectResponse = BaseResponse<
+export type GetProjectsResponse = BaseResponse<
   Array<{
     id: number
     name: string
@@ -12,6 +12,17 @@ export type GetProjectResponse = BaseResponse<
     updatedAt: Date
   }>
 >
+
+export type GetProjectResponse = BaseResponse<{
+  id: number
+  name: string
+  image: string
+  key: string
+  creatorId: number
+  leaderId: number
+  createdAt: Date
+  updatedAt: Date
+}>
 
 export type CreateProjectRequest = {
   name: string

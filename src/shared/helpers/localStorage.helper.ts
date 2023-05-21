@@ -18,11 +18,11 @@ export const getRefreshToken = (): string => {
   return localStorage.getItem(LocalStorageConstant.RefreshToken) || ''
 }
 
-export const setUserInfo = (userInfor: any) => {
+export const setUserInfo = (userInfor: { id: number; email: string; roleId: number }) => {
   localStorage.setItem(LocalStorageConstant.UserInformation, JSON.stringify(userInfor))
 }
 
-export const getUserInfo = (): any => {
+export const getUserInfo = (): { id: number; email: string; roleId: number } => {
   const result = localStorage.getItem(LocalStorageConstant.UserInformation)
   return result ? JSON.parse(result) : null
 }
