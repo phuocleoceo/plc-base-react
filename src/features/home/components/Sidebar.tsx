@@ -34,7 +34,7 @@ export default function Sidebar() {
     <div className='flex min-h-screen shrink-0'>
       <div className='flex w-14 flex-col items-center justify-between bg-primary py-6'>
         <div className='flex flex-col gap-y-8'>
-          <button title='Go to Home' onClick={() => navigate('/project')} className='w-8'>
+          <button title='Go to Home' onClick={() => navigate('/')} className='w-8'>
             <img className='h-8 w-12' src={JiraWhiteIcon} alt='jira-clone' />
           </button>
         </div>

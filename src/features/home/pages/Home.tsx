@@ -1,15 +1,10 @@
-import { Navigate, Outlet, useOutlet } from 'react-router-dom'
-import { useContext } from 'react'
+import { Outlet, useOutlet } from 'react-router-dom'
 
 import { Sidebar, Menubar, Breadcrumbs } from '~/features/home/components'
 import { ProjectList } from '~/features/project/pages'
-import { AppContext } from '~/common/contexts'
 
 export default function Home() {
   const outlet = useOutlet()
-  const { isAuthenticated } = useContext(AppContext)
-
-  if (!isAuthenticated) return <Navigate to='/auth/login' />
 
   return (
     <>
