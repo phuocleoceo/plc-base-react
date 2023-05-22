@@ -8,10 +8,14 @@ interface Props {
   onClose: () => void
   onSubmit?: () => Promise<void>
   isLoading?: boolean
+  closeLabel: string
+  submitLabel: string
+  submittingLabel: string
 }
 
 export default function Modal(props: Props) {
-  const { isShowing, onClose, onSubmit, isLoading, children, className } = props
+  const { isShowing, onClose, onSubmit, isLoading, children, className, closeLabel, submittingLabel, submitLabel } =
+    props
 
   return isShowing
     ? createPortal(
@@ -34,10 +38,10 @@ export default function Modal(props: Props) {
             {onSubmit && (
               <div className='mt-8 flex justify-end gap-x-3'>
                 <button onClick={onClose} className='rounded-[3px] px-3 py-1 text-c-1 hover:bg-c-3'>
-                  cancel
+                  {closeLabel}
                 </button>
                 <button onClick={onSubmit} className='btn'>
-                  {isLoading ? 'creating ...' : 'Create'}
+                  {isLoading ? submittingLabel : submitLabel}
                 </button>
               </div>
             )}

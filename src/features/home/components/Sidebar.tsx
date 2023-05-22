@@ -1,17 +1,18 @@
-import { Suspense, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { Suspense, useContext } from 'react'
 import { motion } from 'framer-motion'
 
 import { LocalStorageHelper } from '~/shared/helpers'
 import { Avatar, IconBtn } from '~/common/components'
 import { ProfileApi } from '~/features/profile/apis'
 import { AppContext } from '~/common/contexts'
+import { useShowing } from '~/common/hooks'
 
 import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const { isShowing, toggle } = useShowing()
   const navigate = useNavigate()
 
   const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)
@@ -45,7 +46,7 @@ export default function Sidebar() {
                 title='Profile'
                 src={user.avatar}
                 name={user.displayName}
-                onClick={() => setIsOpen((p) => !p)}
+                onClick={toggle}
                 className='h-9 w-9 border-[1px] hover:border-green-500'
               />
               <IconBtn onClick={handleLogOut} icon='charm:sign-out' title='Log Out' />
@@ -53,7 +54,7 @@ export default function Sidebar() {
           )}
         </div>
       </div>
-      <motion.div initial={{ width: 0 }} animate={{ width: isOpen ? 320 : 0 }} transition={{ type: 'tween' }}>
+      <motion.div initial={{ width: 0 }} animate={{ width: isShowing ? 320 : 0 }} transition={{ type: 'tween' }}>
         <Suspense>{/* <Profile authUser={u} /> */}</Suspense>
       </motion.div>
     </div>

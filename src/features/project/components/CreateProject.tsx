@@ -54,7 +54,13 @@ export default function CreateProject(props: Props) {
   })
 
   return (
-    <Modal onSubmit={handleCreateProject} {...{ isShowing, onClose, isLoading }}>
+    <Modal
+      onSubmit={handleCreateProject}
+      closeLabel='cancle'
+      submittingLabel='creating...'
+      submitLabel='create'
+      {...{ isShowing, onClose, isLoading }}
+    >
       <>
         <div className='mb-8'>
           <span className='text-[22px] font-[600] text-c-text'>create_project</span>
