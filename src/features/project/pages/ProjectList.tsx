@@ -1,16 +1,16 @@
 import { ChangeEvent, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Icon } from '@iconify/react'
-// import CreateProjectModel from './CreateProjectModel'
 
 import { ProjectRow, CreateProject } from '~/features/project/components'
 import { GetProjectsParams } from '~/features/project/models'
-import { ProjectApi } from '~/features/project/apis'
 import { SpinningCircle } from '~/common/components'
+import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 
 export default function ProjectList() {
   const { isAuthenticated } = useContext(AppContext)
+  const [isShowingCreate, setIsShowingCreate] = useState<boolean>(false)
   const [projectParams, setProjectParams] = useState<GetProjectsParams>({
     searchValue: ''
   })
@@ -31,8 +31,6 @@ export default function ProjectList() {
 
   const projects = data?.data.data
 
-  const [isOpen, setIsOpen] = useState(false)
-
   if (isLoading)
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
@@ -48,7 +46,7 @@ export default function ProjectList() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-10 pt-12 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <span className='text-2xl font-semibold tracking-wide'>Projects</span>
-          <button onClick={() => setIsOpen(true)} className='btn'>
+          <button onClick={() => setIsShowingCreate(true)} className='btn'>
             Create Project
           </button>
         </div>
@@ -75,10 +73,10 @@ export default function ProjectList() {
           {projects ? (
             projects.length !== 0 ? (
               <div className='mt-1 border-t-2 border-c-3'>
-                {projects.map((project, i) => (
+                {projects.map((project, idx) => (
                   <ProjectRow
                     key={project.id}
-                    idx={i}
+                    idx={idx}
                     id={project.id}
                     name={project.name}
                     issueKey={project.key}
@@ -95,7 +93,7 @@ export default function ProjectList() {
           ) : null}
         </div>
       </div>
-      {isOpen && <CreateProject onClose={() => setIsOpen(false)} />}
+      <CreateProject isShowing={isShowingCreate} onClose={() => setIsShowingCreate(false)} />
     </>
   )
 }
