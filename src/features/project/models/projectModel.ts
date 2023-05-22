@@ -1,5 +1,9 @@
 import { BaseResponse } from '~/shared/types'
 
+export type GetProjectsParams = {
+  searchValue: string
+}
+
 export type GetProjectsResponse = BaseResponse<
   Array<{
     id: number

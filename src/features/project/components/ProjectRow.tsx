@@ -1,9 +1,7 @@
-import { lazy, Suspense as S, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 
+import { LocalStorageHelper } from '~/shared/helpers'
 import { Avatar } from '~/common/components'
-// const DeleteProject = lazy(() => import('./DeleteProject'))
 
 interface Props {
   idx: number
@@ -20,6 +18,7 @@ export default function ProjectRow(props: Props) {
   const { idx, id, name, issueKey, image, leaderId, leaderName, leaderAvatar } = props
 
   const navigate = useNavigate()
+  const currentUser = LocalStorageHelper.getUserInfo()
 
   return (
     <div
@@ -41,11 +40,10 @@ export default function ProjectRow(props: Props) {
           title='Profile'
           src={leaderAvatar}
           name={leaderName}
-          // onClick={() => setIsOpen((p) => !p)}
           className='h-9 w-9 border-[1px] hover:border-green-500'
         />
         <span>{leaderName}</span>
-        {/* {isAdmin ? <span className='ml-1 text-sm font-bold'>(you)</span> : ''} */}
+        {currentUser.id === leaderId ? <span className='ml-1 text-sm font-bold'>(you)</span> : ''}
       </div>
     </div>
   )
