@@ -45,9 +45,9 @@ export default function ProjectList() {
     <>
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-10 pt-12 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
-          <span className='text-2xl font-semibold tracking-wide'>Projects</span>
+          <span className='text-2xl font-semibold tracking-wide'>projects</span>
           <button onClick={() => setIsShowingCreate(true)} className='btn'>
-            Create Project
+            create_project
           </button>
         </div>
         <div className='mt-8'>
@@ -57,7 +57,7 @@ export default function ProjectList() {
               name='searchValue'
               onChange={handleChangeParams}
               value={projectParams.searchValue}
-              placeholder='Search projects'
+              placeholder='search_projects'
             />
             <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
           </div>
@@ -65,10 +65,10 @@ export default function ProjectList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-8 shrink-0'></div>
-            <div className='min-w-[3rem] grow px-2'>Image</div>
-            <div className='min-w-[3rem] grow px-2'>Key</div>
-            <div className='min-w-[10rem] grow px-2'>Name</div>
-            <div className='w-52 shrink-0 px-2'>Leader</div>
+            <div className='min-w-[3rem] grow px-2'>image</div>
+            <div className='min-w-[3rem] grow px-2'>key</div>
+            <div className='min-w-[10rem] grow px-2'>name</div>
+            <div className='w-52 shrink-0 px-2'>leader</div>
           </div>
           {projects ? (
             projects.length !== 0 ? (
