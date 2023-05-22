@@ -10,7 +10,7 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const projectApi = {
-  getProject() {
+  getProjects() {
     return HttpHelper.get<GetProjectsResponse>('project')
   },
   getProjectById(projectId: number) {

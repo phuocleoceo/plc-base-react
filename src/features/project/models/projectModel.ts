@@ -8,6 +8,8 @@ export type GetProjectsResponse = BaseResponse<
     key: string
     creatorId: number
     leaderId: number
+    leaderName: string
+    leaderAvatar: string
     createdAt: Date
     updatedAt: Date
   }>
@@ -20,6 +22,8 @@ export type GetProjectResponse = BaseResponse<{
   key: string
   creatorId: number
   leaderId: number
+  leaderName: string
+  leaderAvatar: string
   createdAt: Date
   updatedAt: Date
 }>

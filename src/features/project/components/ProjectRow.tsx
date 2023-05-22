@@ -1,65 +1,52 @@
-import { Icon } from '@iconify/react'
 import { lazy, Suspense as S, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Icon } from '@iconify/react'
 
-import { Project } from '../../api/apiTypes'
-import { usePublicUserQuery } from '../../api/endpoints/auth.endpoint'
-import { selectMembers } from '../../api/endpoints/member.endpoint'
+import { Avatar } from '~/common/components'
 // const DeleteProject = lazy(() => import('./DeleteProject'))
 
-interface Props extends Project {
+interface Props {
   idx: number
-  authUserId: number
   id: number
   name: string
-  description: string
-  userId: number
+  issueKey: string
+  image: string
+  leaderId: number
+  leaderName: string
+  leaderAvatar: string
 }
 
 export default function ProjectRow(props: Props) {
-  const { idx, id, name, description, userId, authUserId } = props
-  const { members } = selectMembers(id)
-  const { data: publicUser } = usePublicUserQuery(userId)
-  const [on, setOn] = useState(false)
+  const { idx, id, name, issueKey, image, leaderId, leaderName, leaderAvatar } = props
+
   const navigate = useNavigate()
 
-  if (!members) return null
-
-  // const { isAdmin, id: memberId } = members.filter(({ userId: u }) => u === authUserId)[0]
-  const isAdmin = true
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation()
-    setOn(true)
-  }
-
   return (
-    <div>
-      <div
-        key={id}
-        className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-        onClick={() => navigate(id + '/board')}
-      >
-        <div className='w-8 shrink-0 text-center'>{idx + 1}</div>
-        <div className='min-w-[10rem] grow px-2'>{name}</div>
-        <div className='min-w-[18rem] grow px-2'>{description}</div>
-        <div className='w-52 shrink-0 px-2'>
-          {publicUser?.username}
-          {isAdmin ? <span className='ml-1 text-sm font-bold'>(you)</span> : ''}
-        </div>
-        <button
-          title='Delete or Leave'
-          onClick={handleDelete}
-          className='btn-icon absolute right-0 ml-5 bg-c-1 group-hover:block sm:hidden'
-        >
-          <Icon icon='bx:trash' className='text-red-500' />
-        </button>
+    <div
+      key={id}
+      className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
+      onClick={() => navigate(`project/${id}/board`)}
+      onKeyDown={() => navigate(`project/${id}/board`)}
+      tabIndex={id}
+      role='button'
+    >
+      <div className='w-8 shrink-0 text-center'>{idx + 1}</div>
+      <div className='min-w-[3rem] grow px-2'>
+        <Avatar title='Profile' src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
       </div>
-      {/* {on && publicUser && (
-        <S>
-          <DeleteProject projectId={id} {...{ name, authUserId, memberId, isAdmin }} onClose={() => setOn(false)} />
-        </S>
-      )} */}
+      <div className='min-w-[3rem] grow px-2'>{issueKey}</div>
+      <div className='min-w-[10rem] grow px-2'>{name}</div>
+      <div className='w-52 shrink-0 px-2 flex'>
+        <Avatar
+          title='Profile'
+          src={leaderAvatar}
+          name={leaderName}
+          // onClick={() => setIsOpen((p) => !p)}
+          className='h-9 w-9 border-[1px] hover:border-green-500'
+        />
+        <span>{leaderName}</span>
+        {/* {isAdmin ? <span className='ml-1 text-sm font-bold'>(you)</span> : ''} */}
+      </div>
     </div>
   )
 }
