@@ -29,21 +29,21 @@ export default function ProjectRow(props: Props) {
       tabIndex={id}
       role='button'
     >
-      <div className='w-8 shrink-0 text-center'>{idx + 1}</div>
-      <div className='min-w-[3rem] grow px-2'>
+      <div className='w-32 text-center'>{idx + 1}</div>
+      <div className='w-40'>
         <Avatar title='Profile' src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
       </div>
-      <div className='min-w-[3rem] grow px-2'>{issueKey}</div>
-      <div className='min-w-[10rem] grow px-2'>{name}</div>
-      <div className='w-52 shrink-0 px-2 flex'>
+      <div className='w-40'>{issueKey}</div>
+      <div className='w-80'>{name}</div>
+      <div className='flex-grow flex'>
         <Avatar
           title='Profile'
           src={leaderAvatar}
           name={leaderName}
           className='h-9 w-9 border-[1px] hover:border-green-500'
         />
-        <span>{leaderName}</span>
-        {currentUser.id === leaderId ? <span className='ml-1 text-sm font-bold'>(you)</span> : ''}
+        <span className='ml-3'>{leaderName}</span>
+        {currentUser.id === leaderId ? <span className='ml-1 font-bold'>(you)</span> : ''}
       </div>
     </div>
   )

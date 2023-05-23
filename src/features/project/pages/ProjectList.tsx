@@ -66,11 +66,11 @@ export default function ProjectList() {
         </div>
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
-            <div className='w-8 shrink-0'></div>
-            <div className='min-w-[3rem] grow px-2'>image</div>
-            <div className='min-w-[3rem] grow px-2'>key</div>
-            <div className='min-w-[10rem] grow px-2'>name</div>
-            <div className='w-52 shrink-0 px-2'>leader</div>
+            <div className='w-32'></div>
+            <div className='w-40'>image</div>
+            <div className='w-40'>key</div>
+            <div className='w-80'>name</div>
+            <div className='flex-grow'>leader</div>
           </div>
           {projects ? (
             projects.length !== 0 ? (

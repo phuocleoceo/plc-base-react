@@ -8,9 +8,9 @@ interface Props {
   onClose: () => void
   onSubmit?: () => Promise<void>
   isLoading?: boolean
-  closeLabel: string
-  submitLabel: string
-  submittingLabel: string
+  closeLabel?: string
+  submitLabel?: string
+  submittingLabel?: string
 }
 
 export default function Modal(props: Props) {
