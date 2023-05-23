@@ -4,9 +4,10 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { CreateProjectRequest } from '~/features/project/models'
-import { InputValidation, Modal } from '~/common/components'
+import { InputValidation, Modal, ImageUpload } from '~/common/components'
 import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
+import { MediaApi } from '~/features/media/apis'
 
 interface Props {
   isShowing: boolean
@@ -53,6 +54,10 @@ export default function CreateProject(props: Props) {
     })
   })
 
+  const handleSelectImage = (image: File) => {
+    console.log(image)
+  }
+
   return (
     <Modal
       onSubmit={handleCreateProject}
@@ -65,31 +70,37 @@ export default function CreateProject(props: Props) {
         <div className='mb-8'>
           <span className='text-[22px] font-[600] text-c-text'>create_project</span>
         </div>
-        <div className='flex flex-col gap-4'>
-          <InputValidation
-            label='project_name'
-            placeholder='your_project_name...'
-            register={register('name', {
-              required: {
-                value: true,
-                message: 'project_name_required'
-              }
-            })}
-            error={errors.name as FieldError}
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-          />
-          <InputValidation
-            label='project_key'
-            placeholder='your_project_key...'
-            register={register('key', {
-              required: {
-                value: true,
-                message: 'project_key_required'
-              }
-            })}
-            error={errors.key as FieldError}
-          />
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='flex flex-col gap-4'>
+            <InputValidation
+              label='project_name'
+              placeholder='your_project_name...'
+              register={register('name', {
+                required: {
+                  value: true,
+                  message: 'project_name_required'
+                }
+              })}
+              error={errors.name as FieldError}
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+            />
+            <InputValidation
+              label='project_key'
+              placeholder='your_project_key...'
+              register={register('key', {
+                required: {
+                  value: true,
+                  message: 'project_key_required'
+                }
+              })}
+              error={errors.key as FieldError}
+            />
+          </div>
+
+          <div className='flex flex-col gap-4'>
+            <ImageUpload onSelectedImage={handleSelectImage} />
+          </div>
         </div>
       </>
     </Modal>

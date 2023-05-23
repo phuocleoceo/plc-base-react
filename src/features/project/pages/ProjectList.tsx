@@ -1,5 +1,5 @@
-import { ChangeEvent, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { ProjectRow, CreateProject } from '~/features/project/components'
@@ -17,7 +17,7 @@ export default function ProjectList() {
     searchValue: ''
   })
 
-  const handleChangeParams = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeParams = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProjectParams({
       ...projectParams,
       [event.target.name]: event.target.value
