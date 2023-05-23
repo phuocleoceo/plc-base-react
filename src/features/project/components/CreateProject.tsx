@@ -19,9 +19,8 @@ type FormData = Pick<CreateProjectRequest, 'name' | 'key'>
 
 export default function CreateProject(props: Props) {
   const { isShowing, onClose } = props
+  const [selectedImage, setSelectedImage] = useState<File>()
   const queryClient = useQueryClient()
-
-  const [selectedImage, setSelectedImage] = useState<string>('')
 
   const {
     reset,
@@ -35,10 +34,18 @@ export default function CreateProject(props: Props) {
     mutationFn: (body: CreateProjectRequest) => ProjectApi.createProject(body)
   })
 
-  const handleCreateProject = handleSubmit((form: FormData) => {
+  const handleCreateProject = handleSubmit(async (form: FormData) => {
+    let imageUrl = ''
+    try {
+      const imageUploadResponse = await MediaApi.uploadFile(selectedImage)
+      imageUrl = imageUploadResponse?.data.data || ''
+    } catch {
+      imageUrl = ''
+    }
+
     const projectData: CreateProjectRequest = {
       ...form,
-      image: selectedImage || ''
+      image: imageUrl
     }
 
     createProjectMutation.mutate(projectData, {
@@ -58,8 +65,7 @@ export default function CreateProject(props: Props) {
   })
 
   const handleSelectImage = async (image: File) => {
-    const imageUploadResponse = await MediaApi.uploadFile(image)
-    setSelectedImage(imageUploadResponse.data.data)
+    setSelectedImage(image)
   }
 
   return (
