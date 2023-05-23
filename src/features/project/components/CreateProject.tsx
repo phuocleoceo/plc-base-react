@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
+import { useState } from 'react'
 
 import { CreateProjectRequest } from '~/features/project/models'
 import { InputValidation, Modal, ImageUpload } from '~/common/components'
@@ -14,11 +15,13 @@ interface Props {
   onClose: () => void
 }
 
-type FormData = Pick<CreateProjectRequest, 'name' | 'image' | 'key'>
+type FormData = Pick<CreateProjectRequest, 'name' | 'key'>
 
 export default function CreateProject(props: Props) {
   const { isShowing, onClose } = props
   const queryClient = useQueryClient()
+
+  const [selectedImage, setSelectedImage] = useState<string>('')
 
   const {
     reset,
@@ -35,7 +38,7 @@ export default function CreateProject(props: Props) {
   const handleCreateProject = handleSubmit((form: FormData) => {
     const projectData: CreateProjectRequest = {
       ...form,
-      image: 'string'
+      image: selectedImage || ''
     }
 
     createProjectMutation.mutate(projectData, {
@@ -54,8 +57,9 @@ export default function CreateProject(props: Props) {
     })
   })
 
-  const handleSelectImage = (image: File) => {
-    console.log(image)
+  const handleSelectImage = async (image: File) => {
+    const imageUploadResponse = await MediaApi.uploadFile(image)
+    setSelectedImage(imageUploadResponse.data.data)
   }
 
   return (

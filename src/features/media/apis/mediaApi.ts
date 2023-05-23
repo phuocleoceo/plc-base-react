@@ -7,10 +7,10 @@ const mediaApi = {
     formData.append('file', file)
 
     return HttpHelper.post<FileUploadResponse>('upload-file', formData, {
-      params: { prefix }
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }
+      params: { prefix },
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     })
   }
 }
