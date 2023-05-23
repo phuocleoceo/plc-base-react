@@ -1,4 +1,7 @@
 import {
+  GetProjectsParams,
+  GetProjectsResponse,
+  GetProjectResponse,
   CreateProjectRequest,
   CreateProjectResponse,
   UpdateProjectRequest,
@@ -8,6 +11,12 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const projectApi = {
+  getProjects(params: GetProjectsParams) {
+    return HttpHelper.get<GetProjectsResponse>('project', { params })
+  },
+  getProjectById(projectId: number) {
+    return HttpHelper.get<GetProjectResponse>(`project/${projectId}`)
+  },
   createProject(body: CreateProjectRequest) {
     return HttpHelper.post<CreateProjectResponse>('project', body)
   },
