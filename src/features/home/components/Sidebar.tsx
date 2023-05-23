@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { Suspense, useContext } from 'react'
+import { Suspense, lazy, useContext } from 'react'
 import { motion } from 'framer-motion'
 
 import { LocalStorageHelper } from '~/shared/helpers'
@@ -10,6 +10,8 @@ import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
 
 import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
+
+const Profile = lazy(() => import('~/features/profile/pages/Profile'))
 
 export default function Sidebar() {
   const { isShowing, toggle } = useShowing()
@@ -55,7 +57,9 @@ export default function Sidebar() {
         </div>
       </div>
       <motion.div initial={{ width: 0 }} animate={{ width: isShowing ? 320 : 0 }} transition={{ type: 'tween' }}>
-        <Suspense>{/* <Profile authUser={u} /> */}</Suspense>
+        <Suspense>
+          <Profile user={user} />
+        </Suspense>
       </motion.div>
     </div>
   )
