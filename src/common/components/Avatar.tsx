@@ -8,7 +8,7 @@ interface Props {
   style?: {}
 }
 
-function Avatar(props: Props) {
+export default function Avatar(props: Props) {
   const { src, name, title, className, onClick, style } = props
 
   return (
@@ -25,5 +25,3 @@ function Avatar(props: Props) {
     </div>
   )
 }
-
-export default Avatar

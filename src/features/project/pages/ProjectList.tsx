@@ -72,27 +72,25 @@ export default function ProjectList() {
             <div className='w-80'>name</div>
             <div className='flex-grow'>leader</div>
           </div>
-          {projects ? (
-            projects.length !== 0 ? (
-              <div className='mt-1 border-t-2 border-c-3'>
-                {projects.map((project, idx) => (
-                  <ProjectRow
-                    key={project.id}
-                    idx={idx}
-                    id={project.id}
-                    name={project.name}
-                    issueKey={project.key}
-                    image={project.image}
-                    leaderId={project.leaderId}
-                    leaderName={project.leaderName}
-                    leaderAvatar={project.leaderAvatar}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className='mt-[30vh] grid place-items-center text-xl'>You have not created any project yet!! 🚀</div>
-            )
-          ) : null}
+          {projects && projects.length !== 0 ? (
+            <div className='mt-1 border-t-2 border-c-3'>
+              {projects.map((project, idx) => (
+                <ProjectRow
+                  key={project.id}
+                  idx={idx}
+                  id={project.id}
+                  name={project.name}
+                  issueKey={project.key}
+                  image={project.image}
+                  leaderId={project.leaderId}
+                  leaderName={project.leaderName}
+                  leaderAvatar={project.leaderAvatar}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className='mt-[30vh] grid place-items-center text-xl'>No projects found 🚀</div>
+          )}
         </div>
       </div>
       <CreateProject isShowing={isShowing} onClose={toggle} />

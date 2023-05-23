@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 type Props = { icon: string; text: string; iconSize?: number; to: string }
 
-const BtnWithIcon = ({ icon, text, iconSize, to }: Props) => {
+export default function BtnWithIcon({ icon, text, iconSize, to }: Props) {
   return (
     <li className='list-none'>
       <Link
@@ -16,5 +16,3 @@ const BtnWithIcon = ({ icon, text, iconSize, to }: Props) => {
     </li>
   )
 }
-
-export default BtnWithIcon

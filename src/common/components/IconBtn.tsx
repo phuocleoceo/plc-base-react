@@ -2,11 +2,11 @@ import { Icon } from '@iconify/react'
 
 interface Props {
   icon: string
-  onClick?: () => void
   title?: string
+  onClick?: () => void
 }
 
-const IconBtn = (props: Props) => {
+export default function IconBtn(props: Props) {
   const { icon, onClick, title } = props
 
   return (
@@ -15,5 +15,3 @@ const IconBtn = (props: Props) => {
     </button>
   )
 }
-
-export default IconBtn
