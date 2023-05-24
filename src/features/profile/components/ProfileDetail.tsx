@@ -15,13 +15,13 @@ export default function ProfileDetail(props: Props) {
 
       <div className='mb-2 text-center'>
         <div className='mt-3'>
-          <button onClick={() => onChangeTab(ProfileTab.UpdateProfile)} className='btn'>
+          <button onClick={() => onChangeTab(ProfileTab.UpdateProfile)} className='btn w-40'>
             update_profile
           </button>
         </div>
 
         <div className='mt-3'>
-          <button onClick={() => onChangeTab(ProfileTab.ChangePassword)} className='btn'>
+          <button onClick={() => onChangeTab(ProfileTab.ChangePassword)} className='btn w-40'>
             change_password
           </button>
         </div>

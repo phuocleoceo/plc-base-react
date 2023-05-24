@@ -15,11 +15,11 @@ export default function UpdateProfile(props: Props) {
     <>
       <div className='mb-2 text-center'>
         <div className='mt-3'>
-          <button className='btn'>update_profile</button>
+          <button className='btn w-40'>update_profile</button>
         </div>
 
         <div className='mt-3'>
-          <button onClick={() => onChangeTab(ProfileTab.ProfileDetail)} className='btn'>
+          <button onClick={() => onChangeTab(ProfileTab.ProfileDetail)} className='btn w-40'>
             go_back
           </button>
         </div>
