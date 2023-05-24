@@ -103,8 +103,6 @@ export default function UpdateProfile(props: Props) {
               message: 'phone_number_required'
             }
           })}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
           error={errors.phoneNumber as FieldError}
         />
 
@@ -118,8 +116,6 @@ export default function UpdateProfile(props: Props) {
               message: 'address_required'
             }
           })}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
           error={errors.address as FieldError}
         />
       </div>

@@ -64,6 +64,8 @@ export default function ChangePassword(props: Props) {
           })}
           error={errors.oldPassword as FieldError}
           type='password'
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
         />
         <InputValidation
           label='new_password'
