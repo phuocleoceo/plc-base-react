@@ -1,5 +1,6 @@
-import { UserProfileType, ProfileTab } from '~/features/profile/models'
+import { UserProfileType } from '~/features/profile/models'
 import { Avatar } from '~/common/components'
+import { ProfileTab } from '~/shared/enums'
 
 interface Props {
   user?: UserProfileType

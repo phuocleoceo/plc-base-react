@@ -4,10 +4,10 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { ChangePasswordRequest } from '~/features/auth/models'
-import { ProfileTab } from '~/features/profile/models'
 import { InputValidation } from '~/common/components'
 import { ValidationHelper } from '~/shared/helpers'
 import { AuthAPI } from '~/features/auth/apis'
+import { ProfileTab } from '~/shared/enums'
 
 interface Props {
   onChangeTab: (newTab: ProfileTab) => void

@@ -1,5 +1,6 @@
-import { UserProfileType, ProfileTab } from '~/features/profile/models'
+import { UserProfileType } from '~/features/profile/models'
 import { useQueryClient } from '@tanstack/react-query'
+import { ProfileTab } from '~/shared/enums'
 
 interface Props {
   user?: UserProfileType
