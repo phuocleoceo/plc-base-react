@@ -4,8 +4,9 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 
+import { ImageUpload, InputValidation, LabelWrapper, SelectBox } from '~/common/components'
 import { UserProfileType, UpdateProfileRequest } from '~/features/profile/models'
-import { ImageUpload, InputValidation } from '~/common/components'
+// import { AddressApi } from '~/features/address/apis'
 import { ProfileApi } from '~/features/profile/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
@@ -71,6 +72,10 @@ export default function UpdateProfile(props: Props) {
     setSelectedImage(image)
   }
 
+  const handleSelectProvince = (provinceId: number) => {
+    console.log(provinceId)
+  }
+
   return (
     <form onSubmit={handleUpdateProfile}>
       <div>
@@ -118,6 +123,27 @@ export default function UpdateProfile(props: Props) {
           })}
           error={errors.address as FieldError}
         />
+
+        <LabelWrapper label='address_province' margin='mt-1'>
+          <SelectBox
+            selectList={[
+              { text: 'abc', value: 0 },
+              { text: 'def', value: 2 },
+              { text: 'fgh', value: 4 }
+            ]}
+            defaultValue={2}
+            onSelected={handleSelectProvince}
+            className='w-full'
+          />
+        </LabelWrapper>
+
+        <LabelWrapper label='address_district' margin='mt-1'>
+          <SelectBox selectList={[]} onSelected={handleSelectProvince} className='w-full' />
+        </LabelWrapper>
+
+        <LabelWrapper label='address_ward' margin='mt-1'>
+          <SelectBox selectList={[]} onSelected={handleSelectProvince} className='w-full' />
+        </LabelWrapper>
       </div>
 
       <div className='mt-5 text-center'>
