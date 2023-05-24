@@ -51,9 +51,9 @@ export default function ChangePassword(props: Props) {
   return (
     <>
       <div className='mb-2'>
-        <h2 className='mt-2 text-2xl text-c-text text-center'>Change Password</h2>
+        <h2 className='mt-2 text-2xl text-c-text text-center'>change_password</h2>
 
-        <div className='mt-5 flex w-[16.5rem] flex-col gap-4'>
+        <div className='mt-5 ml-2 flex w-[16.5rem] flex-col gap-4'>
           <InputValidation
             label='old_password'
             placeholder='enter_old_password...'

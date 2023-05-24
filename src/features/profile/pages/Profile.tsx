@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 
-import { UserProfileType, ProfileTab } from '~/features/profile/models'
+import { UserProfileType } from '~/features/profile/models'
+import { ProfileTab } from '~/shared/enums'
 
 const ProfileDetail = lazy(() => import('~/features/profile/components/ProfileDetail'))
 const UpdateProfile = lazy(() => import('~/features/profile/components/UpdateProfile'))
@@ -18,7 +19,7 @@ export default function Profile(props: Props) {
   const handleChangeTab = (newTab: ProfileTab) => setTab(newTab)
 
   return (
-    <div className='flex h-screen w-[320px] flex-col items-center gap-8 overflow-y-auto overflow-x-hidden border-r-2 border-c-3 bg-c-1 p-6'>
+    <div className='flex h-screen w-[320px] flex-col gap-8 overflow-y-auto overflow-x-hidden border-r-2 border-c-3 bg-c-1 p-6'>
       {user && (
         <>
           {tab === ProfileTab.ProfileDetail && (
