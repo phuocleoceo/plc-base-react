@@ -64,40 +64,31 @@ export default function SelectBox(props: Prop) {
     })
   }
 
+  const SelectComponent = (onChange: any) => (
+    <Select
+      options={selectList}
+      defaultValue={selectList.find((option) => option.value === defaultValue)}
+      formatOptionLabel={formatOptionLabel}
+      styles={customStyles}
+      className={className}
+      onChange={onChange}
+      noOptionsMessage={NoOptionsMessage}
+      isSearchable={isSearchable ?? true}
+      isClearable={isClearable ?? true}
+      isDisabled={isDisabled ?? false}
+    />
+  )
+
   return selectList.length > 0 ? (
     controlField ? (
       <Controller
         name={controlField}
         control={control}
-        render={({ field: { onChange } }) => (
-          <Select
-            options={selectList}
-            defaultValue={selectList.find((option) => option.value === defaultValue)}
-            formatOptionLabel={formatOptionLabel}
-            styles={customStyles}
-            className={className}
-            onChange={(val: SingleValue<SelectItem>) => onChange(val?.value)}
-            noOptionsMessage={NoOptionsMessage}
-            isSearchable={isSearchable ?? true}
-            isClearable={isClearable ?? true}
-            isDisabled={isDisabled ?? false}
-          />
-        )}
+        render={({ field: { onChange } }) => SelectComponent((val: SingleValue<SelectItem>) => onChange(val?.value))}
         rules={{ required: true }}
       />
     ) : onSelected ? (
-      <Select
-        options={selectList}
-        defaultValue={selectList.find((option) => option.value === defaultValue)}
-        formatOptionLabel={formatOptionLabel}
-        styles={customStyles}
-        className={className}
-        onChange={(val: SingleValue<SelectItem>) => onSelected(val?.value)}
-        noOptionsMessage={NoOptionsMessage}
-        isSearchable={isSearchable ?? true}
-        isClearable={isClearable ?? true}
-        isDisabled={isDisabled ?? false}
-      />
+      SelectComponent((val: SingleValue<SelectItem>) => onSelected(val?.value))
     ) : null
   ) : null
 }
