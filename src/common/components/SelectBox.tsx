@@ -1,29 +1,34 @@
 import Select, { SingleValue } from 'react-select'
+import { Controller } from 'react-hook-form'
 
 import Item from './Item'
 
 export type SelectItem = { label: string; value: string; icon?: string }
 
-type Prop = {
+interface Prop {
+  control?: any
+  controlField?: string
+  onSelected?: (selectedValue?: string) => void
   selectList: SelectItem[]
   defaultValue?: string
   isSearchable?: boolean
   isClearable?: boolean
   isDisabled?: boolean
-  onSelected: (selectedValue?: string) => void
   className?: string
 }
 
 export default function SelectBox(props: Prop) {
-  const { selectList, defaultValue, isSearchable, isClearable, isDisabled, onSelected, className } = props
-
-  const getDefaultOption = () => {
-    return selectList.find((option) => option.value === defaultValue)
-  }
-
-  const handleChange = (selectedOption: SingleValue<SelectItem>) => {
-    onSelected(selectedOption?.value)
-  }
+  const {
+    control,
+    controlField,
+    selectList,
+    defaultValue,
+    isSearchable,
+    isClearable,
+    isDisabled,
+    onSelected,
+    className
+  } = props
 
   const formatOptionLabel = ({ label, icon }: SelectItem) => (
     <Item size='w-4 h-4' variant='SQUARE' icon={icon} text={label} />
@@ -59,18 +64,40 @@ export default function SelectBox(props: Prop) {
     })
   }
 
-  return (
-    <Select
-      options={selectList}
-      defaultValue={getDefaultOption()}
-      formatOptionLabel={formatOptionLabel}
-      styles={customStyles}
-      onChange={handleChange}
-      className={className}
-      noOptionsMessage={NoOptionsMessage}
-      isSearchable={isSearchable ?? true}
-      isClearable={isClearable ?? true}
-      isDisabled={isDisabled ?? false}
-    />
-  )
+  return selectList.length > 0 ? (
+    controlField ? (
+      <Controller
+        name={controlField}
+        control={control}
+        render={({ field: { onChange } }) => (
+          <Select
+            options={selectList}
+            defaultValue={selectList.find((option) => option.value === defaultValue)}
+            formatOptionLabel={formatOptionLabel}
+            styles={customStyles}
+            className={className}
+            onChange={(val: SingleValue<SelectItem>) => onChange(val?.value)}
+            noOptionsMessage={NoOptionsMessage}
+            isSearchable={isSearchable ?? true}
+            isClearable={isClearable ?? true}
+            isDisabled={isDisabled ?? false}
+          />
+        )}
+        rules={{ required: true }}
+      />
+    ) : onSelected ? (
+      <Select
+        options={selectList}
+        defaultValue={selectList.find((option) => option.value === defaultValue)}
+        formatOptionLabel={formatOptionLabel}
+        styles={customStyles}
+        className={className}
+        onChange={(val: SingleValue<SelectItem>) => onSelected(val?.value)}
+        noOptionsMessage={NoOptionsMessage}
+        isSearchable={isSearchable ?? true}
+        isClearable={isClearable ?? true}
+        isDisabled={isDisabled ?? false}
+      />
+    ) : null
+  ) : null
 }

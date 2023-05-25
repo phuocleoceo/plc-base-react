@@ -28,6 +28,7 @@ export default function UpdateProfile(props: Props) {
 
   const {
     reset,
+    control,
     register,
     setError,
     handleSubmit,
@@ -39,6 +40,7 @@ export default function UpdateProfile(props: Props) {
   })
 
   const handleUpdateProfile = handleSubmit(async (form: FormData) => {
+    console.log(form)
     let imageUrl = ''
     try {
       const imageUploadResponse = await MediaApi.uploadFile(selectedImage)
@@ -49,8 +51,7 @@ export default function UpdateProfile(props: Props) {
 
     const profileData: UpdateProfileRequest = {
       ...form,
-      avatar: imageUrl,
-      addressWardId: wardId ?? user?.addressWardId ?? 0
+      avatar: imageUrl
     }
 
     updateProfileMutation.mutate(profileData, {
@@ -76,7 +77,6 @@ export default function UpdateProfile(props: Props) {
   // Address
   const [provinceId, setProvinceId] = useState<number | undefined>(user?.addressProvinceId)
   const [districtId, setDistrictId] = useState<number | undefined>(user?.addressDistrictId)
-  const [wardId, setWardId] = useState<number | undefined>(user?.addressWardId)
   const [provinces, setProvinces] = useState<SelectItem[]>([])
   const [districts, setDistricts] = useState<SelectItem[]>([])
   const [wards, setWards] = useState<SelectItem[]>([])
@@ -129,10 +129,6 @@ export default function UpdateProfile(props: Props) {
     setDistrictId(parseInt(districtId ?? ''))
   }
 
-  const handleSelectWard = (wardId?: string) => {
-    setWardId(parseInt(wardId ?? ''))
-  }
-
   return (
     <form onSubmit={handleUpdateProfile}>
       <div>
@@ -181,40 +177,35 @@ export default function UpdateProfile(props: Props) {
           error={errors.address as FieldError}
         />
 
-        {provinces.length > 0 && (
-          <LabelWrapper label='address_province' margin='mt-1'>
-            <SelectBox
-              selectList={provinces}
-              onSelected={handleSelectProvince}
-              defaultValue={user?.addressProvinceId.toString()}
-              className='w-full'
-            />
-          </LabelWrapper>
-        )}
+        <LabelWrapper label='address_province' margin='mt-1'>
+          <SelectBox
+            selectList={provinces}
+            onSelected={handleSelectProvince}
+            defaultValue={user?.addressProvinceId.toString()}
+            className='w-full'
+          />
+        </LabelWrapper>
 
-        {districts.length > 0 && (
-          <LabelWrapper label='address_district' margin='mt-1'>
-            <SelectBox
-              isDisabled={provinceId === undefined}
-              selectList={districts}
-              onSelected={handleSelectDistrict}
-              defaultValue={user?.addressDistrictId.toString()}
-              className='w-full'
-            />
-          </LabelWrapper>
-        )}
+        <LabelWrapper label='address_district' margin='mt-1'>
+          <SelectBox
+            isDisabled={provinceId === undefined}
+            selectList={districts}
+            onSelected={handleSelectDistrict}
+            defaultValue={user?.addressDistrictId.toString()}
+            className='w-full'
+          />
+        </LabelWrapper>
 
-        {wards.length > 0 && (
-          <LabelWrapper label='address_ward' margin='mt-1'>
-            <SelectBox
-              isDisabled={provinceId === undefined || districtId === undefined}
-              selectList={wards}
-              onSelected={handleSelectWard}
-              defaultValue={user?.addressWardId.toString()}
-              className='w-full'
-            />
-          </LabelWrapper>
-        )}
+        <LabelWrapper label='address_ward' margin='mt-1'>
+          <SelectBox
+            control={control}
+            controlField='addressWardId'
+            isDisabled={provinceId === undefined || districtId === undefined}
+            selectList={wards}
+            defaultValue={user?.addressWardId.toString()}
+            className='w-full'
+          />
+        </LabelWrapper>
       </div>
 
       <div className='mt-5 text-center'>
