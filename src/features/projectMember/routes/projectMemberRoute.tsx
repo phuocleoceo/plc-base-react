@@ -5,7 +5,7 @@ import { ProjectLayout } from '~/features/project/layouts'
 
 export const projectMemberRoute: RouteObject[] = [
   {
-    path: ':projectId/member',
+    path: 'member',
     element: (
       <ProjectLayout>
         <ProjectMember />

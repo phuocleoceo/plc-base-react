@@ -8,7 +8,7 @@ import { ProjectLayout } from '../layouts'
 
 export const projectRoute: RouteObject[] = [
   {
-    path: '/project',
+    path: 'project',
     element: <RequiredAuthenticatedRoute />,
     children: [
       {
@@ -20,22 +20,27 @@ export const projectRoute: RouteObject[] = [
         )
       },
       {
-        path: ':projectId/board',
-        element: (
-          <ProjectLayout>
-            <ProjectBoard />
-          </ProjectLayout>
-        )
-      },
-      {
-        path: ':projectId/setting',
-        element: (
-          <ProjectLayout>
-            <ProjectSetting />
-          </ProjectLayout>
-        )
-      },
-      ...projectMemberRoute
+        path: ':projectId',
+        children: [
+          {
+            path: 'board',
+            element: (
+              <ProjectLayout>
+                <ProjectBoard />
+              </ProjectLayout>
+            )
+          },
+          {
+            path: 'setting',
+            element: (
+              <ProjectLayout>
+                <ProjectSetting />
+              </ProjectLayout>
+            )
+          },
+          ...projectMemberRoute
+        ]
+      }
     ]
   }
 ]
