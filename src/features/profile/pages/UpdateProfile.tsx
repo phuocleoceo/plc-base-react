@@ -40,7 +40,6 @@ export default function UpdateProfile(props: Props) {
   })
 
   const handleUpdateProfile = handleSubmit(async (form: FormData) => {
-    console.log(form)
     let imageUrl = ''
     try {
       const imageUploadResponse = await MediaApi.uploadFile(selectedImage)

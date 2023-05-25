@@ -32,7 +32,11 @@ export default function Menubar() {
       className='relative bg-c-2'
     >
       {projectId &&
-        (!isLoading ? (
+        (isLoading ? (
+          <div className='flex justify-center'>
+            <SpinningCircle height={40} width={40} />
+          </div>
+        ) : (
           <div className='h-full w-[15rem] bg-c-2 px-4 py-6'>
             <div className='flex'>
               <div className='grid h-10 w-10 shrink-0 place-items-center text-lg'>
@@ -58,10 +62,6 @@ export default function Menubar() {
             <div className='mt-2'>
               <BtnWithIcon to={`/project/${projectId}/setting`} icon='clarity:settings-solid' text='project_setting' />
             </div>
-          </div>
-        ) : (
-          <div className='flex justify-center'>
-            <SpinningCircle height={40} width={40} />
           </div>
         ))}
 
