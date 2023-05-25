@@ -15,7 +15,7 @@ export default function Menubar() {
   const { isAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ['project'],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated
   })
@@ -29,10 +29,10 @@ export default function Menubar() {
       transition={{ type: 'tween' }}
       className='relative bg-c-2'
     >
-      {projectId ? (
+      {projectId && (
         <div className='h-full w-[15rem] bg-c-2 px-4 py-6'>
           <div className='flex'>
-            <div className='grid h-10 w-10 shrink-0 place-items-center bg-cyan-500 text-lg'>{project?.name.at(0)}</div>
+            {/* <div className='grid h-10 w-10 shrink-0 place-items-center bg-cyan-500 text-lg'>{project?.name.at(0)}</div> */}
             <div className='ml-2 w-40'>
               <span className='block truncate text-sm font-medium text-c-5'>{project?.name ?? 'loading...'}</span>
               <span className='text-[13px] text-c-text'>Project Planning</span>
@@ -44,7 +44,7 @@ export default function Menubar() {
           </div>
           <hr className='border-t-[.5px] border-gray-400' />
         </div>
-      ) : null}
+      )}
       <button
         title='Toggle project sidebar'
         onClick={() => setOn((p) => !p)}

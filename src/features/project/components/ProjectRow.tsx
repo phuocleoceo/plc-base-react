@@ -24,8 +24,8 @@ export default function ProjectRow(props: Props) {
     <div
       key={id}
       className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-      onClick={() => navigate(`project/${id}/board`)}
-      onKeyDown={() => navigate(`project/${id}/board`)}
+      onClick={() => navigate(`${id}/board`)}
+      onKeyDown={() => navigate(`${id}/board`)}
       tabIndex={id}
       role='button'
     >

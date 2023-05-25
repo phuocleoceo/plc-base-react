@@ -13,7 +13,7 @@ export default function Breadcrumbs() {
   const { isAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ['project'],
     queryFn: () => ProjectApi.getProjectById(Number(fragments[1]) ?? -1),
     enabled: isAuthenticated
   })
@@ -37,7 +37,7 @@ export default function Breadcrumbs() {
         <>
           <Icon className='mx-2 inline text-xl' icon='ei:chevron-right' />
           <Link to={`/project/${fragments[1]}/board`} className='hover:underline'>
-            Kanban board
+            kanban_board
           </Link>
         </>
       )}
