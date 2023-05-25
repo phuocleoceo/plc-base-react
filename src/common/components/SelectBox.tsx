@@ -2,10 +2,10 @@ import Select, { SingleValue } from 'react-select'
 
 import Item from './Item'
 
-export type Category = { label: string; value: number; icon?: string }
+export type SelectItem = { label: string; value: number; icon?: string }
 
 type Prop = {
-  selectList: Category[]
+  selectList: SelectItem[]
   defaultValue?: number
   isSearchable?: boolean
   isClearable?: boolean
@@ -21,11 +21,11 @@ export default function SelectBox(props: Prop) {
     return selectList.find((option) => option.value === defaultValue)
   }
 
-  const handleChange = (selectedOption: SingleValue<Category>) => {
+  const handleChange = (selectedOption: SingleValue<SelectItem>) => {
     onSelected(selectedOption?.value)
   }
 
-  const formatOptionLabel = ({ label, icon }: Category) => (
+  const formatOptionLabel = ({ label, icon }: SelectItem) => (
     <Item size='w-4 h-4' variant='SQUARE' icon={icon} text={label} />
   )
 
