@@ -56,7 +56,7 @@ class Http {
 
   private setAuthorizationHeader(config: InternalAxiosRequestConfig<any>) {
     if (this.accessToken && config.headers) {
-      config.headers.authorization = this.accessToken
+      config.headers.authorization = `Bearer ${this.accessToken}`
     }
   }
 
@@ -74,7 +74,6 @@ class Http {
     if (TypeCheckHelper.isAxiosUnauthorizedError<BaseResponse<null>>(error)) {
       const config: AxiosRequestConfig<any> = error.response?.config || {}
       const { url } = config
-
       if (url !== 'auth/refresh-token') {
         this.refreshTokenRequest = this.refreshTokenRequest
           ? this.refreshTokenRequest
@@ -84,7 +83,6 @@ class Http {
                 this.refreshTokenRequest = null
               }, 10000)
             })
-
         // Recall error request
         return this.refreshTokenRequest.then((accessToken) => {
           return this.instance({
@@ -93,7 +91,6 @@ class Http {
           })
         })
       }
-
       LocalStorageHelper.clear()
       this.accessToken = ''
       this.refreshToken = ''

@@ -1,6 +1,6 @@
 interface Props {
   src?: string
-  name: string
+  name?: string
   title?: string
   className?: string
   onClick?: () => void
@@ -20,7 +20,7 @@ export default function Avatar(props: Props) {
       title={title ?? name}
       {...{ style, onClick }}
     >
-      <div>{name.at(0)}</div>
+      <div>{name?.at(0)}</div>
       {src && <img src={src} alt={name} className='absolute block h-full w-full object-cover' />}
     </div>
   )

@@ -37,7 +37,7 @@ export default function Modal(props: Props) {
             {children}
             {onSubmit && (
               <div className='mt-8 flex justify-end gap-x-3'>
-                <button onClick={onClose} className='rounded-[3px] px-3 py-1 text-c-1 hover:bg-c-3'>
+                <button onClick={onClose} className='btn-crystal'>
                   {closeLabel}
                 </button>
                 <button onClick={onSubmit} className='btn'>
