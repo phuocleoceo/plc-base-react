@@ -128,8 +128,16 @@ export default function UpdateProfile(props: Props) {
           <SelectBox
             selectList={[
               { label: 'abc', value: 0 },
-              { label: 'def', value: 2, icon: 'https://plc-base.s3.ap-southeast-1.amazonaws.com/avatar.jpg' },
-              { label: 'fgh', value: 4 }
+              { label: 'def', value: 1, icon: 'https://plc-base.s3.ap-southeast-1.amazonaws.com/avatar.jpg' },
+              { label: 'fgh', value: 2 },
+              { label: 'abc', value: 3 },
+              { label: 'def', value: 4, icon: 'https://plc-base.s3.ap-southeast-1.amazonaws.com/avatar.jpg' },
+              { label: 'fgh', value: 5 },
+              { label: 'abc', value: 6 },
+              { label: 'def', value: 7, icon: 'https://plc-base.s3.ap-southeast-1.amazonaws.com/avatar.jpg' },
+              { label: 'fgh', value: 8 },
+              { label: 'abc', value: 9 },
+              { label: 'def', value: 10, icon: 'https://plc-base.s3.ap-southeast-1.amazonaws.com/avatar.jpg' }
             ]}
             defaultValue={2}
             onSelected={handleSelectProvince}

@@ -26,20 +26,36 @@ export default function SelectBox(props: Prop) {
   }
 
   const formatOptionLabel = ({ label, icon }: Category) => (
-    <div style={{ display: 'flex' }}>
-      <Item size='w-4 h-4' variant='SQUARE' icon={icon} text={label} />
-    </div>
+    <Item size='w-4 h-4' variant='SQUARE' icon={icon} text={label} />
   )
+
+  const NoOptionsMessage = () => {
+    return <div>no_options</div>
+  }
 
   const customStyles = {
     control: (provided: any) => ({
       ...provided,
-      borderRadius: '3px'
+      borderRadius: '0.125rem',
+      borderWidth: '0.125rem',
+      fontSize: '0.875rem',
+      outline: 'none',
+      transitionDuration: '0.2s',
+      backgroundColor: '#f0f4f8',
+      hoverBorderColor: '#a0aec0',
+      borderColor: 'transparent',
+      cursor: 'pointer'
     }),
-    option: (provided: any) => ({
+    option: (provided: any, state: any) => ({
       ...provided,
-      display: 'flex',
-      alignItems: 'center'
+      backgroundColor: state.isFocused ? '#e2e8f0' : 'white',
+      color: state.isFocused ? '#1a202c' : '#4a5568',
+      cursor: 'pointer',
+      padding: '0.5rem 1rem'
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: '#1a202c'
     })
   }
 
@@ -51,6 +67,7 @@ export default function SelectBox(props: Prop) {
       styles={customStyles}
       onChange={handleChange}
       className={className}
+      noOptionsMessage={NoOptionsMessage}
       isSearchable={isSearchable ?? true}
       isClearable={isClearable ?? true}
       isDisabled={isDisabled ?? false}
