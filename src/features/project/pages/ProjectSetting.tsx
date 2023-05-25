@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
+import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateProjectRequest } from '~/features/project/models'
 import { SelectItem } from '~/common/components/SelectBox'
 import { ProjectApi } from '~/features/project/apis'
@@ -23,15 +24,6 @@ export default function ProjectSetting() {
 
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['project'],
-    queryFn: () => ProjectApi.getProjectById(projectId),
-    enabled: isAuthenticated,
-    staleTime: 100
-  })
-
-  const project = data?.data.data
-
   const {
     reset,
     control,
@@ -40,6 +32,29 @@ export default function ProjectSetting() {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<FormData>()
+
+  const { data: projectData, isLoading: projectLoading } = useQuery({
+    queryKey: ['project'],
+    queryFn: () => ProjectApi.getProjectById(projectId),
+    enabled: isAuthenticated,
+    staleTime: 100
+  })
+
+  const project = projectData?.data.data
+
+  const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
+    queryKey: ['projectMember'],
+    queryFn: () => ProjectMemberApi.getMemberForProject(projectId, {}),
+    enabled: isAuthenticated,
+    staleTime: 1000
+  })
+
+  const projectMembers: SelectItem[] =
+    projectMemberData?.data.data.map((pm) => ({
+      label: pm.name,
+      value: pm.id.toString(),
+      icon: pm.avatar
+    })) || []
 
   const updateProjectMutation = useMutation({
     mutationFn: (body: UpdateProjectRequest) => ProjectApi.updateProject(projectId, body)
@@ -54,13 +69,12 @@ export default function ProjectSetting() {
       imageUrl = project?.image || ''
     }
 
-    const projectData: UpdateProjectRequest = {
+    const updateProjectData: UpdateProjectRequest = {
       ...form,
-      image: imageUrl,
-      leaderId: 1
+      image: imageUrl
     }
 
-    updateProjectMutation.mutate(projectData, {
+    updateProjectMutation.mutate(updateProjectData, {
       onSuccess: () => {
         toast.success('update_project_success')
         queryClient.invalidateQueries(['project'])
@@ -79,7 +93,7 @@ export default function ProjectSetting() {
     setSelectedImage(image)
   }
 
-  return isLoading ? (
+  return projectLoading || projectMemberLoading ? (
     <div className='mt-10 flex justify-center'>
       <SpinningCircle height={50} width={50} />
     </div>
@@ -110,6 +124,17 @@ export default function ProjectSetting() {
           })}
           error={errors.key as FieldError}
         />
+
+        <LabelWrapper label='leader' margin='mt-1'>
+          <SelectBox
+            control={control}
+            controlField='leaderId'
+            selectList={projectMembers}
+            defaultValue={project?.leaderId.toString()}
+            className='w-full'
+          />
+        </LabelWrapper>
+
         <div className='mt-2'>
           <button className='btn mt-3'>{isSubmitting ? 'saving_changes...' : 'save_changes'}</button>
         </div>
