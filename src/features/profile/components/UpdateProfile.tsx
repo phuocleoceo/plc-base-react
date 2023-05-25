@@ -72,7 +72,7 @@ export default function UpdateProfile(props: Props) {
     setSelectedImage(image)
   }
 
-  const handleSelectProvince = (provinceId: number) => {
+  const handleSelectProvince = (provinceId?: number) => {
     console.log(provinceId)
   }
 
@@ -127,9 +127,9 @@ export default function UpdateProfile(props: Props) {
         <LabelWrapper label='address_province' margin='mt-1'>
           <SelectBox
             selectList={[
-              { text: 'abc', value: 0 },
-              { text: 'def', value: 2 },
-              { text: 'fgh', value: 4 }
+              { label: 'abc', value: 0 },
+              { label: 'def', value: 2, icon: 'https://plc-base.s3.ap-southeast-1.amazonaws.com/avatar.jpg' },
+              { label: 'fgh', value: 4 }
             ]}
             defaultValue={2}
             onSelected={handleSelectProvince}
