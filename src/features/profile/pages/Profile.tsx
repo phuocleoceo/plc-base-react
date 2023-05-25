@@ -3,9 +3,9 @@ import { lazy, Suspense, useState } from 'react'
 import { UserProfileType } from '~/features/profile/models'
 import { ProfileTab } from '~/shared/enums'
 
-const ProfileDetail = lazy(() => import('~/features/profile/components/ProfileDetail'))
-const UpdateProfile = lazy(() => import('~/features/profile/components/UpdateProfile'))
-const ChangePassword = lazy(() => import('~/features/profile/components/ChangePassword'))
+const ProfileDetail = lazy(() => import('./ProfileDetail'))
+const UpdateProfile = lazy(() => import('./UpdateProfile'))
+const ChangePassword = lazy(() => import('./ChangePassword'))
 
 interface Props {
   user?: UserProfileType
