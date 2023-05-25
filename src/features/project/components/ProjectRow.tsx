@@ -31,7 +31,7 @@ export default function ProjectRow(props: Props) {
     >
       <div className='w-32 text-center'>{idx + 1}</div>
       <div className='w-40'>
-        <Avatar title='Profile' src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
+        <Avatar title={name} src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
       </div>
       <div className='w-40'>{issueKey}</div>
       <div className='w-80'>{name}</div>
