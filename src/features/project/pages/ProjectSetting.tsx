@@ -34,16 +34,16 @@ export default function ProjectSetting() {
   } = useForm<FormData>()
 
   const { data: projectData, isLoading: projectLoading } = useQuery({
-    queryKey: ['project'],
+    queryKey: ['project', projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
-    staleTime: 100
+    staleTime: 1000
   })
 
   const project = projectData?.data.data
 
   const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
-    queryKey: ['projectMember'],
+    queryKey: ['projectMember', projectId],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, {}),
     enabled: isAuthenticated,
     staleTime: 1000

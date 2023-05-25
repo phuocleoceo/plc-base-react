@@ -9,14 +9,15 @@ import { AppContext } from '~/common/contexts'
 export default function Breadcrumbs() {
   const location = useLocation()
   const fragments = location.pathname.slice(1).split('/')
+  const projectId = Number(fragments[1])
 
   const { isAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
-    queryKey: ['project'],
-    queryFn: () => ProjectApi.getProjectById(Number(fragments[1]) ?? -1),
+    queryKey: ['project', projectId],
+    queryFn: () => ProjectApi.getProjectById(projectId || -1),
     enabled: isAuthenticated,
-    staleTime: 100
+    staleTime: 1000
   })
 
   const project = data?.data.data

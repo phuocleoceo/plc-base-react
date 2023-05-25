@@ -16,10 +16,10 @@ export default function Menubar() {
   const { isAuthenticated } = useContext(AppContext)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['project'],
+    queryKey: ['project', projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
-    staleTime: 100
+    staleTime: 1000
   })
 
   const project = data?.data.data
