@@ -1,7 +1,6 @@
-import { RouteObject } from 'react-router-dom'
+import { Navigate, RouteObject } from 'react-router-dom'
 
 import { NotFound, AccessDenied } from '~/common/components'
-import { Home } from '~/features/home/pages'
 import { RequiredAuthenticatedRoute } from './guardRoute'
 
 export const defaultRoute: RouteObject[] = [
@@ -11,7 +10,7 @@ export const defaultRoute: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Home />
+        element: <Navigate to='/project' />
       }
     ]
   },

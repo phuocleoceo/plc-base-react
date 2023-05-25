@@ -1,10 +1,16 @@
-import { useTranslation } from 'react-i18next'
+import { Menubar, Breadcrumbs } from '~/features/project/components'
 
 interface Props {
   children?: React.ReactNode
 }
 export default function ProjectLayout({ children }: Props) {
-  const { t } = useTranslation()
-
-  return <div>{children}</div>
+  return (
+    <>
+      <Menubar />
+      <main className='z-10 h-screen grow overflow-auto bg-c-1 bg-center'>
+        <Breadcrumbs />
+        {children}
+      </main>
+    </>
+  )
 }

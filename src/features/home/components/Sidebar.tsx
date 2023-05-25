@@ -61,6 +61,7 @@ export default function Sidebar() {
           <Profile user={user} />
         </Suspense>
       </motion.div>
+      <div className='absolute top-0 right-0 h-full w-[2px] bg-c-3 peer-hover:bg-secondary' />
     </div>
   )
 }
