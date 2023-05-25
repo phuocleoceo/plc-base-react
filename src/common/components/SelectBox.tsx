@@ -84,6 +84,7 @@ export default function SelectBox(props: Prop) {
       <Controller
         name={controlField}
         control={control}
+        defaultValue={defaultValue}
         render={({ field: { onChange } }) => SelectComponent((val: SingleValue<SelectItem>) => onChange(val?.value))}
         rules={{ required: true }}
       />
