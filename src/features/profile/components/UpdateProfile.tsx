@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
-import { useState } from 'react'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox } from '~/common/components'
 import { UserProfileType, UpdateProfileRequest } from '~/features/profile/models'
@@ -73,59 +73,64 @@ export default function UpdateProfile(props: Props) {
     setSelectedImage(image)
   }
 
-  // Address State
-  const [provinceId, setProvinceId] = useState<number>()
-  const [districtId, setDistrictId] = useState<number>()
-  const [wardId, setWardId] = useState<number>()
+  // Address
+  const [provinceId, setProvinceId] = useState<number | undefined>(user?.addressProvinceId)
+  const [districtId, setDistrictId] = useState<number | undefined>(user?.addressDistrictId)
+  const [wardId, setWardId] = useState<number | undefined>(user?.addressWardId)
+  const [provinces, setProvinces] = useState<SelectItem[]>([])
+  const [districts, setDistricts] = useState<SelectItem[]>([])
+  const [wards, setWards] = useState<SelectItem[]>([])
 
-  // Address Query
-  const { data: provinceData } = useQuery({
-    queryKey: ['provinces'],
-    queryFn: () => AddressApi.getProvinces(),
-    keepPreviousData: true
-  })
+  useEffect(() => {
+    const getProvinces = async () => {
+      const provinceData = await AddressApi.getProvinces()
+      setProvinces(
+        provinceData.data.data.map((p) => ({
+          label: p.name,
+          value: p.id.toString()
+        }))
+      )
+    }
+    getProvinces()
+  }, [])
 
-  const provinces: SelectItem[] =
-    provinceData?.data.data.map((p) => ({
-      label: p.name,
-      value: p.id
-    })) ?? []
+  useEffect(() => {
+    const getDistricts = async () => {
+      const districtData = await AddressApi.getDistrictsOfProvince(provinceId ?? -1)
+      setDistricts(
+        districtData.data.data.map((p) => ({
+          label: p.name,
+          value: p.id.toString()
+        }))
+      )
+    }
+    getDistricts()
+  }, [provinceId])
 
-  const { data: districtData } = useQuery({
-    queryKey: ['districts', provinceId],
-    queryFn: () => AddressApi.getDistrictsOfProvince(provinceId ?? -1),
-    keepPreviousData: true
-  })
-
-  const districts: SelectItem[] =
-    districtData?.data.data.map((p) => ({
-      label: p.name,
-      value: p.id
-    })) ?? []
-
-  const { data: wardData } = useQuery({
-    queryKey: ['wards', districtId],
-    queryFn: () => AddressApi.getWardsOfDistrict(districtId ?? -1),
-    keepPreviousData: true
-  })
-
-  const wards: SelectItem[] =
-    wardData?.data.data.map((p) => ({
-      label: p.name,
-      value: p.id
-    })) ?? []
+  useEffect(() => {
+    const getWards = async () => {
+      const wardData = await AddressApi.getWardsOfDistrict(districtId ?? -1)
+      setWards(
+        wardData.data.data.map((p) => ({
+          label: p.name,
+          value: p.id.toString()
+        })) ?? []
+      )
+    }
+    getWards()
+  }, [districtId])
 
   // Address select handler
-  const handleSelectProvince = (provinceId?: number) => {
-    setProvinceId(provinceId)
+  const handleSelectProvince = (provinceId?: string) => {
+    setProvinceId(parseInt(provinceId ?? ''))
   }
 
-  const handleSelectDistrict = (districtId?: number) => {
-    setDistrictId(districtId)
+  const handleSelectDistrict = (districtId?: string) => {
+    setDistrictId(parseInt(districtId ?? ''))
   }
 
-  const handleSelectWard = (wardId?: number) => {
-    setWardId(wardId)
+  const handleSelectWard = (wardId?: string) => {
+    setWardId(parseInt(wardId ?? ''))
   }
 
   return (
@@ -176,27 +181,40 @@ export default function UpdateProfile(props: Props) {
           error={errors.address as FieldError}
         />
 
-        <LabelWrapper label='address_province' margin='mt-1'>
-          <SelectBox selectList={provinces} onSelected={handleSelectProvince} className='w-full' />
-        </LabelWrapper>
+        {provinces.length > 0 && (
+          <LabelWrapper label='address_province' margin='mt-1'>
+            <SelectBox
+              selectList={provinces}
+              onSelected={handleSelectProvince}
+              defaultValue={user?.addressProvinceId.toString()}
+              className='w-full'
+            />
+          </LabelWrapper>
+        )}
 
-        <LabelWrapper label='address_district' margin='mt-1'>
-          <SelectBox
-            isDisabled={provinceId === undefined}
-            selectList={districts}
-            onSelected={handleSelectDistrict}
-            className='w-full'
-          />
-        </LabelWrapper>
+        {districts.length > 0 && (
+          <LabelWrapper label='address_district' margin='mt-1'>
+            <SelectBox
+              isDisabled={provinceId === undefined}
+              selectList={districts}
+              onSelected={handleSelectDistrict}
+              defaultValue={user?.addressDistrictId.toString()}
+              className='w-full'
+            />
+          </LabelWrapper>
+        )}
 
-        <LabelWrapper label='address_ward' margin='mt-1'>
-          <SelectBox
-            isDisabled={provinceId === undefined || districtId === undefined}
-            selectList={wards}
-            onSelected={handleSelectWard}
-            className='w-full'
-          />
-        </LabelWrapper>
+        {wards.length > 0 && (
+          <LabelWrapper label='address_ward' margin='mt-1'>
+            <SelectBox
+              isDisabled={provinceId === undefined || districtId === undefined}
+              selectList={wards}
+              onSelected={handleSelectWard}
+              defaultValue={user?.addressWardId.toString()}
+              className='w-full'
+            />
+          </LabelWrapper>
+        )}
       </div>
 
       <div className='mt-5 text-center'>

@@ -10,6 +10,8 @@ export type UserProfileType = {
   address: string
   addressWardId: number
   addressWard: string
+  addressDistrictId: number
   addressDistrict: string
+  addressProvinceId: number
   addressProvince: string
 }

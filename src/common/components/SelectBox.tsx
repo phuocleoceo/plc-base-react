@@ -2,15 +2,15 @@ import Select, { SingleValue } from 'react-select'
 
 import Item from './Item'
 
-export type SelectItem = { label: string; value: number; icon?: string }
+export type SelectItem = { label: string; value: string; icon?: string }
 
 type Prop = {
   selectList: SelectItem[]
-  defaultValue?: number
+  defaultValue?: string
   isSearchable?: boolean
   isClearable?: boolean
   isDisabled?: boolean
-  onSelected: (selectedValue?: number) => void
+  onSelected: (selectedValue?: string) => void
   className?: string
 }
 
