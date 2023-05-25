@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
 
-import { Avatar, BtnWithIcon, SpinningCircle } from '~/common/components'
+import { Avatar, IconLink, SpinningCircle } from '~/common/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
@@ -55,12 +55,12 @@ export default function Menubar() {
             </div>
 
             <div className='mt-5 mb-2'>
-              <BtnWithIcon to={`/project/${projectId}/board`} icon='bi:kanban' text='kanban_board' />
-              <BtnWithIcon to={`/project/${projectId}/member`} icon='mdi:people' text='project_member' />
+              <IconLink to={`/project/${projectId}/board`} icon='bi:kanban' text='kanban_board' />
+              <IconLink to={`/project/${projectId}/member`} icon='mdi:people' text='project_member' />
             </div>
             <hr className='border-t-[.5px] border-gray-400' />
             <div className='mt-2'>
-              <BtnWithIcon to={`/project/${projectId}/setting`} icon='clarity:settings-solid' text='project_setting' />
+              <IconLink to={`/project/${projectId}/setting`} icon='clarity:settings-solid' text='project_setting' />
             </div>
           </div>
         ))}
