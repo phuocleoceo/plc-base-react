@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'react'
 
 import { ProjectLayout } from '~/features/project/layouts'
 
-const ProjectMember = lazy(() => import('~/features/projectMember/pages/ProjectMember'))
+const ProjectMemberList = lazy(() => import('~/features/projectMember/pages/ProjectMemberList'))
 
 export const projectMemberRoute: RouteObject[] = [
   {
@@ -11,7 +11,7 @@ export const projectMemberRoute: RouteObject[] = [
     element: (
       <ProjectLayout>
         <Suspense>
-          <ProjectMember />
+          <ProjectMemberList />
         </Suspense>
       </ProjectLayout>
     )

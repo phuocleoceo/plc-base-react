@@ -1,1 +1,1 @@
-export { default as ProjectMember } from './ProjectMember'
+export { default as ProjectMemberList } from './ProjectMemberList'
