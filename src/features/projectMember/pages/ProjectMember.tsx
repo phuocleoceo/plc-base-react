@@ -3,14 +3,16 @@ import { useParams } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
+import { ProjectMemberRow, ProjectMemberDetail } from '~/features/projectMember/components'
 import { GetMemberForProjectParams } from '~/features/projectMember/models'
-import { ProjectMemberRow } from '~/features/projectMember/components'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
+import { useShowing } from '~/common/hooks'
 
 export default function ProjectMember() {
   const projectId = Number(useParams().projectId)
+  const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useShowing()
 
   const { isAuthenticated } = useContext(AppContext)
 
@@ -35,6 +37,12 @@ export default function ProjectMember() {
   })
 
   const projectMembers = data?.data.data
+
+  const [selectedMember, setSelectedMember] = useState<number>()
+  const handleClickMemberRow = (userId: number) => {
+    setSelectedMember(userId)
+    toggleMemberDetail()
+  }
 
   if (isLoading)
     return (
@@ -83,6 +91,7 @@ export default function ProjectMember() {
                   email={projectMember.email}
                   avatar={projectMember.avatar}
                   projectMemberId={projectMember.projectMemberId}
+                  onClick={() => handleClickMemberRow(projectMember.id)}
                 />
               ))}
             </div>
@@ -91,7 +100,9 @@ export default function ProjectMember() {
           )}
         </div>
       </div>
-      {/* <CreateProject isShowing={isShowing} onClose={toggle} /> */}
+      {selectedMember && (
+        <ProjectMemberDetail userId={selectedMember} isShowing={isShowingMemberDetail} onClose={toggleMemberDetail} />
+      )}
     </>
   )
 }

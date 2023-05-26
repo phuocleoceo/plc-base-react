@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom'
-
 import { Avatar } from '~/common/components'
 
 interface Props {
@@ -9,19 +7,18 @@ interface Props {
   name: string
   avatar: string
   projectMemberId: number
+  onClick: () => void
 }
 
 export default function ProjectMemberRow(props: Props) {
-  const { idx, id, name, email, avatar } = props
-
-  const navigate = useNavigate()
+  const { idx, id, name, email, avatar, onClick } = props
 
   return (
     <div
       key={id}
       className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-      onClick={() => navigate(`${id}/board`)}
-      onKeyDown={() => navigate(`${id}/board`)}
+      onClick={onClick}
+      onKeyDown={onClick}
       tabIndex={id}
       role='button'
     >
