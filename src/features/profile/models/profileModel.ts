@@ -33,6 +33,7 @@ export type GetAnonymousProfileResponse = BaseResponse<{
   userAccountId: number
   email: string
   displayName: string
+  phoneNumber: string
   avatar: string
   address: string
   addressWardId: number
