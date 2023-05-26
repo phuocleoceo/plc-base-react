@@ -91,6 +91,7 @@ export default function ProjectMember() {
                   email={projectMember.email}
                   avatar={projectMember.avatar}
                   projectMemberId={projectMember.projectMemberId}
+                  projectId={projectId}
                   onClick={() => handleClickMemberRow(projectMember.id)}
                 />
               ))}
