@@ -9,13 +9,15 @@ import { AppContext } from '~/common/contexts'
 export default function Breadcrumbs() {
   const location = useLocation()
   const fragments = location.pathname.slice(1).split('/')
+  const projectId = Number(fragments[1])
 
   const { isAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
-    queryKey: ['profile'],
-    queryFn: () => ProjectApi.getProjectById(Number(fragments[1]) ?? -1),
-    enabled: isAuthenticated
+    queryKey: ['project', projectId],
+    queryFn: () => ProjectApi.getProjectById(projectId || -1),
+    enabled: isAuthenticated,
+    staleTime: 1000
   })
 
   const project = data?.data.data
@@ -25,10 +27,11 @@ export default function Breadcrumbs() {
       <Link to='/project' className='hover:underline'>
         project
       </Link>
+
       {fragments[1] && (
         <>
           <Icon className='mx-2 inline text-xl' icon='ei:chevron-right' />
-          <Link to={'/project/' + fragments[1]} className='hover:underline'>
+          <Link to={`/project/${fragments[1]}/setting`} className='hover:underline'>
             {project?.name ?? 'undefined'}
           </Link>
         </>
@@ -37,7 +40,7 @@ export default function Breadcrumbs() {
         <>
           <Icon className='mx-2 inline text-xl' icon='ei:chevron-right' />
           <Link to={`/project/${fragments[1]}/board`} className='hover:underline'>
-            Kanban board
+            kanban_board
           </Link>
         </>
       )}

@@ -11,11 +11,24 @@ interface Props {
   closeLabel?: string
   submitLabel?: string
   submittingLabel?: string
+  submitClassName?: string
+  submitDisable?: boolean
 }
 
 export default function Modal(props: Props) {
-  const { isShowing, onClose, onSubmit, isLoading, children, className, closeLabel, submittingLabel, submitLabel } =
-    props
+  const {
+    isShowing,
+    onClose,
+    onSubmit,
+    isLoading,
+    children,
+    className,
+    closeLabel,
+    submittingLabel,
+    submitLabel,
+    submitClassName,
+    submitDisable
+  } = props
 
   return isShowing
     ? createPortal(
@@ -40,7 +53,11 @@ export default function Modal(props: Props) {
                 <button onClick={onClose} className='btn-crystal'>
                   {closeLabel}
                 </button>
-                <button onClick={onSubmit} className='btn'>
+                <button
+                  onClick={onSubmit}
+                  disabled={submitDisable}
+                  className={submitDisable ? `btn-disabled` : `btn ${submitClassName}`}
+                >
                   {isLoading ? submittingLabel : submitLabel}
                 </button>
               </div>

@@ -24,14 +24,14 @@ export default function ProjectRow(props: Props) {
     <div
       key={id}
       className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-      onClick={() => navigate(`project/${id}/board`)}
-      onKeyDown={() => navigate(`project/${id}/board`)}
+      onClick={() => navigate(`${id}/board`)}
+      onKeyDown={() => navigate(`${id}/board`)}
       tabIndex={id}
       role='button'
     >
       <div className='w-32 text-center'>{idx + 1}</div>
       <div className='w-40'>
-        <Avatar title='Profile' src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
+        <Avatar title={name} src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
       </div>
       <div className='w-40'>{issueKey}</div>
       <div className='w-80'>{name}</div>

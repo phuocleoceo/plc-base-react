@@ -1,6 +1,7 @@
-import { BaseResponse, BaseParams } from '~/shared/types'
+import { BaseResponse } from '~/shared/types'
 
-export type GetMemberForProjectParams = BaseParams & {
+export type GetMemberForProjectParams = {
+  searchValue?: string
   withDeleted?: boolean
 }
 

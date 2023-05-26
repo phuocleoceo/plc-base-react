@@ -1,9 +1,9 @@
-import { Icon } from '@iconify/react'
 import { Link } from 'react-router-dom'
+import { Icon } from '@iconify/react'
 
 type Props = { icon: string; text: string; iconSize?: number; to: string }
 
-export default function BtnWithIcon({ icon, text, iconSize, to }: Props) {
+export default function IconLink({ icon, text, iconSize, to }: Props) {
   return (
     <li className='list-none'>
       <Link
