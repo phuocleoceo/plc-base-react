@@ -4,6 +4,7 @@ import { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
+import * as _ from 'lodash'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
@@ -155,7 +156,7 @@ export default function ProjectSetting() {
           </div>
         </form>
       </div>
-      <DeleteProject isShowing={isShowing} onClose={toggle} />
+      <DeleteProject project={_.pick(project, ['id', 'name'])} isShowing={isShowing} onClose={toggle} />
     </>
   )
 }
