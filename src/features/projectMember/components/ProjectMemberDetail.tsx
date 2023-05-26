@@ -33,7 +33,7 @@ export default function ProjectMemberDetail(props: Props) {
 
         <div className='grid grid-cols-2 gap-4'>
           <div className='flex flex-col gap-4'>
-            <div className='mt-7 flex justify-center'>
+            <div className='mt-10 flex justify-center'>
               <Avatar src={user?.avatar} name={user?.displayName} className='h-40 w-40 cursor-default text-6xl' />
             </div>
           </div>

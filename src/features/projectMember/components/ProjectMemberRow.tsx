@@ -1,3 +1,5 @@
+import { Icon } from '@iconify/react'
+
 import { Avatar } from '~/common/components'
 
 interface Props {
@@ -12,6 +14,11 @@ interface Props {
 
 export default function ProjectMemberRow(props: Props) {
   const { idx, id, name, email, avatar, onClick } = props
+
+  const handleDeleteProjectMember = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    console.log(id)
+  }
 
   return (
     <div
@@ -29,7 +36,13 @@ export default function ProjectMemberRow(props: Props) {
       </div>
       <div className='w-72'>{email}</div>
       <div className='flex-grow flex'>
-        <div>delete</div>
+        <button
+          title='delete_project_member'
+          onClick={handleDeleteProjectMember}
+          className='btn-icon absolute ml-2 bg-c-1'
+        >
+          <Icon width={22} icon='bx:trash' className='text-red-500' />
+        </button>
       </div>
     </div>
   )
