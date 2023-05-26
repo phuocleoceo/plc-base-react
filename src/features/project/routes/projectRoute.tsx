@@ -1,10 +1,14 @@
 import { RouteObject } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 
-import { ProjectList, ProjectBoard, ProjectSetting } from '~/features/project/pages'
 import { RequiredAuthenticatedRoute } from '~/common/routings/guardRoute'
 import { projectMemberRoute } from '~/features/projectMember/routes'
+import { ProjectLayout } from '~/features/project/layouts'
 import { HomeLayout } from '~/features/home/layouts'
-import { ProjectLayout } from '../layouts'
+
+const ProjectList = lazy(() => import('~/features/project/pages/ProjectList'))
+const ProjectBoard = lazy(() => import('~/features/project/pages/ProjectBoard'))
+const ProjectSetting = lazy(() => import('~/features/project/pages/ProjectSetting'))
 
 export const projectRoute: RouteObject[] = [
   {
@@ -15,7 +19,9 @@ export const projectRoute: RouteObject[] = [
         path: '',
         element: (
           <HomeLayout>
-            <ProjectList />
+            <Suspense>
+              <ProjectList />
+            </Suspense>
           </HomeLayout>
         )
       },
@@ -26,7 +32,9 @@ export const projectRoute: RouteObject[] = [
             path: 'board',
             element: (
               <ProjectLayout>
-                <ProjectBoard />
+                <Suspense>
+                  <ProjectBoard />
+                </Suspense>
               </ProjectLayout>
             )
           },
@@ -34,7 +42,9 @@ export const projectRoute: RouteObject[] = [
             path: 'setting',
             element: (
               <ProjectLayout>
-                <ProjectSetting />
+                <Suspense>
+                  <ProjectSetting />
+                </Suspense>
               </ProjectLayout>
             )
           },
