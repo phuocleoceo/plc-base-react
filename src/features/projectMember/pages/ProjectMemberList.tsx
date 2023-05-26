@@ -29,7 +29,7 @@ export default function ProjectMemberList() {
     })
   }
 
-  const { data, isLoading } = useQuery({
+  const { data: projectData, isLoading: projectLoading } = useQuery({
     queryKey: ['projectMembers', projectId, projectMemberParams],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, projectMemberParams),
     enabled: isAuthenticated,
@@ -37,7 +37,7 @@ export default function ProjectMemberList() {
     staleTime: 1000
   })
 
-  const projectMembers = data?.data.data
+  const projectMembers = projectData?.data.data
 
   const [selectedMember, setSelectedMember] = useState<number>()
   const handleClickMemberRow = (userId: number) => {
@@ -45,7 +45,7 @@ export default function ProjectMemberList() {
     toggleMemberDetail()
   }
 
-  if (isLoading)
+  if (projectLoading)
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
