@@ -1,15 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useContext, useState, lazy, Suspense } from 'react'
 import { FieldError, useForm } from 'react-hook-form'
-import { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import * as _ from 'lodash'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
-import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateProjectRequest } from '~/features/project/models'
-import { DeleteProject } from '~/features/project/components'
+import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { SelectItem } from '~/common/components/SelectBox'
 import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
@@ -17,13 +16,15 @@ import { MediaApi } from '~/features/media/apis'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
 
+const DeleteProject = lazy(() => import('~/features/project/components/DeleteProject'))
+
 type FormData = Pick<UpdateProjectRequest, 'name' | 'key' | 'leaderId'>
 
 export default function ProjectSetting() {
   const projectId = Number(useParams().projectId)
   const { isAuthenticated } = useContext(AppContext)
   const [selectedImage, setSelectedImage] = useState<File>()
-  const { isShowing, toggle } = useShowing()
+  const { isShowing: isShowingDeleteProject, toggle: toggleShowingDeleteProject } = useShowing()
 
   const queryClient = useQueryClient()
 
@@ -145,8 +146,8 @@ export default function ProjectSetting() {
             </button>
 
             <div
-              onClick={toggle}
-              onKeyDown={toggle}
+              onClick={toggleShowingDeleteProject}
+              onKeyDown={toggleShowingDeleteProject}
               className='btn-alert w-2/5 text-center cursor-pointer'
               role='button'
               tabIndex={0}
@@ -156,7 +157,16 @@ export default function ProjectSetting() {
           </div>
         </form>
       </div>
-      <DeleteProject project={_.pick(project, ['id', 'name'])} isShowing={isShowing} onClose={toggle} />
+
+      {isShowingDeleteProject && (
+        <Suspense>
+          <DeleteProject
+            project={_.pick(project, ['id', 'name'])}
+            isShowing={isShowingDeleteProject}
+            onClose={toggleShowingDeleteProject}
+          />
+        </Suspense>
+      )}
     </>
   )
 }

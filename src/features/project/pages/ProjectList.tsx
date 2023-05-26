@@ -37,7 +37,7 @@ export default function ProjectList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 Loading project...</span>
+          <span className='text-base'>🚀 loading_projects...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function ProjectList() {
             <div className='mt-1 border-t-2 border-c-3'>
               {projects.map((project, idx) => (
                 <ProjectRow
-                  key={project.id}
+                  key={idx}
                   idx={idx}
                   id={project.id}
                   name={project.name}
@@ -89,7 +89,7 @@ export default function ProjectList() {
               ))}
             </div>
           ) : (
-            <div className='mt-[30vh] grid place-items-center text-xl'>No projects found 🚀</div>
+            <div className='mt-[30vh] grid place-items-center text-xl'>no_projects_found 🚀</div>
           )}
         </div>
       </div>
