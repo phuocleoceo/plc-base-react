@@ -31,6 +31,9 @@
   .btn-alert {
     @apply whitespace-nowrap rounded-[3px] bg-red-500 px-3 py-1 text-white hover:bg-red-600 active:bg-red-700;
   }
+  .btn-disabled {
+    @apply whitespace-nowrap rounded-[3px] bg-gray-400 px-3 py-1 text-white;
+  }
   .btn-icon {
     @apply rounded-[3px] p-1 hover:bg-c-2;
   }

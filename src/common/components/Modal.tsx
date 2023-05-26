@@ -12,6 +12,7 @@ interface Props {
   submitLabel?: string
   submittingLabel?: string
   submitClassName?: string
+  submitDisable?: boolean
 }
 
 export default function Modal(props: Props) {
@@ -25,7 +26,8 @@ export default function Modal(props: Props) {
     closeLabel,
     submittingLabel,
     submitLabel,
-    submitClassName
+    submitClassName,
+    submitDisable
   } = props
 
   return isShowing
@@ -51,7 +53,11 @@ export default function Modal(props: Props) {
                 <button onClick={onClose} className='btn-crystal'>
                   {closeLabel}
                 </button>
-                <button onClick={onSubmit} className={`btn ${submitClassName ?? ''}`}>
+                <button
+                  onClick={onSubmit}
+                  disabled={submitDisable}
+                  className={submitDisable ? `btn-disabled` : `btn ${submitClassName}`}
+                >
                   {isLoading ? submittingLabel : submitLabel}
                 </button>
               </div>
