@@ -11,7 +11,7 @@ import { useShowing } from '~/common/hooks'
 
 export default function ProjectList() {
   const { isAuthenticated } = useContext(AppContext)
-  const { isShowing, toggle } = useShowing()
+  const { isShowing: isShowingCreateProject, toggle: toggleCreateProject } = useShowing()
 
   const [projectParams, setProjectParams] = useState<GetProjectsParams>({
     searchValue: ''
@@ -48,7 +48,7 @@ export default function ProjectList() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-10 pt-12 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <span className='text-2xl font-semibold tracking-wide'>projects</span>
-          <button onClick={toggle} className='btn'>
+          <button onClick={toggleCreateProject} className='btn'>
             create_project
           </button>
         </div>
@@ -93,7 +93,7 @@ export default function ProjectList() {
           )}
         </div>
       </div>
-      <CreateProject isShowing={isShowing} onClose={toggle} />
+      <CreateProject isShowing={isShowingCreateProject} onClose={toggleCreateProject} />
     </>
   )
 }

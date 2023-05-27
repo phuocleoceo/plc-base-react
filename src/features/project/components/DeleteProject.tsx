@@ -34,9 +34,6 @@ export default function DeleteProject(props: Props) {
         queryClient.invalidateQueries(['projects'])
         onClose()
         navigate('/')
-      },
-      onError: () => {
-        toast.success('delete_project_fail')
       }
     })
   }

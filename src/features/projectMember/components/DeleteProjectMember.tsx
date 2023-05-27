@@ -27,9 +27,6 @@ export default function DeleteProject(props: Props) {
         toast.success('delete_project_member_success')
         queryClient.invalidateQueries(['projectMembers'])
         onClose()
-      },
-      onError: () => {
-        toast.success('delete_project_member_fail')
       }
     })
   }

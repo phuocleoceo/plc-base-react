@@ -1,5 +1,5 @@
+import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
@@ -10,9 +10,10 @@ import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
 
-export default function ProjectMember() {
+export default function ProjectMemberList() {
   const projectId = Number(useParams().projectId)
   const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useShowing()
+  const navigate = useNavigate()
 
   const { isAuthenticated } = useContext(AppContext)
 
@@ -28,7 +29,7 @@ export default function ProjectMember() {
     })
   }
 
-  const { data, isLoading } = useQuery({
+  const { data: projectData, isLoading: projectLoading } = useQuery({
     queryKey: ['projectMembers', projectId, projectMemberParams],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, projectMemberParams),
     enabled: isAuthenticated,
@@ -36,7 +37,7 @@ export default function ProjectMember() {
     staleTime: 1000
   })
 
-  const projectMembers = data?.data.data
+  const projectMembers = projectData?.data.data
 
   const [selectedMember, setSelectedMember] = useState<number>()
   const handleClickMemberRow = (userId: number) => {
@@ -44,7 +45,7 @@ export default function ProjectMember() {
     toggleMemberDetail()
   }
 
-  if (isLoading)
+  if (projectLoading)
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
@@ -59,7 +60,9 @@ export default function ProjectMember() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <h1 className='text-xl font-semibold tracking-wide'>project_members</h1>
-          <button className='btn'>invitations</button>
+          <button onClick={() => navigate(`/project/${projectId}/invitation`)} className='btn'>
+            invitations
+          </button>
         </div>
         <div className='mt-8'>
           <div className='relative'>

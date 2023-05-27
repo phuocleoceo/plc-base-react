@@ -2,6 +2,7 @@ import { RouteObject } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
 import { RequiredAuthenticatedRoute } from '~/common/routings/guardRoute'
+import { projectInvitationRoute } from '~/features/invitation/routes'
 import { projectMemberRoute } from '~/features/projectMember/routes'
 import { ProjectLayout } from '~/features/project/layouts'
 import { HomeLayout } from '~/features/home/layouts'
@@ -48,7 +49,8 @@ export const projectRoute: RouteObject[] = [
               </ProjectLayout>
             )
           },
-          ...projectMemberRoute
+          ...projectMemberRoute,
+          ...projectInvitationRoute
         ]
       }
     ]

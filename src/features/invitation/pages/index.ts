@@ -1,1 +1,1 @@
-export { default as InvitationList } from './InvitationList'
+export { default as ProjectInvitationList } from './ProjectInvitationList'
