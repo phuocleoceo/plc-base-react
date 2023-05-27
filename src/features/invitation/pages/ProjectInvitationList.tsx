@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 
 import { GetInvitationForProjectParams } from '~/features/invitation/models'
+import { ProjectInvitationRow } from '~/features/invitation/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
@@ -60,7 +61,7 @@ export default function ProjectInvitationList() {
         <div className='mt-8'>
           <div className='relative'>
             <input
-              className='w-52 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-44 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={invitationParams.searchValue}
@@ -74,25 +75,24 @@ export default function ProjectInvitationList() {
             <div className='w-32'></div>
             <div className='w-60'>name</div>
             <div className='w-72'>email</div>
+            <div className='w-64'>status</div>
             <div className='flex-grow'>action</div>
           </div>
           {invitations && invitations.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {invitations.map((invitation, idx) => (
-                // <ProjectMemberRow
-                //   key={idx}
-                //   idx={idx}
-                //   id={projectMember.id}
-                //   name={projectMember.name}
-                //   email={projectMember.email}
-                //   avatar={projectMember.avatar}
-                //   projectMemberId={projectMember.projectMemberId}
-                //   projectId={projectId}
-                //   onClick={() => handleClickMemberRow(projectMember.id)}
-                // />
-                <>
-                  {idx + 1} {invitation.recipientName}
-                </>
+                <ProjectInvitationRow
+                  key={idx}
+                  idx={idx}
+                  invitationId={invitation.invitationId}
+                  recipientId={invitation.recipientId}
+                  recipientName={invitation.recipientName}
+                  recipientEmail={invitation.recipientEmail}
+                  recipientAvatar={invitation.recipientAvatar}
+                  acceptedAt={invitation.acceptedAt}
+                  declinedAt={invitation.declinedAt}
+                  projectId={projectId}
+                />
               ))}
             </div>
           ) : (
