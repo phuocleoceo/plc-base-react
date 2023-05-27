@@ -3,16 +3,16 @@ import { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 
+import { CreateProjectInvitation, ProjectInvitationRow } from '~/features/invitation/components'
 import { GetInvitationForProjectParams } from '~/features/invitation/models'
-import { ProjectInvitationRow } from '~/features/invitation/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
-// import { useShowing } from '~/common/hooks'
+import { useShowing } from '~/common/hooks'
 
 export default function ProjectInvitationList() {
   const projectId = Number(useParams().projectId)
-  // const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useShowing()
+  const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useShowing()
 
   const { isAuthenticated } = useContext(AppContext)
 
@@ -56,7 +56,9 @@ export default function ProjectInvitationList() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <h1 className='text-xl font-semibold tracking-wide'>invitations</h1>
-          <button className='btn'>create_invitation</button>
+          <button onClick={toggleCreateInvitation} className='btn'>
+            create_invitation
+          </button>
         </div>
         <div className='mt-8'>
           <div className='relative'>
@@ -100,6 +102,11 @@ export default function ProjectInvitationList() {
           )}
         </div>
       </div>
+      <CreateProjectInvitation
+        projectId={projectId}
+        isShowing={isShowingCreateInvitation}
+        onClose={toggleCreateInvitation}
+      />
     </>
   )
 }
