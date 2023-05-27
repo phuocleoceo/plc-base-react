@@ -3,17 +3,19 @@ import { lazy, Suspense } from 'react'
 
 import { ProjectLayout } from '~/features/project/layouts'
 
-const InvitationList = lazy(() => import('~/features/invitation/pages/InvitationList'))
+const ProjectInvitationList = lazy(() => import('~/features/invitation/pages/ProjectInvitationList'))
 
-export const invitationRoute: RouteObject[] = [
+export const projectInvitationRoute: RouteObject[] = [
   {
     path: 'invitation',
     element: (
       <ProjectLayout>
         <Suspense>
-          <InvitationList />
+          <ProjectInvitationList />
         </Suspense>
       </ProjectLayout>
     )
   }
 ]
+
+export const userInvitationRoute: RouteObject[] = []

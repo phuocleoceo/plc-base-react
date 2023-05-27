@@ -7,11 +7,11 @@ import { GetInvitationForProjectParams } from '~/features/invitation/models'
 import { InvitationApi } from '~/features/invitation/apis'
 import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
-import { useShowing } from '~/common/hooks'
+// import { useShowing } from '~/common/hooks'
 
-export default function InvitationList() {
+export default function ProjectInvitationList() {
   const projectId = Number(useParams().projectId)
-  const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useShowing()
+  // const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useShowing()
 
   const { isAuthenticated } = useContext(AppContext)
 
@@ -38,7 +38,7 @@ export default function InvitationList() {
   })
 
   const invitations = invitationData?.data.data.records
-  const invitationsCount = invitationData?.data.data.totalRecords
+  // const invitationsCount = invitationData?.data.data.totalRecords
 
   if (invitationLoading)
     return (
