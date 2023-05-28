@@ -48,7 +48,7 @@ export default function ProjectSetting() {
 
   const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
     queryKey: ['projectMember', projectId],
-    queryFn: () => ProjectMemberApi.getMemberForProject(projectId, {}),
+    queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
     staleTime: 1000
   })

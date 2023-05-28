@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react'
 import { ProjectMemberRow, ProjectMemberDetail } from '~/features/projectMember/components'
 import { GetMemberForProjectParams } from '~/features/projectMember/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
-import { SpinningCircle } from '~/common/components'
+import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
 
@@ -18,6 +18,8 @@ export default function ProjectMemberList() {
   const { isAuthenticated } = useContext(AppContext)
 
   const [projectMemberParams, setProjectMemberParams] = useState<GetMemberForProjectParams>({
+    pageNumber: 1,
+    pageSize: 10,
     searchValue: '',
     withDeleted: false
   })
@@ -29,6 +31,13 @@ export default function ProjectMemberList() {
     })
   }
 
+  const handleChangePage = (newPage: number) => {
+    setProjectMemberParams({
+      ...projectMemberParams,
+      pageNumber: newPage
+    })
+  }
+
   const { data: projectData, isLoading: projectLoading } = useQuery({
     queryKey: ['projectMembers', projectId, projectMemberParams],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, projectMemberParams),
@@ -37,7 +46,8 @@ export default function ProjectMemberList() {
     staleTime: 1000
   })
 
-  const projectMembers = projectData?.data.data
+  const projectMembers = projectData?.data.data.records
+  const projectMemberCount = projectData?.data.data.totalRecords ?? 0
 
   const [selectedMember, setSelectedMember] = useState<number>()
   const handleClickMemberRow = (userId: number) => {
@@ -103,6 +113,12 @@ export default function ProjectMemberList() {
             <div className='mt-[30vh] grid place-items-center text-xl'>no_project_members_found 🚀</div>
           )}
         </div>
+
+        <Pagination
+          pageSize={projectMemberParams.pageSize}
+          totalRecords={projectMemberCount}
+          onChangePage={handleChangePage}
+        />
       </div>
       {selectedMember && (
         <ProjectMemberDetail userId={selectedMember} isShowing={isShowingMemberDetail} onClose={toggleMemberDetail} />
