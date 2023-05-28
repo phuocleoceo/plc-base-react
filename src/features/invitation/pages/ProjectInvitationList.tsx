@@ -1,14 +1,16 @@
+import { useContext, useState, lazy, Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 
-import { CreateProjectInvitation, ProjectInvitationRow } from '~/features/invitation/components'
 import { GetInvitationForProjectParams } from '~/features/invitation/models'
+import { ProjectInvitationRow } from '~/features/invitation/components'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
+
+const CreateProjectInvitation = lazy(() => import('~/features/invitation/components/CreateProjectInvitation'))
 
 export default function ProjectInvitationList() {
   const projectId = Number(useParams().projectId)
@@ -115,11 +117,16 @@ export default function ProjectInvitationList() {
           onChangePage={handleChangePage}
         />
       </div>
-      <CreateProjectInvitation
-        projectId={projectId}
-        isShowing={isShowingCreateInvitation}
-        onClose={toggleCreateInvitation}
-      />
+
+      {isShowingCreateInvitation && (
+        <Suspense>
+          <CreateProjectInvitation
+            projectId={projectId}
+            isShowing={isShowingCreateInvitation}
+            onClose={toggleCreateInvitation}
+          />
+        </Suspense>
+      )}
     </>
   )
 }

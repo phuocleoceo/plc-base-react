@@ -1,13 +1,15 @@
+import { useContext, useState, lazy, Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
-import { ProjectRow, CreateProject } from '~/features/project/components'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { GetProjectsParams } from '~/features/project/models'
+import { ProjectRow } from '~/features/project/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
+
+const CreateProject = lazy(() => import('~/features/project/components/CreateProject'))
 
 export default function ProjectList() {
   const { isAuthenticated } = useContext(AppContext)
@@ -105,7 +107,11 @@ export default function ProjectList() {
 
         <Pagination pageSize={projectParams.pageSize} totalRecords={projectCount} onChangePage={handleChangePage} />
       </div>
-      <CreateProject isShowing={isShowingCreateProject} onClose={toggleCreateProject} />
+      {isShowingCreateProject && (
+        <Suspense>
+          <CreateProject isShowing={isShowingCreateProject} onClose={toggleCreateProject} />
+        </Suspense>
+      )}
     </>
   )
 }
