@@ -1,14 +1,16 @@
+import { useContext, useState, lazy, Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 
-import { CreateProjectInvitation, ProjectInvitationRow } from '~/features/invitation/components'
 import { GetInvitationForProjectParams } from '~/features/invitation/models'
+import { ProjectInvitationRow } from '~/features/invitation/components'
+import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
-import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
+
+const CreateProjectInvitation = lazy(() => import('~/features/invitation/components/CreateProjectInvitation'))
 
 export default function ProjectInvitationList() {
   const projectId = Number(useParams().projectId)
@@ -30,6 +32,13 @@ export default function ProjectInvitationList() {
     })
   }
 
+  const handleChangePage = (newPage: number) => {
+    setInvitationParams({
+      ...invitationParams,
+      pageNumber: newPage
+    })
+  }
+
   const { data: invitationData, isLoading: invitationLoading } = useQuery({
     queryKey: ['projectInvitations', projectId, invitationParams],
     queryFn: () => InvitationApi.getInvitationForProject(projectId, invitationParams),
@@ -39,7 +48,7 @@ export default function ProjectInvitationList() {
   })
 
   const invitations = invitationData?.data.data.records
-  // const invitationsCount = invitationData?.data.data.totalRecords
+  const invitationCount = invitationData?.data.data.totalRecords ?? 0
 
   if (invitationLoading)
     return (
@@ -101,12 +110,23 @@ export default function ProjectInvitationList() {
             <div className='mt-[30vh] grid place-items-center text-xl'>no_invitations_found 🚀</div>
           )}
         </div>
+
+        <Pagination
+          pageSize={invitationParams.pageSize}
+          totalRecords={invitationCount}
+          onChangePage={handleChangePage}
+        />
       </div>
-      <CreateProjectInvitation
-        projectId={projectId}
-        isShowing={isShowingCreateInvitation}
-        onClose={toggleCreateInvitation}
-      />
+
+      {isShowingCreateInvitation && (
+        <Suspense>
+          <CreateProjectInvitation
+            projectId={projectId}
+            isShowing={isShowingCreateInvitation}
+            onClose={toggleCreateInvitation}
+          />
+        </Suspense>
+      )}
     </>
   )
 }
