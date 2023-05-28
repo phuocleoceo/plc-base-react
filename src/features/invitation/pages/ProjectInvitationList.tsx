@@ -5,8 +5,8 @@ import { Icon } from '@iconify/react'
 
 import { CreateProjectInvitation, ProjectInvitationRow } from '~/features/invitation/components'
 import { GetInvitationForProjectParams } from '~/features/invitation/models'
+import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
-import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
 
@@ -18,7 +18,7 @@ export default function ProjectInvitationList() {
 
   const [invitationParams, setInvitationParams] = useState<GetInvitationForProjectParams>({
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 5,
     searchValue: '',
     stillValid: true
   })
@@ -27,6 +27,13 @@ export default function ProjectInvitationList() {
     setInvitationParams({
       ...invitationParams,
       [event.target.name]: event.target.value
+    })
+  }
+
+  const handleChangePage = (newPage: number) => {
+    setInvitationParams({
+      ...invitationParams,
+      pageNumber: newPage
     })
   }
 
@@ -39,7 +46,7 @@ export default function ProjectInvitationList() {
   })
 
   const invitations = invitationData?.data.data.records
-  // const invitationsCount = invitationData?.data.data.totalRecords
+  const invitationsCount = invitationData?.data.data.totalRecords ?? 0
 
   if (invitationLoading)
     return (
@@ -101,6 +108,13 @@ export default function ProjectInvitationList() {
             <div className='mt-[30vh] grid place-items-center text-xl'>no_invitations_found 🚀</div>
           )}
         </div>
+
+        <Pagination
+          pageSize={invitationParams.pageSize}
+          pageNumber={invitationParams.pageNumber}
+          totalRecords={invitationsCount}
+          onChangePage={handleChangePage}
+        />
       </div>
       <CreateProjectInvitation
         projectId={projectId}
