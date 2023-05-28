@@ -3,8 +3,8 @@ import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { ProjectRow, CreateProject } from '~/features/project/components'
+import { Pagination, SpinningCircle } from '~/common/components'
 import { GetProjectsParams } from '~/features/project/models'
-import { SpinningCircle } from '~/common/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 import { useShowing } from '~/common/hooks'
@@ -14,6 +14,8 @@ export default function ProjectList() {
   const { isShowing: isShowingCreateProject, toggle: toggleCreateProject } = useShowing()
 
   const [projectParams, setProjectParams] = useState<GetProjectsParams>({
+    pageNumber: 1,
+    pageSize: 10,
     searchValue: ''
   })
 
@@ -24,6 +26,13 @@ export default function ProjectList() {
     })
   }
 
+  const handleChangePage = (newPage: number) => {
+    setProjectParams({
+      ...projectParams,
+      pageNumber: newPage
+    })
+  }
+
   const { data, isLoading } = useQuery({
     queryKey: ['projects', projectParams],
     queryFn: () => ProjectApi.getProjects(projectParams),
@@ -31,7 +40,8 @@ export default function ProjectList() {
     enabled: isAuthenticated
   })
 
-  const projects = data?.data.data
+  const projects = data?.data.data.records
+  const projectCount = data?.data.data.totalRecords ?? 0
 
   if (isLoading)
     return (
@@ -92,6 +102,8 @@ export default function ProjectList() {
             <div className='mt-[30vh] grid place-items-center text-xl'>no_projects_found 🚀</div>
           )}
         </div>
+
+        <Pagination pageSize={projectParams.pageSize} totalRecords={projectCount} onChangePage={handleChangePage} />
       </div>
       <CreateProject isShowing={isShowingCreateProject} onClose={toggleCreateProject} />
     </>

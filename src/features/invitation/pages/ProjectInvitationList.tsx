@@ -46,7 +46,7 @@ export default function ProjectInvitationList() {
   })
 
   const invitations = invitationData?.data.data.records
-  const invitationsCount = invitationData?.data.data.totalRecords ?? 0
+  const invitationCount = invitationData?.data.data.totalRecords ?? 0
 
   if (invitationLoading)
     return (
@@ -111,7 +111,7 @@ export default function ProjectInvitationList() {
 
         <Pagination
           pageSize={invitationParams.pageSize}
-          totalRecords={invitationsCount}
+          totalRecords={invitationCount}
           onChangePage={handleChangePage}
         />
       </div>
