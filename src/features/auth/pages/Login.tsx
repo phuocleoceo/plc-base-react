@@ -1,7 +1,7 @@
 import { FieldError, useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
@@ -18,7 +18,6 @@ type FormData = Pick<LoginRequest, 'email' | 'password'>
 export default function Login() {
   const { setIsAuthenticated } = useContext(AppContext)
 
-  const navigate = useNavigate()
   const { t } = useTranslation()
 
   const {
@@ -48,7 +47,9 @@ export default function Login() {
         LocalStorageHelper.setUserInfo(userInfo)
 
         toast.success(t('login_success'))
-        navigate('/')
+
+        // Use navigate('/') => bug not reload user
+        window.location.href = '/'
       },
       onError: (error) => {
         const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
