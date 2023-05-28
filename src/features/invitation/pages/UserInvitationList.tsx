@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { GetInvitationForUserParams } from '~/features/invitation/models'
-// import { ProjectInvitationRow } from '~/features/invitation/components'
+import { UserInvitationRow } from '~/features/invitation/components'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { AppContext } from '~/common/contexts'
@@ -47,7 +47,7 @@ export default function UserInvitationList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 loading_project_members...</span>
+          <span className='text-base'>🚀 loading_invitations...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function UserInvitationList() {
 
   return (
     <>
-      <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5'>
+      <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-10 pt-12 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <h1 className='text-xl font-semibold tracking-wide'>invitations</h1>
         </div>
@@ -74,29 +74,16 @@ export default function UserInvitationList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-32'></div>
-            <div className='w-60'>name</div>
+            <div className='w-60'>sender</div>
             <div className='w-72'>email</div>
+            <div className='w-72'>project</div>
             <div className='w-64'>status</div>
             <div className='flex-grow'>action</div>
           </div>
           {invitations && invitations.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {invitations.map((invitation, idx) => (
-                // <ProjectInvitationRow
-                //   key={idx}
-                //   idx={idx}
-                //   invitationId={invitation.invitationId}
-                //   recipientId={invitation.recipientId}
-                //   recipientName={invitation.recipientName}
-                //   recipientEmail={invitation.recipientEmail}
-                //   recipientAvatar={invitation.recipientAvatar}
-                //   acceptedAt={invitation.acceptedAt}
-                //   declinedAt={invitation.declinedAt}
-                //   projectId={projectId}
-                // />
-                <>
-                  {idx} {invitation.projectName}
-                </>
+                <UserInvitationRow key={idx} idx={idx} {...invitation} />
               ))}
             </div>
           ) : (

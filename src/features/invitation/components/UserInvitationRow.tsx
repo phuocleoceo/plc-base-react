@@ -1,19 +1,18 @@
-import { lazy, Suspense } from 'react'
 import { Icon } from '@iconify/react'
 
 import { Avatar } from '~/common/components'
 import { useShowing } from '~/common/hooks'
 
-const DeleteProjectInvitation = lazy(() => import('~/features/invitation/components/DeleteProjectInvitation'))
-
 interface Props {
   idx: number
-  projectId: number
   invitationId: number
-  recipientId: number
-  recipientName: string
-  recipientEmail: string
-  recipientAvatar: string
+  senderId: number
+  senderName: string
+  senderEmail: string
+  senderAvatar: string
+  projectId: number
+  projectName: string
+  projectImage: string
   acceptedAt: Date
   declinedAt: Date
   onClick?: () => void
@@ -23,20 +22,21 @@ export default function ProjectInvitationRow(props: Props) {
   const {
     idx,
     invitationId,
-    recipientName,
-    recipientEmail,
-    recipientAvatar,
+    senderName,
+    senderEmail,
+    senderAvatar,
+    projectName,
+    projectImage,
     acceptedAt,
     declinedAt,
-    projectId,
     onClick
   } = props
 
-  const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useShowing()
+  // const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useShowing()
 
   const handleDeleteProjectMember = (event: React.MouseEvent) => {
     event.stopPropagation()
-    toggleDeleteInvitation()
+    // toggleDeleteInvitation()
   }
 
   return (
@@ -52,14 +52,23 @@ export default function ProjectInvitationRow(props: Props) {
         <div className='w-32 text-center'>{idx + 1}</div>
         <div className='w-60 flex'>
           <Avatar
-            title={recipientName}
-            src={recipientAvatar}
-            name={recipientName}
+            title={senderName}
+            src={senderAvatar}
+            name={senderName}
             className='h-9 w-9 border-[1px] hover:border-green-500'
           />
-          <span className='ml-3'>{recipientName}</span>
+          <span className='ml-3'>{senderName}</span>
         </div>
-        <div className='w-72'>{recipientEmail}</div>
+        <div className='w-72'>{senderEmail}</div>
+        <div className='w-72 flex'>
+          <Avatar
+            title={projectName}
+            src={projectImage}
+            name={projectName}
+            className='h-9 w-9 border-[1px] hover:border-green-500'
+          />
+          <span className='ml-3'>{projectName}</span>
+        </div>
 
         {acceptedAt && <div className='w-64'>accept</div>}
         {declinedAt && <div className='w-64'>declined</div>}
@@ -75,18 +84,6 @@ export default function ProjectInvitationRow(props: Props) {
           </button>
         </div>
       </div>
-
-      {isShowingDeleteInvitation && (
-        <Suspense>
-          <DeleteProjectInvitation
-            projectId={projectId}
-            invitationId={invitationId}
-            recipientEmail={recipientEmail}
-            isShowing={isShowingDeleteInvitation}
-            onClose={toggleDeleteInvitation}
-          />
-        </Suspense>
-      )}
     </>
   )
 }

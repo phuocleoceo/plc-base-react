@@ -54,7 +54,7 @@ export default function ProjectInvitationList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 loading_project_members...</span>
+          <span className='text-base'>🚀 loading_invitations...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function ProjectInvitationList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-32'></div>
-            <div className='w-60'>name</div>
+            <div className='w-60'>recipient</div>
             <div className='w-72'>email</div>
             <div className='w-64'>status</div>
             <div className='flex-grow'>action</div>
