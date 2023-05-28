@@ -18,7 +18,7 @@ export default function ProjectInvitationList() {
 
   const [invitationParams, setInvitationParams] = useState<GetInvitationForProjectParams>({
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 10,
     searchValue: '',
     stillValid: true
   })

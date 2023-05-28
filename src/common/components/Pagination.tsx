@@ -20,7 +20,7 @@ export default function Pagination(props: Props) {
     <div className='flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6'>
       <div>
         <p className='text-sm text-gray-700'>
-          Showing {pageSize} of {totalRecords} results
+          showing {pageSize} of {totalRecords} results
         </p>
       </div>
 
@@ -30,9 +30,11 @@ export default function Pagination(props: Props) {
         breakLabel='...'
         containerClassName='flex justify-center'
         pageClassName='inline-block mx-1'
-        previousLabel={<Icon className='text-secondary group-hover:text-white' icon='fa-solid:angle-left' />}
+        previousLabel={
+          <Icon className='text-secondary group-hover:text-white' fontSize={20} icon='fa-solid:angle-left' />
+        }
         previousClassName='px-2 py-1 border rounded-lg hover:bg-gray-200'
-        nextLabel={<Icon className='text-secondary group-hover:text-white' icon='fa-solid:angle-right' />}
+        nextLabel={<Icon className='text-secondary group-hover:text-white' fontSize={20} icon='fa-solid:angle-right' />}
         nextClassName='px-2 py-1 border rounded-lg hover:bg-gray-200'
         activeClassName='font-bold'
         breakClassName='px-2 py-1'
