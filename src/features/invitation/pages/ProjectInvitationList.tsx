@@ -111,7 +111,6 @@ export default function ProjectInvitationList() {
 
         <Pagination
           pageSize={invitationParams.pageSize}
-          pageNumber={invitationParams.pageNumber}
           totalRecords={invitationsCount}
           onChangePage={handleChangePage}
         />
