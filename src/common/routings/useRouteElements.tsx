@@ -1,5 +1,6 @@
 import { RouteObject, useRoutes } from 'react-router-dom'
 
+import { userInvitationRoute } from '~/features/invitation/routes'
 import { projectStatusRoute } from '~/features/projectStatus/routes'
 import { adminUserRoute } from '~/features/admin/user/routes'
 import { projectRoute } from '~/features/project/routes'
@@ -13,6 +14,7 @@ const routes: RouteObject[] = [
   ...authRoute,
   ...profileRoute,
   ...projectRoute,
+  ...userInvitationRoute,
   ...issueRoute,
   ...projectStatusRoute,
   ...sprintRoute,

@@ -28,10 +28,13 @@ export type GetInvitationForUserParams = BaseParams & {
 
 export type GetInvitationForUserResponse = PagedResponse<{
   invitationId: number
-  recipientId: number
-  recipientName: string
-  recipientEmail: string
-  recipientAvatar: string
+  senderId: number
+  senderName: string
+  senderEmail: string
+  senderAvatar: string
+  projectId: number
+  projectName: string
+  projectImage: string
   acceptedAt: Date
   declinedAt: Date
 }>
