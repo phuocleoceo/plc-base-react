@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { ProjectMemberApi } from '~/features/projectMember/apis'
+import { QueryKey } from '~/shared/constants'
 import { Modal } from '~/common/components'
 
 interface Props {
@@ -25,7 +26,7 @@ export default function DeleteProject(props: Props) {
     deleteProjectMemberMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('delete_project_member_success')
-        queryClient.invalidateQueries(['projectMembers'])
+        queryClient.invalidateQueries([QueryKey.ProjectMembers])
         onClose()
       }
     })

@@ -7,6 +7,7 @@ import { useContext } from 'react'
 import { Avatar, IconLink, SpinningCircle } from '~/common/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 export default function Menubar() {
@@ -16,7 +17,7 @@ export default function Menubar() {
   const { isAuthenticated } = useContext(AppContext)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['project', projectId],
+    queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
     staleTime: 1000

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
 import { InvitationApi } from '~/features/invitation/apis'
+import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 
 interface Props {
@@ -49,7 +50,7 @@ export default function ProjectInvitationRow(props: Props) {
     acceptInvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('accept_invitation_success')
-        queryClient.invalidateQueries(['userInvitations'])
+        queryClient.invalidateQueries([QueryKey.UserInvitations])
       }
     })
   }
@@ -59,7 +60,7 @@ export default function ProjectInvitationRow(props: Props) {
     declineInvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('decline_invitation_success')
-        queryClient.invalidateQueries(['userInvitations'])
+        queryClient.invalidateQueries([QueryKey.UserInvitations])
       }
     })
   }

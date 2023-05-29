@@ -8,6 +8,7 @@ import { GetMemberForProjectParams } from '~/features/projectMember/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 export default function ProjectMemberList() {
@@ -39,7 +40,7 @@ export default function ProjectMemberList() {
   }
 
   const { data: projectData, isLoading: projectLoading } = useQuery({
-    queryKey: ['projectMembers', projectId, projectMemberParams],
+    queryKey: [QueryKey.ProjectMembers, projectId, projectMemberParams],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, projectMemberParams),
     enabled: isAuthenticated,
     keepPreviousData: true,

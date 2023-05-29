@@ -8,6 +8,7 @@ import { ProjectInvitationRow } from '~/features/invitation/components'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 const CreateProjectInvitation = lazy(() => import('~/features/invitation/components/CreateProjectInvitation'))
@@ -40,7 +41,7 @@ export default function ProjectInvitationList() {
   }
 
   const { data: invitationData, isLoading: invitationLoading } = useQuery({
-    queryKey: ['projectInvitations', projectId, invitationParams],
+    queryKey: [QueryKey.ProjectInvitations, projectId, invitationParams],
     queryFn: () => InvitationApi.getInvitationForProject(projectId, invitationParams),
     enabled: isAuthenticated,
     keepPreviousData: true,

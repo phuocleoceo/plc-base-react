@@ -7,6 +7,7 @@ import { LocalStorageHelper } from '~/shared/helpers'
 import { Avatar, IconBtn } from '~/common/components'
 import { ProfileApi } from '~/features/profile/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
@@ -20,7 +21,7 @@ export default function Sidebar() {
   const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
-    queryKey: ['profile'],
+    queryKey: [QueryKey.PersonalProfile],
     queryFn: () => ProfileApi.getPersonalProfile(),
     enabled: isAuthenticated
   })

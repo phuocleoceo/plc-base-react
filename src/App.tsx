@@ -9,7 +9,14 @@ function App() {
   return (
     <div className='bg-c-111 flex plc-theme'>
       {routeElements}
-      <ToastContainer />
+      <ToastContainer
+        closeOnClick
+        position='top-right'
+        rtl={false}
+        autoClose={1500}
+        newestOnTop={true}
+        hideProgressBar={false}
+      />
     </div>
   )
 }

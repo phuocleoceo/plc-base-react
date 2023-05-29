@@ -7,6 +7,7 @@ import { GetProjectsParams } from '~/features/project/models'
 import { ProjectRow } from '~/features/project/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 const CreateProject = lazy(() => import('~/features/project/components/CreateProject'))
@@ -36,7 +37,7 @@ export default function ProjectList() {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['projects', projectParams],
+    queryKey: [QueryKey.Projects, projectParams],
     queryFn: () => ProjectApi.getProjects(projectParams),
     keepPreviousData: true,
     enabled: isAuthenticated

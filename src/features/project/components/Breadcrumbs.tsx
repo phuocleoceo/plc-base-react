@@ -5,6 +5,7 @@ import { useContext } from 'react'
 
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 
 export default function Breadcrumbs() {
   const location = useLocation()
@@ -14,7 +15,7 @@ export default function Breadcrumbs() {
   const { isAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
-    queryKey: ['project', projectId],
+    queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId || -1),
     enabled: isAuthenticated,
     staleTime: 1000

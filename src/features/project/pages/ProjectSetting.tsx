@@ -14,6 +14,7 @@ import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 const DeleteProject = lazy(() => import('~/features/project/components/DeleteProject'))
@@ -38,7 +39,7 @@ export default function ProjectSetting() {
   } = useForm<FormData>()
 
   const { data: projectData, isLoading: projectLoading } = useQuery({
-    queryKey: ['project', projectId],
+    queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
     staleTime: 1000
@@ -47,7 +48,7 @@ export default function ProjectSetting() {
   const project = projectData?.data.data
 
   const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
-    queryKey: ['projectMember', projectId],
+    queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
     staleTime: 1000
@@ -81,7 +82,7 @@ export default function ProjectSetting() {
     updateProjectMutation.mutate(updateProjectData, {
       onSuccess: () => {
         toast.success('update_project_success')
-        queryClient.invalidateQueries(['project'])
+        queryClient.invalidateQueries([QueryKey.ProjectDetail])
         reset()
       },
       onError: (error) => {

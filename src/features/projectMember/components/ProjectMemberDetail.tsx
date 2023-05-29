@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { ProfileApi } from '~/features/profile/apis'
 import { Avatar, Modal } from '~/common/components'
+import { QueryKey } from '~/shared/constants'
 
 interface Props {
   userId: number
@@ -13,7 +14,7 @@ export default function ProjectMemberDetail(props: Props) {
   const { userId, isShowing, onClose } = props
 
   const { data, isLoading } = useQuery({
-    queryKey: ['anonymousProfile', userId],
+    queryKey: [QueryKey.AnonymousProfile, userId],
     queryFn: () => ProfileApi.getAnonymousProfile(userId),
     staleTime: 1000
   })

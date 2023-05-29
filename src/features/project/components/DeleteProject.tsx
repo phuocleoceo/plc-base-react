@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { useState } from 'react'
 
 import { ProjectApi } from '~/features/project/apis'
+import { QueryKey } from '~/shared/constants'
 import { Modal } from '~/common/components'
 
 interface Props {
@@ -31,7 +32,7 @@ export default function DeleteProject(props: Props) {
     deleteProjectMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('delete_project_success')
-        queryClient.invalidateQueries(['projects'])
+        queryClient.invalidateQueries([QueryKey.Projects])
         onClose()
         navigate('/')
       }

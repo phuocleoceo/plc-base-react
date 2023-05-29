@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { InvitationApi } from '~/features/invitation/apis'
+import { QueryKey } from '~/shared/constants'
 import { Modal } from '~/common/components'
 
 interface Props {
@@ -25,7 +26,7 @@ export default function DeleteProjectInvitation(props: Props) {
     deleteProjectinvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('delete_project_invitation_success')
-        queryClient.invalidateQueries(['projectInvitations'])
+        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
         onClose()
       }
     })

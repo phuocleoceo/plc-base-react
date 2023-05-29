@@ -9,6 +9,7 @@ import { InputValidation, Modal, ImageUpload } from '~/common/components'
 import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
+import { QueryKey } from '~/shared/constants'
 
 interface Props {
   isShowing: boolean
@@ -51,7 +52,7 @@ export default function CreateProject(props: Props) {
     createProjectMutation.mutate(projectData, {
       onSuccess: () => {
         toast.success('create_project_success')
-        queryClient.invalidateQueries(['projects'])
+        queryClient.invalidateQueries([QueryKey.Projects])
         reset()
         onClose()
       },

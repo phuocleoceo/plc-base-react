@@ -7,6 +7,7 @@ import { CreateInvitationForProjectRequest } from '~/features/invitation/models'
 import { InputValidation, Modal } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { ValidationHelper } from '~/shared/helpers'
+import { QueryKey } from '~/shared/constants'
 
 interface Props {
   projectId: number
@@ -40,7 +41,7 @@ export default function CreateProjectInvitation(props: Props) {
     createInvitationMutation.mutate(invitationData, {
       onSuccess: () => {
         toast.success('create_invitation_success')
-        queryClient.invalidateQueries(['projectInvitations'])
+        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
         reset()
         onClose()
       },

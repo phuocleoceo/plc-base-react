@@ -11,6 +11,7 @@ import { AddressApi } from '~/features/address/apis'
 import { ProfileApi } from '~/features/profile/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
+import { QueryKey } from '~/shared/constants'
 import { ProfileTab } from '~/shared/enums'
 
 interface Props {
@@ -56,7 +57,7 @@ export default function UpdateProfile(props: Props) {
     updateProfileMutation.mutate(profileData, {
       onSuccess: () => {
         toast.success('update_profile_success')
-        queryClient.invalidateQueries(['profile'])
+        queryClient.invalidateQueries([QueryKey.PersonalProfile])
         reset()
         onChangeTab(ProfileTab.ProfileDetail)
       },

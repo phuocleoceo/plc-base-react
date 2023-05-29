@@ -7,6 +7,7 @@ import { UserInvitationRow } from '~/features/invitation/components'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { AppContext } from '~/common/contexts'
+import { QueryKey } from '~/shared/constants'
 
 export default function UserInvitationList() {
   const { isAuthenticated } = useContext(AppContext)
@@ -33,7 +34,7 @@ export default function UserInvitationList() {
   }
 
   const { data: invitationData, isLoading: invitationLoading } = useQuery({
-    queryKey: ['userInvitations', invitationParams],
+    queryKey: [QueryKey.UserInvitations, invitationParams],
     queryFn: () => InvitationApi.getInvitationForUser(invitationParams),
     enabled: isAuthenticated,
     keepPreviousData: true,
