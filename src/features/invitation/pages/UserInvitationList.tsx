@@ -77,7 +77,6 @@ export default function UserInvitationList() {
             <div className='w-60'>sender</div>
             <div className='w-72'>email</div>
             <div className='w-72'>project</div>
-            <div className='w-64'>status</div>
             <div className='flex-grow'>action</div>
           </div>
           {invitations && invitations.length !== 0 ? (

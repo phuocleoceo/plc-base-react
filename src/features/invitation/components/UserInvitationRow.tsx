@@ -1,7 +1,9 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
+import { InvitationApi } from '~/features/invitation/apis'
 import { Avatar } from '~/common/components'
-import { useShowing } from '~/common/hooks'
 
 interface Props {
   idx: number
@@ -32,11 +34,34 @@ export default function ProjectInvitationRow(props: Props) {
     onClick
   } = props
 
-  // const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useShowing()
+  const queryClient = useQueryClient()
 
-  const handleDeleteProjectMember = (event: React.MouseEvent) => {
+  const acceptInvitationMutation = useMutation({
+    mutationFn: () => InvitationApi.acceptInvitation(invitationId)
+  })
+
+  const declineInvitationMutation = useMutation({
+    mutationFn: () => InvitationApi.declineInvitation(invitationId)
+  })
+
+  const handleAcceptInvitation = async (event: React.MouseEvent) => {
     event.stopPropagation()
-    // toggleDeleteInvitation()
+    acceptInvitationMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('accept_invitation_success')
+        queryClient.invalidateQueries(['userInvitations'])
+      }
+    })
+  }
+
+  const handleDeclineInvitation = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    declineInvitationMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('decline_invitation_success')
+        queryClient.invalidateQueries(['userInvitations'])
+      }
+    })
   }
 
   return (
@@ -70,18 +95,21 @@ export default function ProjectInvitationRow(props: Props) {
           <span className='ml-3'>{projectName}</span>
         </div>
 
-        {acceptedAt && <div className='w-64'>accept</div>}
-        {declinedAt && <div className='w-64'>declined</div>}
-        {!declinedAt && !acceptedAt && <div className='w-64'>pending</div>}
-
         <div className='flex-grow flex'>
-          <button
-            title='delete_project_member'
-            onClick={handleDeleteProjectMember}
-            className='btn-icon absolute ml-2 bg-c-1'
-          >
-            <Icon width={22} icon='bx:trash' className='text-red-500' />
-          </button>
+          {acceptedAt && <span>accept</span>}
+          {declinedAt && <span>declined</span>}
+
+          {!declinedAt && !acceptedAt && (
+            <div className='flex'>
+              <button title='accept_invitation' onClick={handleAcceptInvitation} className='btn-icon bg-c-1'>
+                <Icon width={22} icon='mdi:check-outline' className='text-green-500' />
+              </button>
+
+              <button title='decline_invitation' onClick={handleDeclineInvitation} className='btn-icon bg-c-1'>
+                <Icon width={22} icon='mdi:close-outline' className='text-red-500' />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
