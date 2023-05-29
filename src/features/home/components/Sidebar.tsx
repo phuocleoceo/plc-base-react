@@ -27,6 +27,10 @@ export default function Sidebar() {
 
   const user = data?.data.data
 
+  const handleGetInvitation = () => {
+    navigate('/user/invitation')
+  }
+
   const handleLogOut = () => {
     LocalStorageHelper.clear()
     setIsAuthenticated(false)
@@ -51,7 +55,8 @@ export default function Sidebar() {
                 onClick={toggle}
                 className='h-9 w-9 border-[1px] hover:border-green-500'
               />
-              <IconBtn onClick={handleLogOut} icon='charm:sign-out' title='Log Out' />
+              <IconBtn onClick={handleGetInvitation} icon='iconoir:telegram' title='invitations' />
+              <IconBtn onClick={handleLogOut} icon='charm:sign-out' title='log_out' />
             </>
           )}
         </div>
