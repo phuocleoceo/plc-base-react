@@ -2,7 +2,6 @@ import { FieldError, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
@@ -45,8 +44,6 @@ export default function Login() {
         LocalStorageHelper.setAccessToken(accessToken)
         LocalStorageHelper.setRefreshToken(refreshToken)
         LocalStorageHelper.setUserInfo(userInfo)
-
-        toast.success(t('login_success'))
 
         // Use navigate('/') => bug not reload user
         window.location.href = '/'
