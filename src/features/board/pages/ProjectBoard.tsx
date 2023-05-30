@@ -1,8 +1,11 @@
+import { DragDropContext, DropResult } from '@hello-pangea/dnd'
 import { useParams } from 'react-router-dom'
 import { useContext, useState } from 'react'
 
+import { StatusContainer } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { FilterBar } from '~/features/board/components'
+import { DroppableWrapper } from '~/common/components'
 import { useQuery } from '@tanstack/react-query'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
@@ -39,12 +42,37 @@ export default function ProjectBoard() {
     return issues?.find((i) => i.projectStatusId === statusId)?.issues ?? []
   }
 
-  console.log(getIssuesByStatusId(projectStatuses?.at(1)?.id))
+  const handleDragEnd = ({ type, source: s, destination: d }: DropResult) => {
+    console.log(type)
+  }
 
   return (
     <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
       <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
       <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled }} />
+
+      {projectStatuses && projectStatuses?.length > 0 && (
+        <div className='mb-5 flex min-w-max grow items-start'>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <DroppableWrapper
+              type='projectStatus'
+              className='flex items-start'
+              droppableId='board-central'
+              direction='horizontal'
+            >
+              {projectStatuses.map((projectStatus, idx) => (
+                <StatusContainer
+                  key={projectStatus.id}
+                  idx={idx}
+                  issues={getIssuesByStatusId(projectStatus.id)}
+                  isDragDisabled={isDragDisabled}
+                  {...projectStatus}
+                />
+              ))}
+            </DroppableWrapper>
+          </DragDropContext>
+        </div>
+      )}
     </div>
   )
 }

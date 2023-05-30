@@ -1,12 +1,7 @@
+import { ProjectStatus } from './projectStatusType'
 import { BaseResponse } from '~/shared/types'
 
-export type GetProjectStatusResponse = BaseResponse<
-  Array<{
-    id: number
-    name: string
-    index: number
-  }>
->
+export type GetProjectStatusResponse = BaseResponse<Array<ProjectStatus>>
 
 export type CreateProjectStatusRequest = {
   name: string

@@ -14,14 +14,19 @@ export type Issue = {
   projectStatusId: number
 }
 
-export type IssueInBoard = Issue & {
-  projectStatusIndex: number
-}
-
 export type IssueInBacklog = Issue & {
   projectStatusName: string
 }
 
 export type IssueDetail = Issue & {
   projectStatusName: number
+}
+
+export type IssueInBoard = Issue & {
+  projectStatusIndex: number
+}
+
+export type IssueGroupedInBoard = {
+  projectStatusId: number
+  issues: Array<IssueInBoard>
 }

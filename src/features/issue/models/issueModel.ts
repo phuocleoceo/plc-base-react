@@ -1,12 +1,7 @@
 import { BaseResponse } from '~/shared/types'
-import { IssueInBacklog, IssueInBoard, IssueDetail } from './issueType'
+import { IssueInBacklog, IssueInBoard, IssueDetail, IssueGroupedInBoard } from './issueType'
 
-export type GetIssuesInBoardResponse = BaseResponse<
-  Array<{
-    projectStatusId: number
-    issues: Array<IssueInBoard>
-  }>
->
+export type GetIssuesInBoardResponse = BaseResponse<Array<IssueGroupedInBoard>>
 
 export type GetIssuesInBacklogResponse = BaseResponse<Array<IssueInBacklog>>
 
