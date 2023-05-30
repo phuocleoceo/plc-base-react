@@ -1,65 +1,18 @@
 import { BaseResponse } from '~/shared/types'
+import { IssueInBacklog, IssueInBoard, IssueDetail } from './issueType'
 
-export type GetIssuesInBoardResponse = BaseResponse<{
-  [statusId: number]: Array<{
-    id: number
-    title: string
-    description: string
-    storyPoint: number
-    priority: string
-    type: string
-    reporterId: number
-    reporterName: string
-    reporterAvatar: string
-    assigneeId: number
-    assigneeName: string
-    assigneeAvatar: string
-    projectStatusId: number
-    projectStatusIndex: number
-  }>
-}>
-
-export type GetIssuesInBacklogResponse = BaseResponse<
+export type GetIssuesInBoardResponse = BaseResponse<
   Array<{
-    id: number
-    title: string
-    description: string
-    storyPoint: number
-    priority: string
-    type: string
-    backlogIndex: number
-    sprintId: number
-    reporterId: number
-    reporterName: string
-    reporterAvatar: string
-    assigneeId: number
-    assigneeName: string
-    assigneeAvatar: string
     projectStatusId: number
-    projectStatusName: string
+    issues: Array<IssueInBoard>
   }>
 >
 
-export type GetIssuesInSprintResponse = BaseResponse<
-  Array<{
-    id: number
-    title: string
-    description: string
-    storyPoint: number
-    priority: string
-    type: string
-    backlogIndex: number
-    sprintId: number
-    reporterId: number
-    reporterName: string
-    reporterAvatar: string
-    assigneeId: number
-    assigneeName: string
-    assigneeAvatar: string
-    projectStatusId: number
-    projectStatusName: string
-  }>
->
+export type GetIssuesInBacklogResponse = BaseResponse<Array<IssueInBacklog>>
+
+export type GetIssuesInSprintResponse = BaseResponse<Array<IssueInBacklog>>
+
+export type GetIssueDetailResponse = BaseResponse<IssueDetail>
 
 export type CreateIssueRequest = {
   title: string

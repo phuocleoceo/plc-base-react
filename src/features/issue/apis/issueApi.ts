@@ -2,6 +2,7 @@ import {
   GetIssuesInBoardResponse,
   GetIssuesInBacklogResponse,
   GetIssuesInSprintResponse,
+  GetIssueDetailResponse,
   CreateIssueRequest,
   CreateIssueResponse,
   UpdateIssueRequest,
@@ -19,6 +20,9 @@ const issueApi = {
   },
   getIssuesInSprint(projectId: number) {
     return HttpHelper.get<GetIssuesInSprintResponse>(`project/${projectId}/sprint/issue`)
+  },
+  getIssueDetail(projectId: number, issueId: number) {
+    return HttpHelper.get<GetIssueDetailResponse>(`project/${projectId}/issue/${issueId}`)
   },
   createIssueRequest(projectId: number, body: CreateIssueRequest) {
     return HttpHelper.post<CreateIssueResponse>(`project/${projectId}/issue`, body)

@@ -6,5 +6,7 @@ export const QueryKey = {
   ProjectMembers: 'project_members',
   ProjectMemberSelect: 'project_member_select',
   ProjectInvitations: 'project_invitations',
-  UserInvitations: 'user_invitations'
+  UserInvitations: 'user_invitations',
+  ProjectStatuses: 'project_statuses',
+  IssueInBoard: 'issue_in_board'
 } as const

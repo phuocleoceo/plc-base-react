@@ -2,6 +2,7 @@ import { BaseResponse } from '~/shared/types'
 
 export type GetProjectStatusResponse = BaseResponse<
   Array<{
+    id: number
     name: string
     index: number
   }>
