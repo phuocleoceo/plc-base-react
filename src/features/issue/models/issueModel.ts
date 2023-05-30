@@ -1,8 +1,23 @@
-import { BaseResponse, BaseParams } from '~/shared/types'
+import { BaseResponse } from '~/shared/types'
 
-export type GetInvitationForProjectParams = BaseParams & {
-  stillValid: boolean
-}
+export type GetIssuesInBoardResponse = BaseResponse<{
+  [statusId: number]: Array<{
+    id: number
+    title: string
+    description: string
+    storyPoint: number
+    priority: string
+    type: string
+    reporterId: number
+    reporterName: string
+    reporterAvatar: string
+    assigneeId: number
+    assigneeName: string
+    assigneeAvatar: string
+    projectStatusId: number
+    projectStatusIndex: number
+  }>
+}>
 
 export type GetIssuesInBacklogResponse = BaseResponse<
   Array<{

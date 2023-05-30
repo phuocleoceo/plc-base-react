@@ -1,5 +1,12 @@
 import { BaseResponse } from '~/shared/types'
 
+export type GetProjectStatusResponse = BaseResponse<
+  Array<{
+    name: string
+    index: number
+  }>
+>
+
 export type CreateProjectStatusRequest = {
   name: string
 }

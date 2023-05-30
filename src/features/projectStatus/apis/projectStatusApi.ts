@@ -1,4 +1,5 @@
 import {
+  GetProjectStatusResponse,
   CreateProjectStatusRequest,
   CreateProjectStatusResponse,
   UpdateProjectStatusRequest,
@@ -8,6 +9,9 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const projectStatusApi = {
+  getProjectStatus(projectId: number) {
+    return HttpHelper.get<GetProjectStatusResponse>(`project/${projectId}/status`)
+  },
   createProjectStatus(projectId: number, body: CreateProjectStatusRequest) {
     return HttpHelper.post<CreateProjectStatusResponse>(`project/${projectId}/status`, body)
   },
