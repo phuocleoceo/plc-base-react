@@ -1,10 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+import { Suspense, lazy } from 'react'
 import { Icon } from '@iconify/react'
 
 import { InvitationApi } from '~/features/invitation/apis'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
+import { useShowing } from '~/common/hooks'
+
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
   idx: number
@@ -35,18 +39,21 @@ export default function ProjectInvitationRow(props: Props) {
     onClick
   } = props
 
+  const { isShowing: isShowingAcceptInvitation, toggle: toggleAcceptInvitation } = useShowing()
+  const { isShowing: isShowingDeclineInvitation, toggle: toggleDeclineInvitation } = useShowing()
+
   const queryClient = useQueryClient()
 
   const acceptInvitationMutation = useMutation({
     mutationFn: () => InvitationApi.acceptInvitation(invitationId)
   })
 
-  const declineInvitationMutation = useMutation({
-    mutationFn: () => InvitationApi.declineInvitation(invitationId)
-  })
-
-  const handleAcceptInvitation = async (event: React.MouseEvent) => {
+  const handleClickAcceptInvitation = (event: React.MouseEvent) => {
     event.stopPropagation()
+    toggleAcceptInvitation()
+  }
+
+  const handleAcceptInvitation = async () => {
     acceptInvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('accept_invitation_success')
@@ -55,8 +62,16 @@ export default function ProjectInvitationRow(props: Props) {
     })
   }
 
-  const handleDeclineInvitation = (event: React.MouseEvent) => {
+  const handleClickDeclineInvitation = (event: React.MouseEvent) => {
     event.stopPropagation()
+    toggleDeclineInvitation()
+  }
+
+  const declineInvitationMutation = useMutation({
+    mutationFn: () => InvitationApi.declineInvitation(invitationId)
+  })
+
+  const handleDeclineInvitation = async () => {
     declineInvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('decline_invitation_success')
@@ -102,17 +117,49 @@ export default function ProjectInvitationRow(props: Props) {
 
           {!declinedAt && !acceptedAt && (
             <div className='flex'>
-              <button title='accept_invitation' onClick={handleAcceptInvitation} className='btn-icon bg-c-1'>
+              <button title='accept_invitation' onClick={handleClickAcceptInvitation} className='btn-icon bg-c-1'>
                 <Icon width={22} icon='mdi:check-outline' className='text-green-500' />
               </button>
 
-              <button title='decline_invitation' onClick={handleDeclineInvitation} className='btn-icon bg-c-1'>
+              <button title='decline_invitation' onClick={handleClickDeclineInvitation} className='btn-icon bg-c-1'>
                 <Icon width={22} icon='mdi:close-outline' className='text-red-500' />
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {isShowingAcceptInvitation && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingAcceptInvitation}
+            onClose={toggleAcceptInvitation}
+            onSubmit={handleAcceptInvitation}
+            isLoading={acceptInvitationMutation.isLoading}
+            confirmMessage={`submit_accept_invitation` + `: ${projectName}`}
+            closeLabel='cancle'
+            submittingLabel='accepting_invitation...'
+            submitLabel='accept_invitation'
+            submitClassName='btn-alert'
+          />
+        </Suspense>
+      )}
+
+      {isShowingDeclineInvitation && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingDeclineInvitation}
+            onClose={toggleDeclineInvitation}
+            onSubmit={handleDeclineInvitation}
+            isLoading={declineInvitationMutation.isLoading}
+            confirmMessage={`submit_decline_invitation` + `: ${projectName}`}
+            closeLabel='cancle'
+            submittingLabel='declining_invitation...'
+            submitLabel='decline_invitation'
+            submitClassName='btn-alert'
+          />
+        </Suspense>
+      )}
     </>
   )
 }
