@@ -7,14 +7,15 @@ import { DragDropIssue } from '~/features/issue/components'
 import { IssueInBoard } from '~/features/issue/models'
 import { useShowing } from '~/common/hooks'
 
-type Props = ProjectStatus & {
+type Props = {
   idx: number
+  projectStatus: ProjectStatus
   issues?: Array<IssueInBoard>
   isDragDisabled: boolean
 }
 
 export default function DragDropStatus(props: Props) {
-  const { idx, issues, isDragDisabled, id, name } = props
+  const { idx, issues, isDragDisabled, projectStatus } = props
 
   const [isEditing, setIsEditing] = useState(false)
   const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useShowing()
@@ -27,7 +28,7 @@ export default function DragDropStatus(props: Props) {
     <DraggableWrapper
       className='w-[clamp(16rem,18rem,20rem)]'
       index={idx}
-      draggableId={'list-' + id}
+      draggableId={`projectStatus-${projectStatus.id}`}
       isDragDisabled={isDragDisabled}
     >
       <div className='relative mr-3 bg-c-2 p-3 text-c-5 shadow-list'>
@@ -36,14 +37,14 @@ export default function DragDropStatus(props: Props) {
             <div className='relative'>
               {isEditing ? (
                 <input
-                  value={name}
+                  value={projectStatus.name}
                   //   onChange={(e) => setName(e.target.value)}
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                   className='w-36 border-[1.5px] bg-c-2 pl-2 text-[15px] outline-none focus:border-chakra-blue'
                 />
               ) : (
-                <span className='block border-[1.5px] border-transparent pl-2 font-medium'>{name}</span>
+                <span className='block border-[1.5px] border-transparent pl-2 font-medium'>{projectStatus.name}</span>
               )}
             </div>
             <span className='mx-2 text-gray-500'>|</span>
@@ -62,9 +63,9 @@ export default function DragDropStatus(props: Props) {
           </div>
         </div>
 
-        <DroppableWrapper className='min-h-[3rem]' type='issue' droppableId={'list-' + id}>
+        <DroppableWrapper className='min-h-[3rem]' type='issue' droppableId={`projectStatus-${projectStatus.id}`}>
           {issues?.map((issue, idx) => (
-            <DragDropIssue isDragDisabled={isDragDisabled} key={issue.id} idx={idx} {...issue} />
+            <DragDropIssue key={issue.id} isDragDisabled={isDragDisabled} idx={idx} issue={issue} />
           ))}
         </DroppableWrapper>
       </div>

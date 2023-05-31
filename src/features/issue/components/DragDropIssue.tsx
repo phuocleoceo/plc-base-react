@@ -1,15 +1,16 @@
+import { Avatar, DraggableWrapper } from '~/common/components'
 import { IssueInBoard } from '~/features/issue/models'
-import { DraggableWrapper } from '~/common/components'
 import { IssueHelper } from '~/shared/helpers'
 import { useShowing } from '~/common/hooks'
 
-type Props = IssueInBoard & {
+type Props = {
   idx: number
   isDragDisabled: boolean
+  issue: IssueInBoard
 }
 
 export default function DragDropIssue(props: Props) {
-  const { idx, isDragDisabled, id, title, type, priority } = props
+  const { idx, isDragDisabled, issue } = props
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useShowing()
 
@@ -18,28 +19,40 @@ export default function DragDropIssue(props: Props) {
       <DraggableWrapper
         className='hover:bg-c-4 mb-2 w-full rounded-sm bg-c-1 p-2 shadow-issue'
         index={idx}
-        draggableId={'issue-' + id}
+        draggableId={`issue-${issue.id}`}
         isDragDisabled={isDragDisabled}
       >
-        <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={id} role='button'>
-          <span className=''>{title}</span>
+        <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
+          <span className=''>{issue.title}</span>
 
           <div className='mt-[10px] flex items-center justify-between'>
             <div className='mb-1 flex items-center gap-3'>
               <img
                 className='h-[18px] w-[18px]'
-                src={IssueHelper.getIssueType(type)?.icon}
-                alt={IssueHelper.getIssueType(type)?.text}
+                src={IssueHelper.getIssueType(issue.type)?.icon}
+                alt={IssueHelper.getIssueType(issue.type)?.text}
               />
 
               <img
                 className='h-[18px] w-[18px]'
-                src={IssueHelper.getIssuePriority(priority)?.icon}
-                alt={IssueHelper.getIssuePriority(priority)?.text}
+                src={IssueHelper.getIssuePriority(issue.priority)?.icon}
+                alt={IssueHelper.getIssuePriority(issue.priority)?.text}
               />
             </div>
 
-            {/* <AssignedMembers assignees={assignees} members={members} /> */}
+            <div className='ml-7 flex'>
+              {issue.assigneeId ? (
+                <Avatar
+                  key={issue.assigneeId}
+                  src={issue.assigneeAvatar}
+                  name={issue.assigneeName}
+                  style={{ zIndex: 0 }}
+                  className='pointer-events-none -ml-2 h-7 w-7 border-2'
+                />
+              ) : (
+                <div className='h-7 w-7'></div>
+              )}
+            </div>
           </div>
         </div>
       </DraggableWrapper>

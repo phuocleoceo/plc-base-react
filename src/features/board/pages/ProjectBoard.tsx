@@ -64,9 +64,9 @@ export default function ProjectBoard() {
                 <DragDropStatus
                   key={projectStatus.id}
                   idx={idx}
+                  projectStatus={projectStatus}
                   issues={getIssuesByStatusId(projectStatus.id)}
                   isDragDisabled={isDragDisabled}
-                  {...projectStatus}
                 />
               ))}
             </DroppableWrapper>
