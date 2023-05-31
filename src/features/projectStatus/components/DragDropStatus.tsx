@@ -3,7 +3,9 @@ import { useState } from 'react'
 
 import { DraggableWrapper, DroppableWrapper } from '~/common/components'
 import { ProjectStatus } from '~/features/projectStatus/models'
+import { DragDropIssue } from '~/features/issue/components'
 import { IssueInBoard } from '~/features/issue/models'
+import { useShowing } from '~/common/hooks'
 
 type Props = ProjectStatus & {
   idx: number
@@ -15,7 +17,7 @@ export default function DragDropStatus(props: Props) {
   const { idx, issues, isDragDisabled, id, name } = props
 
   const [isEditing, setIsEditing] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useShowing()
 
   const handleUpdateStatus = async () => {
     setIsEditing((p) => !p)
@@ -50,7 +52,7 @@ export default function DragDropStatus(props: Props) {
 
           <div className='flex gap-2'>
             {isEditing && (
-              <button onClick={() => setIsOpen(true)} title='Delete' className='btn-icon ml-5 hover:bg-c-3'>
+              <button onClick={toggleDeleteStatus} title='Delete' className='btn-icon ml-5 hover:bg-c-3'>
                 <Icon icon='bx:trash' className='text-red-500' />
               </button>
             )}
@@ -62,8 +64,7 @@ export default function DragDropStatus(props: Props) {
 
         <DroppableWrapper className='min-h-[3rem]' type='issue' droppableId={'list-' + id}>
           {issues?.map((issue, idx) => (
-            <div key={idx}>{issue.title}</div>
-            // <Issue isDragDisabled={isDragDisabled} key={data.id} listIdx={idx} idx={i} {...data} listId={id} />
+            <DragDropIssue isDragDisabled={isDragDisabled} key={issue.id} idx={idx} {...issue} />
           ))}
         </DroppableWrapper>
       </div>
