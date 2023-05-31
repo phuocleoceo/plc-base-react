@@ -88,17 +88,7 @@ export default function ProjectList() {
           {projects && projects.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {projects.map((project, idx) => (
-                <ProjectRow
-                  key={idx}
-                  idx={idx}
-                  id={project.id}
-                  name={project.name}
-                  issueKey={project.key}
-                  image={project.image}
-                  leaderId={project.leaderId}
-                  leaderName={project.leaderName}
-                  leaderAvatar={project.leaderAvatar}
-                />
+                <ProjectRow key={idx} idx={idx} project={project} />
               ))}
             </div>
           ) : (

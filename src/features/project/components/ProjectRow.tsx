@@ -1,49 +1,49 @@
 import { useNavigate } from 'react-router-dom'
 
 import { LocalStorageHelper } from '~/shared/helpers'
+import { Project } from '~/features/project/models'
 import { Avatar } from '~/common/components'
 
 interface Props {
   idx: number
-  id: number
-  name: string
-  issueKey: string
-  image: string
-  leaderId: number
-  leaderName: string
-  leaderAvatar: string
+  project: Project
 }
 
 export default function ProjectRow(props: Props) {
-  const { idx, id, name, issueKey, image, leaderId, leaderName, leaderAvatar } = props
+  const { idx, project } = props
 
   const navigate = useNavigate()
   const currentUser = LocalStorageHelper.getUserInfo()
 
   return (
     <div
-      key={id}
+      key={project.id}
       className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-      onClick={() => navigate(`${id}/board`)}
-      onKeyDown={() => navigate(`${id}/board`)}
-      tabIndex={id}
+      onClick={() => navigate(`${project.id}/board`)}
+      onKeyDown={() => navigate(`${project.id}/board`)}
+      tabIndex={project.id}
       role='button'
     >
       <div className='w-32 text-center'>{idx + 1}</div>
       <div className='w-40'>
-        <Avatar title={name} src={image} name={name} className='h-9 w-9 border-[1px] hover:border-green-500' />
+        <Avatar
+          title={project.name}
+          src={project.image}
+          name={project.name}
+          className='h-9 w-9 border-[1px] hover:border-green-500'
+        />
       </div>
-      <div className='w-40'>{issueKey}</div>
-      <div className='w-80'>{name}</div>
+      <div className='w-40'>{project.key}</div>
+      <div className='w-80'>{project.name}</div>
       <div className='flex-grow flex'>
         <Avatar
           title='Profile'
-          src={leaderAvatar}
-          name={leaderName}
+          src={project.leaderAvatar}
+          name={project.leaderName}
           className='h-9 w-9 border-[1px] hover:border-green-500'
         />
-        <span className='ml-3'>{leaderName}</span>
-        {currentUser.id === leaderId ? <span className='ml-1 font-bold'>(you)</span> : ''}
+        <span className='ml-3'>{project.leaderName}</span>
+        {currentUser.id === project.leaderId ? <span className='ml-1 font-bold'>(you)</span> : ''}
       </div>
     </div>
   )

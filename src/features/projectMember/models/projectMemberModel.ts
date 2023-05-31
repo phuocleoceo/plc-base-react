@@ -1,16 +1,11 @@
 import { BaseParams, BaseResponse, PagedResponse } from '~/shared/types'
+import { ProjectMember } from './projectMemberType'
 
 export type GetMemberForProjectParams = BaseParams & {
   withDeleted?: boolean
 }
 
-export type GetMemberForProjectResponse = PagedResponse<{
-  id: number
-  email: string
-  name: string
-  avatar: string
-  projectMemberId: number
-}>
+export type GetMemberForProjectResponse = PagedResponse<ProjectMember>
 
 export type GetMemberForSelectResponse = BaseResponse<
   Array<{
