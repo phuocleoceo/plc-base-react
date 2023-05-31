@@ -1,1 +1,1 @@
-export { default as StatusContainer } from './StatusContainer'
+export { default as DragDropStatus } from './DragDropStatus'

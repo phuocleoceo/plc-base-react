@@ -2,7 +2,7 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd'
 import { useParams } from 'react-router-dom'
 import { useContext, useState } from 'react'
 
-import { StatusContainer } from '~/features/projectStatus/components'
+import { DragDropStatus } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { FilterBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
@@ -42,8 +42,8 @@ export default function ProjectBoard() {
     return issues?.find((i) => i.projectStatusId === statusId)?.issues ?? []
   }
 
-  const handleDragEnd = ({ type, source: s, destination: d }: DropResult) => {
-    console.log(type)
+  const handleDragEnd = ({ type, source, destination }: DropResult) => {
+    console.log(type, source, destination)
   }
 
   return (
@@ -61,7 +61,7 @@ export default function ProjectBoard() {
               direction='horizontal'
             >
               {projectStatuses.map((projectStatus, idx) => (
-                <StatusContainer
+                <DragDropStatus
                   key={projectStatus.id}
                   idx={idx}
                   issues={getIssuesByStatusId(projectStatus.id)}

@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react'
 import { useState } from 'react'
 
+import { DraggableWrapper, DroppableWrapper } from '~/common/components'
 import { ProjectStatus } from '~/features/projectStatus/models'
-import { DraggableWrapper } from '~/common/components'
 import { IssueInBoard } from '~/features/issue/models'
 
 type Props = ProjectStatus & {
@@ -11,7 +11,7 @@ type Props = ProjectStatus & {
   isDragDisabled: boolean
 }
 
-export default function StatusContainer(props: Props) {
+export default function DragDropStatus(props: Props) {
   const { idx, issues, isDragDisabled, id, name } = props
 
   const [isEditing, setIsEditing] = useState(false)
@@ -59,6 +59,13 @@ export default function StatusContainer(props: Props) {
             </button>
           </div>
         </div>
+
+        <DroppableWrapper className='min-h-[3rem]' type='issue' droppableId={'list-' + id}>
+          {issues?.map((issue, idx) => (
+            <div key={idx}>{issue.title}</div>
+            // <Issue isDragDisabled={isDragDisabled} key={data.id} listIdx={idx} idx={i} {...data} listId={id} />
+          ))}
+        </DroppableWrapper>
       </div>
     </DraggableWrapper>
   )
