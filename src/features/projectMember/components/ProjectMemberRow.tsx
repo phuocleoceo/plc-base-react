@@ -1,10 +1,14 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense } from 'react'
+import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
+import { ProjectMemberApi } from '~/features/projectMember/apis'
+import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useShowing } from '~/common/hooks'
 
-const DeleteProjectMember = lazy(() => import('~/features/projectMember/components/DeleteProjectMember'))
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
   idx: number
@@ -22,9 +26,25 @@ export default function ProjectMemberRow(props: Props) {
 
   const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useShowing()
 
-  const handleDeleteProjectMember = (event: React.MouseEvent) => {
+  const queryClient = useQueryClient()
+
+  const handleClickDeleteProjectMember = (event: React.MouseEvent) => {
     event.stopPropagation()
     toggleDeleteMember()
+  }
+
+  const deleteProjectMemberMutation = useMutation({
+    mutationFn: () => ProjectMemberApi.deleteProjectMember(projectId, projectMemberId)
+  })
+
+  const handleDeleteProjectMember = async () => {
+    deleteProjectMemberMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('delete_project_member_success')
+        queryClient.invalidateQueries([QueryKey.ProjectMembers])
+        toggleDeleteMember()
+      }
+    })
   }
 
   return (
@@ -46,7 +66,7 @@ export default function ProjectMemberRow(props: Props) {
         <div className='flex-grow flex'>
           <button
             title='delete_project_member'
-            onClick={handleDeleteProjectMember}
+            onClick={handleClickDeleteProjectMember}
             className='btn-icon absolute ml-2 bg-c-1'
           >
             <Icon width={22} icon='bx:trash' className='text-red-500' />
@@ -56,12 +76,16 @@ export default function ProjectMemberRow(props: Props) {
 
       {isShowingDeleteMember && (
         <Suspense>
-          <DeleteProjectMember
-            projectId={projectId}
-            projectMemberId={projectMemberId}
-            projectMemberName={name}
+          <ConfirmModal
             isShowing={isShowingDeleteMember}
             onClose={toggleDeleteMember}
+            onSubmit={handleDeleteProjectMember}
+            isLoading={deleteProjectMemberMutation.isLoading}
+            confirmMessage={`submit_delete_project_member` + `: ${name}`}
+            closeLabel='cancle'
+            submittingLabel='deleting_project_member...'
+            submitLabel='delete_project_member'
+            submitClassName='btn-alert'
           />
         </Suspense>
       )}

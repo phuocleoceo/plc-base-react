@@ -93,18 +93,7 @@ export default function ProjectInvitationList() {
           {invitations && invitations.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {invitations.map((invitation, idx) => (
-                <ProjectInvitationRow
-                  key={idx}
-                  idx={idx}
-                  invitationId={invitation.invitationId}
-                  recipientId={invitation.recipientId}
-                  recipientName={invitation.recipientName}
-                  recipientEmail={invitation.recipientEmail}
-                  recipientAvatar={invitation.recipientAvatar}
-                  acceptedAt={invitation.acceptedAt}
-                  declinedAt={invitation.declinedAt}
-                  projectId={projectId}
-                />
+                <ProjectInvitationRow key={idx} idx={idx} projectId={projectId} {...invitation} />
               ))}
             </div>
           ) : (
