@@ -100,12 +100,8 @@ export default function ProjectMemberList() {
                 <ProjectMemberRow
                   key={idx}
                   idx={idx}
-                  id={projectMember.id}
-                  name={projectMember.name}
-                  email={projectMember.email}
-                  avatar={projectMember.avatar}
-                  projectMemberId={projectMember.projectMemberId}
                   projectId={projectId}
+                  projectMember={projectMember}
                   onClick={() => handleClickMemberRow(projectMember.id)}
                 />
               ))}
