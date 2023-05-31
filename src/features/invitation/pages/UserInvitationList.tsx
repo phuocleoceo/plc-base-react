@@ -83,7 +83,7 @@ export default function UserInvitationList() {
           {invitations && invitations.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {invitations.map((invitation, idx) => (
-                <UserInvitationRow key={idx} idx={idx} {...invitation} />
+                <UserInvitationRow key={idx} idx={idx} invitation={invitation} />
               ))}
             </div>
           ) : (
