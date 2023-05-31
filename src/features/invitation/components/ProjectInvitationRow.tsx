@@ -1,10 +1,14 @@
+import { toast } from 'react-toastify'
 import { lazy, Suspense } from 'react'
 import { Icon } from '@iconify/react'
 
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { InvitationApi } from '~/features/invitation/apis'
+import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useShowing } from '~/common/hooks'
 
-const DeleteProjectInvitation = lazy(() => import('~/features/invitation/components/DeleteProjectInvitation'))
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
   idx: number
@@ -34,9 +38,25 @@ export default function ProjectInvitationRow(props: Props) {
 
   const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useShowing()
 
-  const handleDeleteProjectMember = (event: React.MouseEvent) => {
+  const queryClient = useQueryClient()
+
+  const handleClickDeleteProjectInvitation = (event: React.MouseEvent) => {
     event.stopPropagation()
     toggleDeleteInvitation()
+  }
+
+  const deleteProjectinvitationMutation = useMutation({
+    mutationFn: () => InvitationApi.deleteInvitationForProject(projectId, invitationId)
+  })
+
+  const handleDeleteProjectInvitation = async () => {
+    deleteProjectinvitationMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('delete_project_invitation_success')
+        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
+        toggleDeleteInvitation()
+      }
+    })
   }
 
   return (
@@ -68,7 +88,7 @@ export default function ProjectInvitationRow(props: Props) {
         <div className='flex-grow flex'>
           <button
             title='delete_project_member'
-            onClick={handleDeleteProjectMember}
+            onClick={handleClickDeleteProjectInvitation}
             className='btn-icon absolute ml-2 bg-c-1'
           >
             <Icon width={22} icon='bx:trash' className='text-red-500' />
@@ -78,12 +98,16 @@ export default function ProjectInvitationRow(props: Props) {
 
       {isShowingDeleteInvitation && (
         <Suspense>
-          <DeleteProjectInvitation
-            projectId={projectId}
-            invitationId={invitationId}
-            recipientEmail={recipientEmail}
+          <ConfirmModal
             isShowing={isShowingDeleteInvitation}
             onClose={toggleDeleteInvitation}
+            onSubmit={handleDeleteProjectInvitation}
+            isLoading={deleteProjectinvitationMutation.isLoading}
+            confirmMessage={`submit_delete_project_invitation` + `: ${recipientEmail}`}
+            closeLabel='cancle'
+            submittingLabel='deleting_project_invitation...'
+            submitLabel='delete_project_invitation'
+            submitClassName='btn-alert'
           />
         </Suspense>
       )}
