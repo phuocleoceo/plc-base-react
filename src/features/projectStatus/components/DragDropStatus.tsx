@@ -39,9 +39,9 @@ export default function DragDropStatus(props: Props) {
                 <input
                   value={projectStatus.name}
                   //   onChange={(e) => setName(e.target.value)}
+                  className='w-36 border-[1.5px] bg-c-2 pl-2 text-[15px] outline-none focus:border-chakra-blue'
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
-                  className='w-36 border-[1.5px] bg-c-2 pl-2 text-[15px] outline-none focus:border-chakra-blue'
                 />
               ) : (
                 <span className='block border-[1.5px] border-transparent pl-2 font-medium'>{projectStatus.name}</span>

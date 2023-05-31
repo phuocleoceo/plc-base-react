@@ -4,6 +4,7 @@ import { useContext, useState } from 'react'
 
 import { DragDropStatus } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
+import { GetIssuesInBoardParams } from '~/features/issue/models'
 import { FilterBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
 import { useQuery } from '@tanstack/react-query'
@@ -15,9 +16,9 @@ export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
-
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 
+  // ---------------------Project Status---------------------
   const { data: projectStatusData } = useQuery({
     queryKey: [QueryKey.ProjectStatuses, projectId],
     queryFn: () => ProjectStatusApi.getProjectStatus(projectId),
@@ -28,9 +29,22 @@ export default function ProjectBoard() {
 
   const projectStatuses = projectStatusData?.data.data
 
+  // ----------------------Issue----------------------------
+  const [issueParams, setIssueParams] = useState<GetIssuesInBoardParams>({
+    searchValue: '',
+    assignees: ''
+  })
+
+  const handleChangeIssueParams = (key: string, value: string) => {
+    setIssueParams({
+      ...issueParams,
+      [key]: value
+    })
+  }
+
   const { data: issueData } = useQuery({
-    queryKey: [QueryKey.IssueInBoard, projectId],
-    queryFn: () => IssueApi.getIssuesInBoard(projectId),
+    queryKey: [QueryKey.IssueInBoard, projectId, issueParams],
+    queryFn: () => IssueApi.getIssuesInBoard(projectId, issueParams),
     enabled: isAuthenticated,
     keepPreviousData: true,
     staleTime: 1 * 60 * 1000
@@ -42,6 +56,7 @@ export default function ProjectBoard() {
     return issues?.find((i) => i.projectStatusId === statusId)?.issues ?? []
   }
 
+  // ----------------------Drag Drop----------------------------
   const handleDragEnd = ({ type, source, destination }: DropResult) => {
     console.log(type, source, destination)
   }
@@ -49,7 +64,11 @@ export default function ProjectBoard() {
   return (
     <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
       <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
-      <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled }} />
+      <FilterBar
+        maxMemberDisplay={4}
+        onChangeIssueParams={handleChangeIssueParams}
+        {...{ projectId, setIsDragDisabled }}
+      />
 
       {projectStatuses && projectStatuses?.length > 0 && (
         <div className='mb-5 flex min-w-max grow items-start'>

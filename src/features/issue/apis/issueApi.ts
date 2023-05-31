@@ -1,4 +1,5 @@
 import {
+  GetIssuesInBoardParams,
   GetIssuesInBoardResponse,
   GetIssuesInBacklogResponse,
   GetIssuesInSprintResponse,
@@ -12,8 +13,8 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const issueApi = {
-  getIssuesInBoard(projectId: number) {
-    return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`)
+  getIssuesInBoard(projectId: number, params: GetIssuesInBoardParams) {
+    return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`, { params })
   },
   getIssuesInBacklog(projectId: number) {
     return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`)
