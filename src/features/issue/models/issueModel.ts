@@ -1,5 +1,10 @@
+import { IssueInBacklog, IssueDetail, IssueGroupedInBoard } from './issueType'
 import { BaseResponse } from '~/shared/types'
-import { IssueInBacklog, IssueInBoard, IssueDetail, IssueGroupedInBoard } from './issueType'
+
+export type GetIssuesInBoardParams = {
+  searchValue?: string
+  assignees?: string
+}
 
 export type GetIssuesInBoardResponse = BaseResponse<Array<IssueGroupedInBoard>>
 

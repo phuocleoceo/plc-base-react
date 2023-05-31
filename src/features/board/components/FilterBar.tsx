@@ -12,14 +12,16 @@ interface Props {
   setIsDragDisabled: Dispatch<SetStateAction<boolean>>
   projectId: number
   maxMemberDisplay: number
+  onChangeIssueParams: (key: string, value: string) => void
 }
 
 export default function FilterBar(props: Props) {
-  const { projectId, setIsDragDisabled, maxMemberDisplay } = props
+  const { projectId, setIsDragDisabled, maxMemberDisplay, onChangeIssueParams } = props
   const { isAuthenticated } = useContext(AppContext)
   const currentUser = LocalStorageHelper.getUserInfo()
 
   const [fold, setFold] = useState(true)
+  const [searchValue, setSearchValue] = useState<string>()
   const [selectedMember, setSelectedMember] = useState<number>()
 
   const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
@@ -33,7 +35,13 @@ export default function FilterBar(props: Props) {
 
   const handleSelectMember = (userId?: number) => () => {
     setSelectedMember(userId)
+    onChangeIssueParams('assignees', userId?.toString() ?? '')
     setIsDragDisabled(!!userId)
+  }
+
+  const handleChangeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value)
+    onChangeIssueParams('searchValue', event.target.value)
   }
 
   if (projectMemberLoading)
@@ -49,7 +57,9 @@ export default function FilterBar(props: Props) {
     <div className='mb-8 flex min-w-fit items-center text-c-5'>
       <div className='relative'>
         <input
-          placeholder='Search issues'
+          value={searchValue}
+          onChange={handleChangeSearchValue}
+          placeholder='search_issues'
           className='w-44 rounded-sm border-[1.5px] bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
         />
         <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
