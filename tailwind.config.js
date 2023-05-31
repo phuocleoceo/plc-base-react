@@ -19,6 +19,9 @@ export default {
       boxShadow: {
         issue: '0 1px 2px 0 #091e4240',
         list: '0 0 2px 0 #091e4230'
+      },
+      borderWidth: {
+        2.5: '2.5px'
       }
     }
   },

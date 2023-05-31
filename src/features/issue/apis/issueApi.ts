@@ -1,6 +1,8 @@
 import {
+  GetIssuesInBoardResponse,
   GetIssuesInBacklogResponse,
   GetIssuesInSprintResponse,
+  GetIssueDetailResponse,
   CreateIssueRequest,
   CreateIssueResponse,
   UpdateIssueRequest,
@@ -10,11 +12,17 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const issueApi = {
+  getIssuesInBoard(projectId: number) {
+    return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`)
+  },
   getIssuesInBacklog(projectId: number) {
     return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`)
   },
-  getIssuesInSprint(projectId: number, sprintId: number) {
-    return HttpHelper.get<GetIssuesInSprintResponse>(`project/${projectId}/sprint/${sprintId}/issue`)
+  getIssuesInSprint(projectId: number) {
+    return HttpHelper.get<GetIssuesInSprintResponse>(`project/${projectId}/sprint/issue`)
+  },
+  getIssueDetail(projectId: number, issueId: number) {
+    return HttpHelper.get<GetIssueDetailResponse>(`project/${projectId}/issue/${issueId}`)
   },
   createIssueRequest(projectId: number, body: CreateIssueRequest) {
     return HttpHelper.post<CreateIssueResponse>(`project/${projectId}/issue`, body)

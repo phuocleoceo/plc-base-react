@@ -1,50 +1,13 @@
-import { BaseResponse, BaseParams } from '~/shared/types'
+import { BaseResponse } from '~/shared/types'
+import { IssueInBacklog, IssueInBoard, IssueDetail, IssueGroupedInBoard } from './issueType'
 
-export type GetInvitationForProjectParams = BaseParams & {
-  stillValid: boolean
-}
+export type GetIssuesInBoardResponse = BaseResponse<Array<IssueGroupedInBoard>>
 
-export type GetIssuesInBacklogResponse = BaseResponse<
-  Array<{
-    id: number
-    title: string
-    description: string
-    storyPoint: number
-    priority: string
-    type: string
-    backlogIndex: number
-    sprintId: number
-    reporterId: number
-    reporterName: string
-    reporterAvatar: string
-    assigneeId: number
-    assigneeName: string
-    assigneeAvatar: string
-    projectStatusId: number
-    projectStatusName: string
-  }>
->
+export type GetIssuesInBacklogResponse = BaseResponse<Array<IssueInBacklog>>
 
-export type GetIssuesInSprintResponse = BaseResponse<
-  Array<{
-    id: number
-    title: string
-    description: string
-    storyPoint: number
-    priority: string
-    type: string
-    backlogIndex: number
-    sprintId: number
-    reporterId: number
-    reporterName: string
-    reporterAvatar: string
-    assigneeId: number
-    assigneeName: string
-    assigneeAvatar: string
-    projectStatusId: number
-    projectStatusName: string
-  }>
->
+export type GetIssuesInSprintResponse = BaseResponse<Array<IssueInBacklog>>
+
+export type GetIssueDetailResponse = BaseResponse<IssueDetail>
 
 export type CreateIssueRequest = {
   title: string
