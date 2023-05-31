@@ -1,34 +1,13 @@
 import { BaseParams, BaseResponse, PagedResponse } from '~/shared/types'
+import { Project } from './projectType'
 
 export type GetProjectsParams = BaseParams & {
   searchValue: string
 }
 
-export type GetProjectsResponse = PagedResponse<{
-  id: number
-  name: string
-  image: string
-  key: string
-  creatorId: number
-  leaderId: number
-  leaderName: string
-  leaderAvatar: string
-  createdAt: Date
-  updatedAt: Date
-}>
+export type GetProjectsResponse = PagedResponse<Project>
 
-export type GetProjectResponse = BaseResponse<{
-  id: number
-  name: string
-  image: string
-  key: string
-  creatorId: number
-  leaderId: number
-  leaderName: string
-  leaderAvatar: string
-  createdAt: Date
-  updatedAt: Date
-}>
+export type GetProjectResponse = BaseResponse<Project>
 
 export type CreateProjectRequest = {
   name: string
