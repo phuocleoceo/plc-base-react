@@ -35,13 +35,6 @@ export default function ProjectBoard() {
     assignees: ''
   })
 
-  const handleChangeIssueParams = (key: string, value: string) => {
-    setIssueParams({
-      ...issueParams,
-      [key]: value
-    })
-  }
-
   const { data: issueData } = useQuery({
     queryKey: [QueryKey.IssueInBoard, projectId, issueParams],
     queryFn: () => IssueApi.getIssuesInBoard(projectId, issueParams),
@@ -64,11 +57,7 @@ export default function ProjectBoard() {
   return (
     <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
       <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
-      <FilterBar
-        maxMemberDisplay={4}
-        onChangeIssueParams={handleChangeIssueParams}
-        {...{ projectId, setIsDragDisabled }}
-      />
+      <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams }} />
 
       {projectStatuses && projectStatuses?.length > 0 && (
         <div className='mb-5 flex min-w-max grow items-start'>

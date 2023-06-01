@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Icon } from '@iconify/react'
 
 import { ProjectMemberApi } from '~/features/projectMember/apis'
+import { GetIssuesInBoardParams } from '~/features/issue/models'
 import { Avatar, SpinningCircle } from '~/common/components'
 import { LocalStorageHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
@@ -10,13 +11,13 @@ import { QueryKey } from '~/shared/constants'
 
 interface Props {
   setIsDragDisabled: Dispatch<SetStateAction<boolean>>
+  setIssueParams: Dispatch<SetStateAction<GetIssuesInBoardParams>>
   projectId: number
   maxMemberDisplay: number
-  onChangeIssueParams: (key: string, value: string) => void
 }
 
 export default function FilterBar(props: Props) {
-  const { projectId, setIsDragDisabled, maxMemberDisplay, onChangeIssueParams } = props
+  const { setIsDragDisabled, setIssueParams, projectId, maxMemberDisplay } = props
   const { isAuthenticated } = useContext(AppContext)
   const currentUser = LocalStorageHelper.getUserInfo()
 
@@ -35,13 +36,13 @@ export default function FilterBar(props: Props) {
 
   const handleSelectMember = (userId?: number) => () => {
     setSelectedMember(userId)
-    onChangeIssueParams('assignees', userId?.toString() ?? '')
+    setIssueParams({ assignees: userId?.toString() ?? '' })
     setIsDragDisabled(!!userId)
   }
 
   const handleChangeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
-    onChangeIssueParams('searchValue', event.target.value)
+    setIssueParams({ searchValue: event.target.value })
   }
 
   if (projectMemberLoading)
