@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
-import { InputValidation, LabelWrapper, Modal, SelectBox } from '~/common/components'
+import { InputValidation, LabelWrapper, Modal, RichTextInput, SelectBox } from '~/common/components'
 import { LocalStorageHelper, ValidationHelper } from '~/shared/helpers'
 import { QueryKey, IssueType, IssuePriority } from '~/shared/constants'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
@@ -104,6 +104,10 @@ export default function CreateIssue(props: Props) {
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           />
+
+          <LabelWrapper label='description' margin='mt-1'>
+            <RichTextInput />
+          </LabelWrapper>
 
           <InputValidation
             label='story_point'
