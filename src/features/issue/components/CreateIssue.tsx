@@ -61,24 +61,26 @@ export default function CreateIssue(props: Props) {
   })
 
   const handleCreateIssue = handleSubmit(async (form: FormData) => {
-    console.log(form)
-    // const issueData: CreateIssueRequest = {
-    //   ...form
-    // }
-    // createIssueMutation.mutate(issueData, {
-    //   onSuccess: () => {
-    //     toast.success('create_issue_success')
-    //     queryClient.invalidateQueries([QueryKey.IssueInBacklog])
-    //     reset()
-    //     onClose()
-    //   },
-    //   onError: (error) => {
-    //     const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
-    //     Object.keys(validateErrors).forEach((key) => {
-    //       setError(key as keyof FormData, validateErrors[key])
-    //     })
-    //   }
-    // })
+    const issueData: CreateIssueRequest = {
+      ...form,
+      description: form.description ?? '',
+      assigneeId: form.assigneeId?.toString() === 'null' ? null : form.assigneeId
+    }
+
+    createIssueMutation.mutate(issueData, {
+      onSuccess: () => {
+        toast.success('create_issue_success')
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        reset()
+        onClose()
+      },
+      onError: (error) => {
+        const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
+        Object.keys(validateErrors).forEach((key) => {
+          setError(key as keyof FormData, validateErrors[key])
+        })
+      }
+    })
   })
 
   return (
@@ -90,7 +92,7 @@ export default function CreateIssue(props: Props) {
       {...{ isShowing, onClose, isLoading }}
     >
       <>
-        <div className='mb-4'>
+        <div className='mb-3'>
           <span className='text-[22px] font-[600] text-c-text'>create_issue</span>
         </div>
 
@@ -109,7 +111,7 @@ export default function CreateIssue(props: Props) {
             autoFocus
           />
 
-          <LabelWrapper label='description' margin='mt-1'>
+          <LabelWrapper label='description' margin='mt-0'>
             <RichTextInput control={control} controlField='description' />
           </LabelWrapper>
 
@@ -126,7 +128,7 @@ export default function CreateIssue(props: Props) {
             error={errors.storyPoint as FieldError}
           />
 
-          <LabelWrapper label='type' margin='mt-1'>
+          <LabelWrapper label='type' margin='mt-0'>
             <SelectBox
               control={control}
               controlField='type'
@@ -136,7 +138,7 @@ export default function CreateIssue(props: Props) {
             />
           </LabelWrapper>
 
-          <LabelWrapper label='priority' margin='mt-1'>
+          <LabelWrapper label='priority' margin='mt-0'>
             <SelectBox
               control={control}
               controlField='priority'
@@ -146,7 +148,7 @@ export default function CreateIssue(props: Props) {
             />
           </LabelWrapper>
 
-          <LabelWrapper label='assignee' margin='mt-1'>
+          <LabelWrapper label='assignee' margin='mt-0'>
             <SelectBox
               control={control}
               controlField='assigneeId'

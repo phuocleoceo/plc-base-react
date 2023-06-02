@@ -1,3 +1,5 @@
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { Controller } from 'react-hook-form'
 
 interface Prop {
@@ -9,5 +11,22 @@ interface Prop {
 export default function RichTextInput(props: Prop) {
   const { control, controlField, defaultValue } = props
 
-  return <div>abcd</div>
+  if (!control || !controlField) return null
+
+  return (
+    <Controller
+      name={controlField}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field: { onChange } }) => (
+        <CKEditor
+          editor={ClassicEditor}
+          data={defaultValue}
+          onChange={(_, editor) => {
+            onChange(editor.getData())
+          }}
+        />
+      )}
+    />
+  )
 }
