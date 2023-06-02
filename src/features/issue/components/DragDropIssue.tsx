@@ -30,13 +30,13 @@ export default function DragDropIssue(props: Props) {
               <img
                 className='h-[18px] w-[18px]'
                 src={IssueHelper.getIssueType(issue.type)?.icon}
-                alt={IssueHelper.getIssueType(issue.type)?.text}
+                alt={IssueHelper.getIssueType(issue.type)?.label}
               />
 
               <img
                 className='h-[18px] w-[18px]'
                 src={IssueHelper.getIssuePriority(issue.priority)?.icon}
-                alt={IssueHelper.getIssuePriority(issue.priority)?.text}
+                alt={IssueHelper.getIssuePriority(issue.priority)?.label}
               />
             </div>
 

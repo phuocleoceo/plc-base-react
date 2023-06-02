@@ -25,13 +25,13 @@ const issueApi = {
   getIssueDetail(projectId: number, issueId: number) {
     return HttpHelper.get<GetIssueDetailResponse>(`project/${projectId}/issue/${issueId}`)
   },
-  createIssueRequest(projectId: number, body: CreateIssueRequest) {
+  createIssue(projectId: number, body: CreateIssueRequest) {
     return HttpHelper.post<CreateIssueResponse>(`project/${projectId}/issue`, body)
   },
-  updateIssueRequest(projectId: number, issueId: number, body: UpdateIssueRequest) {
+  updateIssue(projectId: number, issueId: number, body: UpdateIssueRequest) {
     return HttpHelper.put<UpdateIssueResponse>(`project/${projectId}/issue/${issueId}`, body)
   },
-  deleteIssueRequest(projectId: number, issueId: number) {
+  deleteIssue(projectId: number, issueId: number) {
     return HttpHelper.delete<DeleteIssueResponse>(`project/${projectId}/issue/${issueId}`)
   }
 }

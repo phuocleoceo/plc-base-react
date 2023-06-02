@@ -66,7 +66,7 @@ export default function ProjectBacklog() {
                           <img
                             className='h-[18px] w-[18px] ml-2'
                             src={IssueHelper.getIssueType(issue.type)?.icon}
-                            alt={IssueHelper.getIssueType(issue.type)?.text}
+                            alt={IssueHelper.getIssueType(issue.type)?.label}
                           />
                           <span className=''>{issue.title}</span>
                         </div>
@@ -87,7 +87,7 @@ export default function ProjectBacklog() {
                           <img
                             className='h-[18px] w-[18px] ml-2 mt-1'
                             src={IssueHelper.getIssuePriority(issue.priority)?.icon}
-                            alt={IssueHelper.getIssuePriority(issue.priority)?.text}
+                            alt={IssueHelper.getIssuePriority(issue.priority)?.label}
                           />
 
                           <div className='ml-2 text-sm rounded-full border border-transparent bg-gray-100 px-[3px] flex items-center'>
