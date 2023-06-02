@@ -5,13 +5,13 @@ import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
 import { InputValidation, LabelWrapper, Modal, RichTextInput, SelectBox } from '~/common/components'
-import { LocalStorageHelper, ValidationHelper } from '~/shared/helpers'
 import { QueryKey, IssueType, IssuePriority } from '~/shared/constants'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { CreateIssueRequest } from '~/features/issue/models'
-import { SelectItem } from '~/common/components/SelectBox'
+import { ValidationHelper } from '~/shared/helpers'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
+import { SelectItem } from '~/shared/types'
 
 interface Props {
   projectId: number
@@ -33,7 +33,6 @@ export default function CreateIssue(props: Props) {
     formState: { errors, isSubmitting: isLoading }
   } = useForm<FormData>()
 
-  const currentUser = LocalStorageHelper.getUserInfo()
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
@@ -51,6 +50,12 @@ export default function CreateIssue(props: Props) {
       icon: pm.avatar
     })) || []
 
+  projectMembers.unshift({
+    label: 'unassigned',
+    value: 'null',
+    icon: 'https://i.stack.imgur.com/SE2cv.jpg'
+  })
+
   const createIssueMutation = useMutation({
     mutationFn: (body: CreateIssueRequest) => IssueApi.createIssue(projectId, body)
   })
@@ -60,7 +65,6 @@ export default function CreateIssue(props: Props) {
     // const issueData: CreateIssueRequest = {
     //   ...form
     // }
-
     // createIssueMutation.mutate(issueData, {
     //   onSuccess: () => {
     //     toast.success('create_issue_success')
@@ -106,7 +110,7 @@ export default function CreateIssue(props: Props) {
           />
 
           <LabelWrapper label='description' margin='mt-1'>
-            <RichTextInput />
+            <RichTextInput control={control} controlField='description' />
           </LabelWrapper>
 
           <InputValidation
@@ -118,6 +122,7 @@ export default function CreateIssue(props: Props) {
                 message: 'story_point_required'
               }
             })}
+            type='number'
             error={errors.storyPoint as FieldError}
           />
 
@@ -146,7 +151,7 @@ export default function CreateIssue(props: Props) {
               control={control}
               controlField='assigneeId'
               selectList={projectMembers}
-              defaultValue={currentUser.id.toString()}
+              defaultValue={'null'}
               className='w-full'
             />
           </LabelWrapper>

@@ -9,13 +9,13 @@ import * as _ from 'lodash'
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
 import { UpdateProjectRequest } from '~/features/project/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
-import { SelectItem } from '~/common/components/SelectBox'
 import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
+import { SelectItem } from '~/shared/types'
 
 const DeleteProject = lazy(() => import('~/features/project/components/DeleteProject'))
 

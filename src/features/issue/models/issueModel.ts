@@ -20,7 +20,7 @@ export type CreateIssueRequest = {
   storyPoint: number
   priority: string
   type: string
-  assigneeId: number
+  assigneeId: number | null
 }
 
 export type CreateIssueResponse = BaseResponse<boolean>
