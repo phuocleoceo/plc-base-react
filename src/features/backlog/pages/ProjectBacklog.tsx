@@ -3,9 +3,9 @@ import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Avatar, DraggableWrapper, DroppableWrapper } from '~/common/components'
-import { GetIssuesInBacklogParams } from '~/features/issue/models'
+import { GetIssuesInBacklogParams, UpdateBacklogIssueRequest } from '~/features/issue/models'
 import { FilterBar } from '~/features/board/components'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { IssueApi } from '~/features/issue/apis'
 import { IssueHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
@@ -23,6 +23,8 @@ export default function ProjectBacklog() {
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 
+  const queryClient = useQueryClient()
+
   const [issueParams, setIssueParams] = useState<GetIssuesInBacklogParams>({
     searchValue: '',
     assignees: ''
@@ -38,8 +40,40 @@ export default function ProjectBacklog() {
 
   const issuesBacklog = backlogData?.data.data
 
-  const handleDragEnd = ({ type, source, destination }: DropResult) => {
-    console.log(type, source, destination)
+  const updateBacklogIssueMutation = useMutation({
+    mutationFn: (data: { projectId: number; issueId: number; body: UpdateBacklogIssueRequest }) =>
+      IssueApi.updateIssuesInBacklog(data.projectId, data.issueId, data.body)
+  })
+
+  const handleDragEnd = ({ draggableId, destination }: DropResult) => {
+    const dragIssueId = parseInt(draggableId.split('-').at(-1) || '')
+    const toIndex = destination?.index
+
+    if (!toIndex) return
+
+    const firstSegmentIssue = issuesBacklog?.at(toIndex)
+    const toSegmentIssue = issuesBacklog?.at(toIndex + 1)
+
+    if (!firstSegmentIssue?.backlogIndex) return
+
+    const newBacklogIndex = toSegmentIssue
+      ? (firstSegmentIssue?.backlogIndex + toSegmentIssue?.backlogIndex) / 2
+      : firstSegmentIssue?.backlogIndex + 1
+
+    updateBacklogIssueMutation.mutate(
+      {
+        projectId,
+        issueId: dragIssueId,
+        body: {
+          backlogIndex: newBacklogIndex
+        }
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        }
+      }
+    )
   }
 
   return (
@@ -59,15 +93,15 @@ export default function ProjectBacklog() {
               <DroppableWrapper
                 type='issueBacklog'
                 className='items-start'
-                droppableId='board-central'
-                direction='horizontal'
+                droppableId='backlog-board'
+                direction='vertical'
               >
                 {issuesBacklog.map((issue, idx) => (
                   <DraggableWrapper
                     key={idx}
                     className='w-[60rem] border-[1px] p-[0.1rem] mb-[0.2px]'
                     index={idx}
-                    draggableId={`projectStatus-${issue.id}`}
+                    draggableId={`issue-${issue.id}`}
                     isDragDisabled={isDragDisabled}
                   >
                     <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>

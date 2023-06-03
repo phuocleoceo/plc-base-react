@@ -3,7 +3,8 @@ import {
   GetIssuesInBoardResponse,
   GetIssuesInBacklogParams,
   GetIssuesInBacklogResponse,
-  GetIssuesInSprintResponse,
+  UpdateBacklogIssueRequest,
+  UpdateBacklogIssueResponse,
   GetIssueDetailResponse,
   CreateIssueRequest,
   CreateIssueResponse,
@@ -14,15 +15,18 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const issueApi = {
+  // Board
   getIssuesInBoard(projectId: number, params: GetIssuesInBoardParams) {
     return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`, { params })
   },
+  // Backlog
   getIssuesInBacklog(projectId: number, params: GetIssuesInBacklogParams) {
     return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`, { params })
   },
-  getIssuesInSprint(projectId: number) {
-    return HttpHelper.get<GetIssuesInSprintResponse>(`project/${projectId}/sprint/issue`)
+  updateIssuesInBacklog(projectId: number, issueId: number, body: UpdateBacklogIssueRequest) {
+    return HttpHelper.put<UpdateBacklogIssueResponse>(`project/${projectId}/backlog/issue/${issueId}`, body)
   },
+  // Detail
   getIssueDetail(projectId: number, issueId: number) {
     return HttpHelper.get<GetIssueDetailResponse>(`project/${projectId}/issue/${issueId}`)
   },
