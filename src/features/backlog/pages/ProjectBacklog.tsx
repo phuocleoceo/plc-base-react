@@ -1,8 +1,10 @@
 import { DragDropContext, DropResult } from '@hello-pangea/dnd'
-import { useContext, lazy, Suspense } from 'react'
+import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Avatar, DraggableWrapper, DroppableWrapper } from '~/common/components'
+import { GetIssuesInBacklogParams } from '~/features/issue/models'
+import { FilterBar } from '~/features/board/components'
 import { useQuery } from '@tanstack/react-query'
 import { IssueApi } from '~/features/issue/apis'
 import { IssueHelper } from '~/shared/helpers'
@@ -19,9 +21,16 @@ export default function ProjectBacklog() {
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useShowing()
   const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useShowing()
 
+  const [isDragDisabled, setIsDragDisabled] = useState(false)
+
+  const [issueParams, setIssueParams] = useState<GetIssuesInBacklogParams>({
+    searchValue: '',
+    assignees: ''
+  })
+
   const { data: backlogData } = useQuery({
-    queryKey: [QueryKey.IssueInBacklog, projectId],
-    queryFn: () => IssueApi.getIssuesInBacklog(projectId),
+    queryKey: [QueryKey.IssueInBacklog, projectId, issueParams],
+    queryFn: () => IssueApi.getIssuesInBacklog(projectId, issueParams),
     enabled: isAuthenticated,
     keepPreviousData: true,
     staleTime: 1 * 60 * 1000
@@ -42,6 +51,7 @@ export default function ProjectBacklog() {
             create_issue
           </button>
         </div>
+        <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams }} />
 
         {issuesBacklog && issuesBacklog?.length > 0 && (
           <div className='mb-5 flex min-w-max grow items-start'>
@@ -58,7 +68,7 @@ export default function ProjectBacklog() {
                     className='w-[60rem] border-[1px] p-[0.1rem] mb-[0.2px]'
                     index={idx}
                     draggableId={`projectStatus-${issue.id}`}
-                    isDragDisabled={false}
+                    isDragDisabled={isDragDisabled}
                   >
                     <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
                       <div className='flex items-center justify-between'>
@@ -103,6 +113,7 @@ export default function ProjectBacklog() {
           </div>
         )}
       </div>
+
       {isShowingCreateIssue && (
         <Suspense>
           <CreateIssue projectId={projectId} isShowing={isShowingCreateIssue} onClose={toggleCreateIssue} />

@@ -8,6 +8,11 @@ export type GetIssuesInBoardParams = {
 
 export type GetIssuesInBoardResponse = BaseResponse<Array<IssueGroupedInBoard>>
 
+export type GetIssuesInBacklogParams = {
+  searchValue?: string
+  assignees?: string
+}
+
 export type GetIssuesInBacklogResponse = BaseResponse<Array<IssueInBacklog>>
 
 export type GetIssuesInSprintResponse = BaseResponse<Array<IssueInBacklog>>

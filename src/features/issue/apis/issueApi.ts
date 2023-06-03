@@ -1,6 +1,7 @@
 import {
   GetIssuesInBoardParams,
   GetIssuesInBoardResponse,
+  GetIssuesInBacklogParams,
   GetIssuesInBacklogResponse,
   GetIssuesInSprintResponse,
   GetIssueDetailResponse,
@@ -16,8 +17,8 @@ const issueApi = {
   getIssuesInBoard(projectId: number, params: GetIssuesInBoardParams) {
     return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`, { params })
   },
-  getIssuesInBacklog(projectId: number) {
-    return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`)
+  getIssuesInBacklog(projectId: number, params: GetIssuesInBacklogParams) {
+    return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`, { params })
   },
   getIssuesInSprint(projectId: number) {
     return HttpHelper.get<GetIssuesInSprintResponse>(`project/${projectId}/sprint/issue`)

@@ -40,7 +40,7 @@ export default function CreateIssue(props: Props) {
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const projectMembers: SelectItem[] =
