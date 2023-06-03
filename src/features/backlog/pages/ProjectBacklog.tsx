@@ -51,7 +51,7 @@ export default function ProjectBacklog() {
             create_issue
           </button>
         </div>
-        <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams }} />
+        <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 
         {issuesBacklog && issuesBacklog?.length > 0 && (
           <div className='mb-5 flex min-w-max grow items-start'>
