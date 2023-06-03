@@ -1,6 +1,8 @@
 import {
   GetIssuesInBoardParams,
   GetIssuesInBoardResponse,
+  UpdateBoardIssueRequest,
+  UpdateBoardIssueResponse,
   GetIssuesInBacklogParams,
   GetIssuesInBacklogResponse,
   UpdateBacklogIssueRequest,
@@ -18,6 +20,9 @@ const issueApi = {
   // Board
   getIssuesInBoard(projectId: number, params: GetIssuesInBoardParams) {
     return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`, { params })
+  },
+  updateIssuesInBoard(projectId: number, issueId: number, body: UpdateBoardIssueRequest) {
+    return HttpHelper.put<UpdateBoardIssueResponse>(`project/${projectId}/board/issue/${issueId}`, body)
   },
   // Backlog
   getIssuesInBacklog(projectId: number, params: GetIssuesInBacklogParams) {
