@@ -35,7 +35,7 @@ export default function FilterBar(props: Props) {
 
   const projectMembers = projectMemberData?.data.data
 
-  const handleSelectMember = (userId?: number) => () => {
+  const handleSelectMember = (userId?: number) => {
     setSelectedMember(userId)
     setIssueParams({ ...issueParams, assignees: userId?.toString() ?? '' })
     setIsDragDisabled(!!userId)
@@ -44,6 +44,14 @@ export default function FilterBar(props: Props) {
   const handleChangeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
     setIssueParams({ ...issueParams, searchValue: event.target.value })
+    setIsDragDisabled(true)
+  }
+
+  const handleClearFilter = () => {
+    setIssueParams({ assignees: '', searchValue: '' })
+    setIsDragDisabled(false)
+    setSelectedMember(undefined)
+    setSearchValue('')
   }
 
   if (projectMemberLoading)
@@ -78,7 +86,7 @@ export default function FilterBar(props: Props) {
               src={avatar}
               name={name}
               style={{ zIndex: projectMembers.length - idx }}
-              onClick={handleSelectMember(id)}
+              onClick={() => handleSelectMember(id)}
               className={`-ml-2 h-10 w-10 border-2 duration-300 hover:-translate-y-2 ${
                 id === selectedMember ? 'border-blue-500 border-2.5' : ''
               }`}
@@ -96,16 +104,16 @@ export default function FilterBar(props: Props) {
       )}
 
       {currentUser && (
-        <button className='btn-crystal shrink-0 bg-slate-100 ml-3' onClick={handleSelectMember(currentUser.id)}>
+        <button className='btn-crystal shrink-0 bg-slate-100 ml-3' onClick={() => handleSelectMember(currentUser.id)}>
           only_my_issues
         </button>
       )}
 
-      {selectedMember && (
+      {(selectedMember || searchValue) && (
         <>
           <div className='pb-[2px] mx-3'>|</div>
-          <button className='btn-crystal shrink-0 bg-slate-100' onClick={handleSelectMember(undefined)}>
-            clear_all
+          <button className='btn-crystal shrink-0 bg-slate-100' onClick={handleClearFilter}>
+            clear_filter
           </button>
         </>
       )}

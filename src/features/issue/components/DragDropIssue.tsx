@@ -38,6 +38,10 @@ export default function DragDropIssue(props: Props) {
                 src={IssueHelper.getIssuePriority(issue.priority)?.icon}
                 alt={IssueHelper.getIssuePriority(issue.priority)?.label}
               />
+
+              <div className='rounded-full border border-transparent bg-gray-100 text-sm w-9 px-[3px] flex items-center justify-center'>
+                {issue.storyPoint ?? '-'}
+              </div>
             </div>
 
             <div className='ml-7 flex'>

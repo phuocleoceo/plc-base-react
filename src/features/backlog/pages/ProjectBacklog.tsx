@@ -100,8 +100,8 @@ export default function ProjectBacklog() {
                             alt={IssueHelper.getIssuePriority(issue.priority)?.label}
                           />
 
-                          <div className='ml-2 text-sm rounded-full border border-transparent bg-gray-100 px-[3px] flex items-center'>
-                            {issue.projectStatusName}
+                          <div className='rounded-full border border-transparent bg-gray-100 ml-2 text-sm w-9 px-[3px] flex items-center justify-center'>
+                            {issue.storyPoint ?? '-'}
                           </div>
                         </div>
                       </div>
