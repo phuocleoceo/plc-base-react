@@ -1,4 +1,4 @@
-import { DragDropContext, DropResult } from '@hello-pangea/dnd'
+import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -45,20 +45,42 @@ export default function ProjectBacklog() {
       IssueApi.updateIssuesInBacklog(data.projectId, data.issueId, data.body)
   })
 
-  const handleDragEnd = ({ draggableId, destination }: DropResult) => {
-    const dragIssueId = parseInt(draggableId.split('-').at(-1) || '')
+  const getNewBacklogIndex = (source: DraggableLocation, destination: DraggableLocation | null) => {
+    if (!issuesBacklog || issuesBacklog.length === 0) return
+
+    if (!source || source?.index === undefined) return
+    const fromIndex = source?.index
+    if (!destination || destination?.index === undefined) return
     const toIndex = destination?.index
 
-    if (!toIndex) return
+    if (fromIndex === toIndex) return
 
-    const firstSegmentIssue = issuesBacklog?.at(toIndex)
-    const toSegmentIssue = issuesBacklog?.at(toIndex + 1)
+    // Drag lên đầu
+    if (toIndex === 0) return (issuesBacklog?.at(0)?.backlogIndex ?? 0) - 1
 
-    if (!firstSegmentIssue?.backlogIndex) return
+    // Drag về cuối
+    if (toIndex === issuesBacklog?.length - 1) return (issuesBacklog?.at(-1)?.backlogIndex ?? 0) + 1
 
-    const newBacklogIndex = toSegmentIssue
-      ? (firstSegmentIssue?.backlogIndex + toSegmentIssue?.backlogIndex) / 2
-      : firstSegmentIssue?.backlogIndex + 1
+    // Drag vào giữa 2 element khác
+    let firstSegmentIssue = null
+    let toSegmentIssue = null
+
+    if (fromIndex < toIndex) {
+      firstSegmentIssue = issuesBacklog?.at(toIndex)
+      toSegmentIssue = issuesBacklog?.at(toIndex + 1)
+    } else {
+      firstSegmentIssue = issuesBacklog?.at(toIndex - 1)
+      toSegmentIssue = issuesBacklog?.at(toIndex)
+    }
+    if (firstSegmentIssue?.backlogIndex === undefined || toSegmentIssue?.backlogIndex === undefined) return
+    return (firstSegmentIssue?.backlogIndex + toSegmentIssue?.backlogIndex) / 2
+  }
+
+  const handleDragEnd = ({ draggableId, source, destination }: DropResult) => {
+    const newBacklogIndex = getNewBacklogIndex(source, destination)
+    if (newBacklogIndex === undefined) return
+
+    const dragIssueId = parseInt(draggableId.split('-').at(-1) || '')
 
     updateBacklogIssueMutation.mutate(
       {
