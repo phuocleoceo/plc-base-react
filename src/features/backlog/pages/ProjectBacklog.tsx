@@ -56,10 +56,20 @@ export default function ProjectBacklog() {
     if (fromIndex === toIndex) return
 
     // Drag lên đầu
-    if (toIndex === 0) return (issuesBacklog?.at(0)?.backlogIndex ?? 0) - 1
+    if (toIndex === 0) {
+      const newBacklogIndex = (issuesBacklog?.at(0)?.backlogIndex ?? 0) - 1
+      const currentIssue = issuesBacklog.splice(fromIndex, 1)[0]
+      issuesBacklog.unshift(currentIssue)
+      return newBacklogIndex
+    }
 
     // Drag về cuối
-    if (toIndex === issuesBacklog?.length - 1) return (issuesBacklog?.at(-1)?.backlogIndex ?? 0) + 1
+    if (toIndex === issuesBacklog?.length - 1) {
+      const newBacklogIndex = (issuesBacklog?.at(-1)?.backlogIndex ?? 0) + 1
+      const currentIssue = issuesBacklog.splice(fromIndex, 1)[0]
+      issuesBacklog.push(currentIssue)
+      return newBacklogIndex
+    }
 
     // Drag vào giữa 2 element khác
     let firstSegmentIssue = null
@@ -73,7 +83,12 @@ export default function ProjectBacklog() {
       toSegmentIssue = issuesBacklog?.at(toIndex)
     }
     if (firstSegmentIssue?.backlogIndex === undefined || toSegmentIssue?.backlogIndex === undefined) return
-    return (firstSegmentIssue?.backlogIndex + toSegmentIssue?.backlogIndex) / 2
+
+    const newBacklogIndex = (firstSegmentIssue?.backlogIndex + toSegmentIssue?.backlogIndex) / 2
+    const currentIssue = issuesBacklog.splice(fromIndex, 1)[0]
+    issuesBacklog.splice(toIndex, 0, currentIssue)
+
+    return newBacklogIndex
   }
 
   const handleDragEnd = ({ draggableId, source, destination }: DropResult) => {
@@ -120,7 +135,7 @@ export default function ProjectBacklog() {
               >
                 {issuesBacklog.map((issue, idx) => (
                   <DraggableWrapper
-                    key={idx}
+                    key={issue.id}
                     className='w-[60rem] border-[1px] p-[0.1rem] mb-[0.2px]'
                     index={idx}
                     draggableId={`issue-${issue.id}`}
