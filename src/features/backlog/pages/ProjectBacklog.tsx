@@ -2,10 +2,10 @@ import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dn
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Avatar, DraggableWrapper, DroppableWrapper } from '~/common/components'
 import { GetIssuesInBacklogParams, UpdateBacklogIssueRequest } from '~/features/issue/models'
-import { FilterBar } from '~/features/board/components'
+import { Avatar, DraggableWrapper, DroppableWrapper } from '~/common/components'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { FilterBar } from '~/features/board/components'
 import { IssueApi } from '~/features/issue/apis'
 import { IssueHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
