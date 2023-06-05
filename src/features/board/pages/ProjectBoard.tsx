@@ -125,14 +125,44 @@ export default function ProjectBoard() {
       IssueApi.updateIssuesInBoard(data.projectId, data.issueId, data.body)
   })
 
-  const getNewIssueIndexNotChangeStatus = (
-    dragIssueId: number,
-    dragStatusId: number,
-    dragIssueIndex: number,
-    dropStatusId: number,
-    dropIssueIndex: number | undefined
-  ) => {
-    console.log('ahihi')
+  const getNewIssueIndexNotChangeStatus = (dragStatusId: number, dragIssueIndex: number, dropIssueIndex: number) => {
+    const issueList = issues?.find((i) => i.projectStatusId === dragStatusId)?.issues
+    if (!issueList || issueList.length === 0) return
+
+    // Drag lên đầu
+    if (dropIssueIndex === 0) {
+      const newIssueIndex = (issueList?.at(0)?.projectStatusIndex ?? 0) - 1
+      const currentIssue = issueList.splice(dragIssueIndex, 1)[0]
+      issueList.unshift(currentIssue)
+      return newIssueIndex
+    }
+
+    // Drag về cuối
+    if (dropIssueIndex === issueList?.length - 1) {
+      const newBacklogIndex = (issueList?.at(-1)?.projectStatusIndex ?? 0) + 1
+      const currentIssue = issueList.splice(dragIssueIndex, 1)[0]
+      issueList.push(currentIssue)
+      return newBacklogIndex
+    }
+
+    // Drag vào giữa 2 element khác
+    let firstSegmentIssue = null
+    let toSegmentIssue = null
+
+    if (dragIssueIndex < dropIssueIndex) {
+      firstSegmentIssue = issueList?.at(dropIssueIndex)
+      toSegmentIssue = issueList?.at(dropIssueIndex + 1)
+    } else {
+      firstSegmentIssue = issueList?.at(dropIssueIndex - 1)
+      toSegmentIssue = issueList?.at(dropIssueIndex)
+    }
+    if (firstSegmentIssue?.projectStatusIndex === undefined || toSegmentIssue?.projectStatusIndex === undefined) return
+
+    const newBacklogIndex = (firstSegmentIssue?.projectStatusIndex + toSegmentIssue?.projectStatusIndex) / 2
+    const currentIssue = issueList.splice(dragIssueIndex, 1)[0]
+    issueList.splice(dropIssueIndex, 0, currentIssue)
+
+    return newBacklogIndex
   }
 
   const getNewIssueIndexHasChangeStatus = (
@@ -140,7 +170,7 @@ export default function ProjectBoard() {
     dragStatusId: number,
     dragIssueIndex: number,
     dropStatusId: number,
-    dropIssueIndex: number | undefined
+    dropIssueIndex: number
   ) => {
     console.log('ahihi')
   }
@@ -161,32 +191,28 @@ export default function ProjectBoard() {
     // Vị trí index mà ta drop issue vào
     const dropIssueIndex = destination?.index
 
-    // const currentIssue = issues
-    //   ?.find((i) => i.projectStatusId === dragStatusId)
-    //   ?.issues.find((i) => i.id === dragIssueId)
-    // console.log(currentIssue)
+    if (dragIssueIndex === undefined || dropIssueIndex === undefined) return
 
     const newIssueIndex =
       dragStatusId === dropStatusId
-        ? getNewIssueIndexNotChangeStatus(dragIssueId, dragStatusId, dragIssueIndex, dropStatusId, dropIssueIndex)
+        ? getNewIssueIndexNotChangeStatus(dragStatusId, dragIssueIndex, dropIssueIndex)
         : getNewIssueIndexHasChangeStatus(dragIssueId, dragStatusId, dragIssueIndex, dropStatusId, dropIssueIndex)
 
     if (newIssueIndex === undefined) return
-    // console.log(newIssueIndex)
 
-    // updateBoardIssueMutation.mutate(
-    //   {
-    //     projectId,
-    //     issueId: dragIssueId,
-    //     body: {
-    //       projectStatusId: dropStatusId,
-    //       projectStatusIndex: newIssueIndex
-    //     }
-    //   },
-    //   {
-    //     onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBoard])
-    //   }
-    // )
+    updateBoardIssueMutation.mutate(
+      {
+        projectId,
+        issueId: dragIssueId,
+        body: {
+          projectStatusId: dropStatusId,
+          projectStatusIndex: newIssueIndex
+        }
+      },
+      {
+        onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBoard])
+      }
+    )
   }
 
   const getIssuesByStatusId = (statusId?: number) => {
