@@ -53,8 +53,6 @@ export default function ProjectBacklog() {
     if (!destination || destination?.index === undefined) return
     const toIndex = destination?.index
 
-    if (fromIndex === toIndex) return
-
     // Drag lên đầu
     if (toIndex === 0) {
       const newBacklogIndex = (issuesBacklog?.at(0)?.backlogIndex ?? 0) - 1
@@ -92,9 +90,13 @@ export default function ProjectBacklog() {
   }
 
   const handleDragEnd = ({ draggableId, source, destination }: DropResult) => {
+    // Không thay đổi vị trí sau khi drop
+    if (source.index === destination?.index) return
+
     const newBacklogIndex = getNewBacklogIndex(source, destination)
     if (newBacklogIndex === undefined) return
 
+    // Id của issue được drag drop
     const dragIssueId = parseInt(draggableId.split('-').at(-1) || '')
 
     updateBacklogIssueMutation.mutate(
@@ -106,9 +108,7 @@ export default function ProjectBacklog() {
         }
       },
       {
-        onSuccess: () => {
-          queryClient.invalidateQueries([QueryKey.IssueInBacklog])
-        }
+        onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBacklog])
       }
     )
   }

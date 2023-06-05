@@ -44,6 +44,95 @@ export default function ProjectBoard() {
     if (!destination || destination?.index === undefined) return
     const toIndex = destination?.index
 
+    // Drag lên đầu
+    if (toIndex === 0) {
+      const newBacklogIndex = (projectStatuses?.at(0)?.index ?? 0) - 1
+      const currentIssue = projectStatuses.splice(fromIndex, 1)[0]
+      projectStatuses.unshift(currentIssue)
+      return newBacklogIndex
+    }
+
+    // Drag về cuối
+    if (toIndex === projectStatuses?.length - 1) {
+      const newBacklogIndex = (projectStatuses?.at(-1)?.index ?? 0) + 1
+      const currentIssue = projectStatuses.splice(fromIndex, 1)[0]
+      projectStatuses.push(currentIssue)
+      return newBacklogIndex
+    }
+
+    // Drag vào giữa 2 element khác
+    let firstSegmentIssue = null
+    let toSegmentIssue = null
+
+    if (fromIndex < toIndex) {
+      firstSegmentIssue = projectStatuses?.at(toIndex)
+      toSegmentIssue = projectStatuses?.at(toIndex + 1)
+    } else {
+      firstSegmentIssue = projectStatuses?.at(toIndex - 1)
+      toSegmentIssue = projectStatuses?.at(toIndex)
+    }
+    if (firstSegmentIssue?.index === undefined || toSegmentIssue?.index === undefined) return
+
+    const newBacklogIndex = (firstSegmentIssue?.index + toSegmentIssue?.index) / 2
+    const currentIssue = projectStatuses.splice(fromIndex, 1)[0]
+    projectStatuses.splice(toIndex, 0, currentIssue)
+
+    return newBacklogIndex
+  }
+
+  const handleDragDropStatus = ({ draggableId, source, destination }: DropResult) => {
+    if (source.index === destination?.index) return
+
+    const newStatusIndex = getNewStatusIndex(source, destination)
+    if (newStatusIndex === undefined) return
+
+    const dragStatusId = parseInt(draggableId.split('-').at(-1) || '')
+    const currentStatus = projectStatuses?.find((s) => s.id === dragStatusId)
+
+    updateProjectStatusMutation.mutate(
+      {
+        projectId,
+        projectStatusId: dragStatusId,
+        body: {
+          name: currentStatus?.name ?? '',
+          index: newStatusIndex
+        }
+      },
+      {
+        onSuccess: () => queryClient.invalidateQueries([QueryKey.ProjectStatuses])
+      }
+    )
+  }
+
+  // ----------------------Issue----------------------------
+  const [issueParams, setIssueParams] = useState<GetIssuesInBoardParams>({
+    searchValue: '',
+    assignees: ''
+  })
+
+  const { data: issueData } = useQuery({
+    queryKey: [QueryKey.IssueInBoard, projectId, issueParams],
+    queryFn: () => IssueApi.getIssuesInBoard(projectId, issueParams),
+    enabled: isAuthenticated,
+    keepPreviousData: true,
+    staleTime: 1 * 60 * 1000
+  })
+
+  const issues = issueData?.data.data
+
+  const updateBoardIssueMutation = useMutation({
+    mutationFn: (data: { projectId: number; issueId: number; body: UpdateBoardIssueRequest }) =>
+      IssueApi.updateIssuesInBoard(data.projectId, data.issueId, data.body)
+  })
+
+  const getNewIssueIndex = (source: DraggableLocation, destination: DraggableLocation | null) => {
+    if (!issues || issues.length === 0) return
+
+    if (!source || source?.index === undefined) return
+    const fromIndex = source?.index
+    if (!destination || destination?.index === undefined) return
+    const toIndex = destination?.index
+
     if (fromIndex === toIndex) return
 
     // Drag lên đầu
@@ -82,53 +171,37 @@ export default function ProjectBoard() {
     return newBacklogIndex
   }
 
-  const handleDragDropStatus = ({ draggableId, source, destination }: DropResult) => {
-    const newStatusIndex = getNewStatusIndex(source, destination)
-    if (newStatusIndex === undefined) return
-
-    const dragStatusId = parseInt(draggableId.split('-').at(-1) || '')
-    const currentStatus = projectStatuses?.find((s) => s.id === dragStatusId)
-
-    updateProjectStatusMutation.mutate(
-      {
-        projectId,
-        projectStatusId: dragStatusId,
-        body: {
-          name: currentStatus?.name ?? '',
-          index: newStatusIndex
-        }
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries([QueryKey.ProjectStatuses])
-        }
-      }
-    )
-  }
-
-  // ----------------------Issue----------------------------
-  const [issueParams, setIssueParams] = useState<GetIssuesInBoardParams>({
-    searchValue: '',
-    assignees: ''
-  })
-
-  const { data: issueData } = useQuery({
-    queryKey: [QueryKey.IssueInBoard, projectId, issueParams],
-    queryFn: () => IssueApi.getIssuesInBoard(projectId, issueParams),
-    enabled: isAuthenticated,
-    keepPreviousData: true,
-    staleTime: 1 * 60 * 1000
-  })
-
-  const issues = issueData?.data.data
-
-  const updateBoardIssueMutation = useMutation({
-    mutationFn: (data: { projectId: number; issueId: number; body: UpdateBoardIssueRequest }) =>
-      IssueApi.updateIssuesInBoard(data.projectId, data.issueId, data.body)
-  })
-
   const handleDragDropIssue = ({ draggableId, source, destination }: DropResult) => {
-    console.log(draggableId, source, destination)
+    // Kéo thả issue thả tại chỗ cũ (status cũ và vị trí cũ) -> return
+    if (source.droppableId === destination?.droppableId && source.index === destination.index) return
+
+    // Id của Status hiện tại
+    const dragStatusId = parseInt(source.droppableId.split('-').at(-1) || '')
+    // Id của issue được kéo thả
+    const dragIssueId = parseInt(draggableId.split('-').at(-1) || '')
+
+    // Id của Status drop issue vào đó
+    const dropStatusId = parseInt(destination?.droppableId.split('-').at(-1) || '')
+    // Vị trí index mà ta drop issue vào
+    const dropIssueIndex = destination?.index
+
+    const newIssueIndex = getNewIssueIndex(source, destination)
+    if (newIssueIndex === undefined) return
+
+    // updateBoardIssueMutation.mutate(
+    //   {
+    //     projectId,
+    //     issueId: dragIssueId,
+    //     body: {
+    //       projectStatusId: dropStatusId,
+    //       sprintId: ,
+    //       projectStatusIndex: newIssueIndex
+    //     }
+    //   },
+    //   {
+    //     onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBoard])
+    //   }
+    // )
   }
 
   const getIssuesByStatusId = (statusId?: number) => {
@@ -143,6 +216,8 @@ export default function ProjectBoard() {
         break
       case 'issueBoard':
         handleDragDropIssue(dropResult)
+        break
+      default:
         break
     }
   }
