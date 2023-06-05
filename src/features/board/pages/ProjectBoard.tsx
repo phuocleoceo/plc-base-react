@@ -125,68 +125,54 @@ export default function ProjectBoard() {
       IssueApi.updateIssuesInBoard(data.projectId, data.issueId, data.body)
   })
 
-  const getNewIssueIndex = (source: DraggableLocation, destination: DraggableLocation | null) => {
-    if (!issues || issues.length === 0) return
+  const getNewIssueIndexNotChangeStatus = (
+    dragIssueId: number,
+    dragStatusId: number,
+    dragIssueIndex: number,
+    dropStatusId: number,
+    dropIssueIndex: number | undefined
+  ) => {
+    console.log('ahihi')
+  }
 
-    if (!source || source?.index === undefined) return
-    const fromIndex = source?.index
-    if (!destination || destination?.index === undefined) return
-    const toIndex = destination?.index
-
-    if (fromIndex === toIndex) return
-
-    // Drag lên đầu
-    if (toIndex === 0) {
-      const newBacklogIndex = (projectStatuses?.at(0)?.index ?? 0) - 1
-      const currentIssue = projectStatuses.splice(fromIndex, 1)[0]
-      projectStatuses.unshift(currentIssue)
-      return newBacklogIndex
-    }
-
-    // Drag về cuối
-    if (toIndex === projectStatuses?.length - 1) {
-      const newBacklogIndex = (projectStatuses?.at(-1)?.index ?? 0) + 1
-      const currentIssue = projectStatuses.splice(fromIndex, 1)[0]
-      projectStatuses.push(currentIssue)
-      return newBacklogIndex
-    }
-
-    // Drag vào giữa 2 element khác
-    let firstSegmentIssue = null
-    let toSegmentIssue = null
-
-    if (fromIndex < toIndex) {
-      firstSegmentIssue = projectStatuses?.at(toIndex)
-      toSegmentIssue = projectStatuses?.at(toIndex + 1)
-    } else {
-      firstSegmentIssue = projectStatuses?.at(toIndex - 1)
-      toSegmentIssue = projectStatuses?.at(toIndex)
-    }
-    if (firstSegmentIssue?.index === undefined || toSegmentIssue?.index === undefined) return
-
-    const newBacklogIndex = (firstSegmentIssue?.index + toSegmentIssue?.index) / 2
-    const currentIssue = projectStatuses.splice(fromIndex, 1)[0]
-    projectStatuses.splice(toIndex, 0, currentIssue)
-
-    return newBacklogIndex
+  const getNewIssueIndexHasChangeStatus = (
+    dragIssueId: number,
+    dragStatusId: number,
+    dragIssueIndex: number,
+    dropStatusId: number,
+    dropIssueIndex: number | undefined
+  ) => {
+    console.log('ahihi')
   }
 
   const handleDragDropIssue = ({ draggableId, source, destination }: DropResult) => {
     // Kéo thả issue thả tại chỗ cũ (status cũ và vị trí cũ) -> return
     if (source.droppableId === destination?.droppableId && source.index === destination.index) return
 
-    // Id của Status hiện tại
-    const dragStatusId = parseInt(source.droppableId.split('-').at(-1) || '')
     // Id của issue được kéo thả
     const dragIssueId = parseInt(draggableId.split('-').at(-1) || '')
+    // Id của Status hiện tại
+    const dragStatusId = parseInt(source.droppableId.split('-').at(-1) || '')
+    // Vị trí index mà ta bắt đầu drag issue
+    const dragIssueIndex = source.index
 
     // Id của Status drop issue vào đó
     const dropStatusId = parseInt(destination?.droppableId.split('-').at(-1) || '')
     // Vị trí index mà ta drop issue vào
     const dropIssueIndex = destination?.index
 
-    const newIssueIndex = getNewIssueIndex(source, destination)
+    // const currentIssue = issues
+    //   ?.find((i) => i.projectStatusId === dragStatusId)
+    //   ?.issues.find((i) => i.id === dragIssueId)
+    // console.log(currentIssue)
+
+    const newIssueIndex =
+      dragStatusId === dropStatusId
+        ? getNewIssueIndexNotChangeStatus(dragIssueId, dragStatusId, dragIssueIndex, dropStatusId, dropIssueIndex)
+        : getNewIssueIndexHasChangeStatus(dragIssueId, dragStatusId, dragIssueIndex, dropStatusId, dropIssueIndex)
+
     if (newIssueIndex === undefined) return
+    // console.log(newIssueIndex)
 
     // updateBoardIssueMutation.mutate(
     //   {
@@ -194,7 +180,6 @@ export default function ProjectBoard() {
     //     issueId: dragIssueId,
     //     body: {
     //       projectStatusId: dropStatusId,
-    //       sprintId: ,
     //       projectStatusIndex: newIssueIndex
     //     }
     //   },

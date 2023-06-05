@@ -10,7 +10,6 @@ export type GetIssuesInBoardParams = {
 export type GetIssuesInBoardResponse = BaseResponse<Array<IssueGroupedInBoard>>
 
 export type UpdateBoardIssueRequest = {
-  sprintId: number
   projectStatusId: number
   projectStatusIndex: number
 }
