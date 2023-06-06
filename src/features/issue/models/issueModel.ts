@@ -1,6 +1,7 @@
 import { IssueInBacklog, IssueDetail, IssueGroupedInBoard } from './issueType'
 import { BaseResponse } from '~/shared/types'
 
+// Board
 export type GetIssuesInBoardParams = {
   searchValue?: string
   assignees?: string
@@ -8,10 +9,28 @@ export type GetIssuesInBoardParams = {
 
 export type GetIssuesInBoardResponse = BaseResponse<Array<IssueGroupedInBoard>>
 
+export type UpdateBoardIssueRequest = {
+  projectStatusId: number
+  projectStatusIndex: number
+}
+
+export type UpdateBoardIssueResponse = BaseResponse<boolean>
+
+// Backlog
+export type GetIssuesInBacklogParams = {
+  searchValue?: string
+  assignees?: string
+}
+
 export type GetIssuesInBacklogResponse = BaseResponse<Array<IssueInBacklog>>
 
-export type GetIssuesInSprintResponse = BaseResponse<Array<IssueInBacklog>>
+export type UpdateBacklogIssueRequest = {
+  backlogIndex: number
+}
 
+export type UpdateBacklogIssueResponse = BaseResponse<boolean>
+
+// Detail
 export type GetIssueDetailResponse = BaseResponse<IssueDetail>
 
 export type CreateIssueRequest = {
@@ -20,7 +39,7 @@ export type CreateIssueRequest = {
   storyPoint: number
   priority: string
   type: string
-  assigneeId: number
+  assigneeId: number | null
 }
 
 export type CreateIssueResponse = BaseResponse<boolean>

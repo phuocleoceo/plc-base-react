@@ -1,8 +1,12 @@
 import {
   GetIssuesInBoardParams,
   GetIssuesInBoardResponse,
+  UpdateBoardIssueRequest,
+  UpdateBoardIssueResponse,
+  GetIssuesInBacklogParams,
   GetIssuesInBacklogResponse,
-  GetIssuesInSprintResponse,
+  UpdateBacklogIssueRequest,
+  UpdateBacklogIssueResponse,
   GetIssueDetailResponse,
   CreateIssueRequest,
   CreateIssueResponse,
@@ -13,25 +17,31 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const issueApi = {
+  // Board
   getIssuesInBoard(projectId: number, params: GetIssuesInBoardParams) {
     return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`, { params })
   },
-  getIssuesInBacklog(projectId: number) {
-    return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`)
+  updateIssuesInBoard(projectId: number, issueId: number, body: UpdateBoardIssueRequest) {
+    return HttpHelper.put<UpdateBoardIssueResponse>(`project/${projectId}/board/issue/${issueId}`, body)
   },
-  getIssuesInSprint(projectId: number) {
-    return HttpHelper.get<GetIssuesInSprintResponse>(`project/${projectId}/sprint/issue`)
+  // Backlog
+  getIssuesInBacklog(projectId: number, params: GetIssuesInBacklogParams) {
+    return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`, { params })
   },
+  updateIssuesInBacklog(projectId: number, issueId: number, body: UpdateBacklogIssueRequest) {
+    return HttpHelper.put<UpdateBacklogIssueResponse>(`project/${projectId}/backlog/issue/${issueId}`, body)
+  },
+  // Detail
   getIssueDetail(projectId: number, issueId: number) {
     return HttpHelper.get<GetIssueDetailResponse>(`project/${projectId}/issue/${issueId}`)
   },
-  createIssueRequest(projectId: number, body: CreateIssueRequest) {
+  createIssue(projectId: number, body: CreateIssueRequest) {
     return HttpHelper.post<CreateIssueResponse>(`project/${projectId}/issue`, body)
   },
-  updateIssueRequest(projectId: number, issueId: number, body: UpdateIssueRequest) {
+  updateIssue(projectId: number, issueId: number, body: UpdateIssueRequest) {
     return HttpHelper.put<UpdateIssueResponse>(`project/${projectId}/issue/${issueId}`, body)
   },
-  deleteIssueRequest(projectId: number, issueId: number) {
+  deleteIssue(projectId: number, issueId: number) {
     return HttpHelper.delete<DeleteIssueResponse>(`project/${projectId}/issue/${issueId}`)
   }
 }

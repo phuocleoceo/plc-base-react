@@ -57,6 +57,12 @@ export default function Menubar() {
 
             <div className='mt-5 mb-2'>
               <IconLink to={`/project/${projectId}/board`} icon='bi:kanban' text='kanban_board' />
+              <IconLink
+                to={`/project/${projectId}/backlog`}
+                icon='fluent-mdl2:backlog-list'
+                text='backlog'
+                rotate={180}
+              />
               <IconLink to={`/project/${projectId}/member`} icon='mdi:people' text='project_member' />
             </div>
             <hr className='border-t-[.5px] border-gray-400' />

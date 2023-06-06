@@ -1,9 +1,8 @@
 import Select, { SingleValue } from 'react-select'
 import { Controller } from 'react-hook-form'
 
+import { SelectItem } from '~/shared/types'
 import Item from './Item'
-
-export type SelectItem = { label: string; value: string; icon?: string }
 
 interface Prop {
   control?: any

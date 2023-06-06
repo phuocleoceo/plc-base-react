@@ -8,5 +8,6 @@ export const QueryKey = {
   ProjectInvitations: 'project_invitations',
   UserInvitations: 'user_invitations',
   ProjectStatuses: 'project_statuses',
-  IssueInBoard: 'issue_in_board'
+  IssueInBoard: 'issue_in_board',
+  IssueInBacklog: 'issue_in_backlog'
 } as const

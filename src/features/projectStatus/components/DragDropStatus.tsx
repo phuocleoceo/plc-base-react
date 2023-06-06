@@ -63,7 +63,7 @@ export default function DragDropStatus(props: Props) {
           </div>
         </div>
 
-        <DroppableWrapper className='min-h-[3rem]' type='issue' droppableId={`projectStatus-${projectStatus.id}`}>
+        <DroppableWrapper className='min-h-[3rem]' type='issueBoard' droppableId={`projectStatus-${projectStatus.id}`}>
           {issues?.map((issue, idx) => (
             <DragDropIssue key={issue.id} isDragDisabled={isDragDisabled} idx={idx} issue={issue} />
           ))}

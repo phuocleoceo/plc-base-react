@@ -6,12 +6,12 @@ import { AxiosError } from 'axios'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox } from '~/common/components'
 import { UserProfileType, UpdateProfileRequest } from '~/features/profile/models'
-import { SelectItem } from '~/common/components/SelectBox'
 import { AddressApi } from '~/features/address/apis'
 import { ProfileApi } from '~/features/profile/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
 import { QueryKey } from '~/shared/constants'
+import { SelectItem } from '~/shared/types'
 import { ProfileTab } from '~/shared/enums'
 
 interface Props {

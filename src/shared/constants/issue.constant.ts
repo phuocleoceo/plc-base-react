@@ -7,14 +7,14 @@ import HighIcon from '~/assets/svg/high.svg'
 import CriticalIcon from '~/assets/svg/critical.svg'
 
 export const IssueType = [
-  { text: 'coding_task', value: 'coding_task', icon: CodingTaskIcon },
-  { text: 'bug', value: 'bug', icon: BugIcon },
-  { text: 'user_story', value: 'user_story', icon: UserStoryIcon }
+  { label: 'coding_task', value: 'coding_task', icon: CodingTaskIcon },
+  { label: 'bug', value: 'bug', icon: BugIcon },
+  { label: 'user_story', value: 'user_story', icon: UserStoryIcon }
 ]
 
 export const IssuePriority = [
-  { text: 'low', value: 'low', icon: LowIcon },
-  { text: 'medium', value: 'medium', icon: MediumIcon },
-  { text: 'high', value: 'high', icon: HighIcon },
-  { text: 'critical', value: 'critical', icon: CriticalIcon }
+  { label: 'low', value: 'low', icon: LowIcon },
+  { label: 'medium', value: 'medium', icon: MediumIcon },
+  { label: 'high', value: 'high', icon: HighIcon },
+  { label: 'critical', value: 'critical', icon: CriticalIcon }
 ]

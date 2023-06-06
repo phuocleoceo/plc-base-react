@@ -1,10 +1,42 @@
-export type Issue = {
+export type IssueInBoard = {
+  id: number
+  title: string
+  storyPoint: number
+  priority: string
+  type: string
+  assigneeId: number
+  assigneeName: string
+  assigneeAvatar: string
+  projectStatusId: number
+  projectStatusIndex: number
+}
+
+export type IssueGroupedInBoard = {
+  projectStatusId: number
+  issues: Array<IssueInBoard>
+}
+
+export type IssueInBacklog = {
+  id: number
+  title: string
+  storyPoint: number
+  priority: string
+  type: string
+  assigneeId: number
+  assigneeName: string
+  assigneeAvatar: string
+  backlogIndex: number
+}
+
+export type IssueDetail = {
   id: number
   title: string
   description: string
   storyPoint: number
   priority: string
   type: string
+  backlogIndex: number
+  sprintId: number
   reporterId: number
   reporterName: string
   reporterAvatar: string
@@ -12,21 +44,5 @@ export type Issue = {
   assigneeName: string
   assigneeAvatar: string
   projectStatusId: number
-}
-
-export type IssueInBacklog = Issue & {
   projectStatusName: string
-}
-
-export type IssueDetail = Issue & {
-  projectStatusName: number
-}
-
-export type IssueInBoard = Issue & {
-  projectStatusIndex: number
-}
-
-export type IssueGroupedInBoard = {
-  projectStatusId: number
-  issues: Array<IssueInBoard>
 }

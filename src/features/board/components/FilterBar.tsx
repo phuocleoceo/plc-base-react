@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Icon } from '@iconify/react'
 
+import { GetIssuesInBoardParams, GetIssuesInBacklogParams } from '~/features/issue/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Avatar, SpinningCircle } from '~/common/components'
 import { LocalStorageHelper } from '~/shared/helpers'
@@ -10,13 +11,14 @@ import { QueryKey } from '~/shared/constants'
 
 interface Props {
   setIsDragDisabled: Dispatch<SetStateAction<boolean>>
+  setIssueParams: Dispatch<SetStateAction<GetIssuesInBoardParams>>
+  issueParams: GetIssuesInBoardParams | GetIssuesInBacklogParams
   projectId: number
   maxMemberDisplay: number
-  onChangeIssueParams: (key: string, value: string) => void
 }
 
 export default function FilterBar(props: Props) {
-  const { projectId, setIsDragDisabled, maxMemberDisplay, onChangeIssueParams } = props
+  const { setIsDragDisabled, setIssueParams, issueParams, projectId, maxMemberDisplay } = props
   const { isAuthenticated } = useContext(AppContext)
   const currentUser = LocalStorageHelper.getUserInfo()
 
@@ -28,20 +30,28 @@ export default function FilterBar(props: Props) {
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const projectMembers = projectMemberData?.data.data
 
-  const handleSelectMember = (userId?: number) => () => {
+  const handleSelectMember = (userId?: number) => {
     setSelectedMember(userId)
-    onChangeIssueParams('assignees', userId?.toString() ?? '')
+    setIssueParams({ ...issueParams, assignees: userId?.toString() ?? '' })
     setIsDragDisabled(!!userId)
   }
 
   const handleChangeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
-    onChangeIssueParams('searchValue', event.target.value)
+    setIssueParams({ ...issueParams, searchValue: event.target.value })
+    setIsDragDisabled(true)
+  }
+
+  const handleClearFilter = () => {
+    setIssueParams({ assignees: '', searchValue: '' })
+    setIsDragDisabled(false)
+    setSelectedMember(undefined)
+    setSearchValue('')
   }
 
   if (projectMemberLoading)
@@ -76,7 +86,7 @@ export default function FilterBar(props: Props) {
               src={avatar}
               name={name}
               style={{ zIndex: projectMembers.length - idx }}
-              onClick={handleSelectMember(id)}
+              onClick={() => handleSelectMember(id)}
               className={`-ml-2 h-10 w-10 border-2 duration-300 hover:-translate-y-2 ${
                 id === selectedMember ? 'border-blue-500 border-2.5' : ''
               }`}
@@ -94,16 +104,16 @@ export default function FilterBar(props: Props) {
       )}
 
       {currentUser && (
-        <button className='btn-crystal shrink-0 bg-slate-100 ml-3' onClick={handleSelectMember(currentUser.id)}>
+        <button className='btn-crystal shrink-0 bg-slate-100 ml-3' onClick={() => handleSelectMember(currentUser.id)}>
           only_my_issues
         </button>
       )}
 
-      {selectedMember && (
+      {(selectedMember || searchValue) && (
         <>
           <div className='pb-[2px] mx-3'>|</div>
-          <button className='btn-crystal shrink-0 bg-slate-100' onClick={handleSelectMember(undefined)}>
-            clear_all
+          <button className='btn-crystal shrink-0 bg-slate-100' onClick={handleClearFilter}>
+            clear_filter
           </button>
         </>
       )}
