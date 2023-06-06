@@ -288,6 +288,7 @@ export default function ProjectBoard() {
                   <DragDropStatus
                     key={projectStatus.id}
                     idx={idx}
+                    projectId={projectId}
                     projectStatus={projectStatus}
                     issues={getIssuesByStatusId(projectStatus.id)}
                     isDragDisabled={isDragDisabled}

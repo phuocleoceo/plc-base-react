@@ -33,7 +33,7 @@ export default function CreateProjectInvitation(props: Props) {
     mutationFn: (body: CreateInvitationForProjectRequest) => InvitationApi.createInvitationForProject(projectId, body)
   })
 
-  const handleCreateProjectInvitation = handleSubmit(async (form: FormData) => {
+  const handleCreateProjectInvitation = handleSubmit((form: FormData) => {
     const invitationData: CreateInvitationForProjectRequest = {
       ...form
     }

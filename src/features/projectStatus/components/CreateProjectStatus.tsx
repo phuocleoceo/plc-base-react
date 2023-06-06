@@ -33,7 +33,7 @@ export default function CreateProjectStatus(props: Props) {
     mutationFn: (body: CreateProjectStatusRequest) => ProjectStatusApi.createProjectStatus(projectId, body)
   })
 
-  const handleCreateProjectStatus = handleSubmit(async (form: FormData) => {
+  const handleCreateProjectStatus = handleSubmit((form: FormData) => {
     const projectStatusData: CreateProjectStatusRequest = {
       ...form
     }

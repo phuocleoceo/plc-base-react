@@ -1,27 +1,66 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 import { useState } from 'react'
 
+import { ProjectStatus, UpdateProjectStatusRequest } from '~/features/projectStatus/models'
 import { DraggableWrapper, DroppableWrapper } from '~/common/components'
-import { ProjectStatus } from '~/features/projectStatus/models'
+import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { DragDropIssue } from '~/features/issue/components'
 import { IssueInBoard } from '~/features/issue/models'
+import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
 
 type Props = {
   idx: number
+  projectId: number
   projectStatus: ProjectStatus
   issues?: Array<IssueInBoard>
   isDragDisabled: boolean
 }
 
 export default function DragDropStatus(props: Props) {
-  const { idx, issues, isDragDisabled, projectStatus } = props
+  const { idx, projectId, issues, isDragDisabled, projectStatus } = props
 
-  const [isEditing, setIsEditing] = useState(false)
+  const queryClient = useQueryClient()
+
+  const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useShowing()
   const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useShowing()
 
-  const handleUpdateStatus = async () => {
-    setIsEditing((p) => !p)
+  const [statusData, setStatusData] = useState<UpdateProjectStatusRequest>({
+    name: projectStatus.name,
+    index: projectStatus.index
+  })
+
+  const handleChangeStatusData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStatusData({
+      ...statusData,
+      [event.target.name]: event.target.value
+    })
+  }
+
+  const updateProjectStatusMutation = useMutation({
+    mutationFn: (body: UpdateProjectStatusRequest) =>
+      ProjectStatusApi.updateProjectStatus(projectId, projectStatus.id, body)
+  })
+
+  const handleUpdateProjectStatus = () => {
+    const projectStatusData: UpdateProjectStatusRequest = {
+      ...statusData
+    }
+
+    if (!projectStatusData.name || !projectStatusData.index) {
+      toast.warn('status_name_required')
+      return
+    }
+
+    updateProjectStatusMutation.mutate(projectStatusData, {
+      onSuccess: () => {
+        toast.success('update_status_success')
+        queryClient.invalidateQueries([QueryKey.ProjectStatuses])
+        toggleUpdateStatus()
+      }
+    })
   }
 
   return (
@@ -35,10 +74,11 @@ export default function DragDropStatus(props: Props) {
         <div className='mb-4 flex items-center justify-between text-[15px]'>
           <div className='item-center flex'>
             <div className='relative'>
-              {isEditing ? (
+              {isShowingUpdateStatus ? (
                 <input
-                  value={projectStatus.name}
-                  //   onChange={(e) => setName(e.target.value)}
+                  value={statusData.name}
+                  name='name'
+                  onChange={handleChangeStatusData}
                   className='w-36 border-[1.5px] bg-c-2 pl-2 text-[15px] outline-none focus:border-chakra-blue'
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
@@ -52,14 +92,21 @@ export default function DragDropStatus(props: Props) {
           </div>
 
           <div className='flex gap-2'>
-            {isEditing && (
-              <button onClick={toggleDeleteStatus} title='Delete' className='btn-icon ml-5 hover:bg-c-3'>
-                <Icon icon='bx:trash' className='text-red-500' />
+            {isShowingUpdateStatus ? (
+              <>
+                <button onClick={toggleDeleteStatus} title='delete' className='btn-icon ml-5 hover:bg-c-3'>
+                  <Icon icon='bx:trash' className='text-red-500' />
+                </button>
+
+                <button onClick={handleUpdateProjectStatus} title='save' className='btn-icon hover:bg-c-3'>
+                  <Icon icon='charm:tick' />
+                </button>
+              </>
+            ) : (
+              <button onClick={toggleUpdateStatus} title='edit' className='btn-icon hover:bg-c-3'>
+                <Icon icon='akar-icons:edit' />
               </button>
             )}
-            <button onClick={handleUpdateStatus} title={isEditing ? 'Save' : 'Edit'} className='btn-icon hover:bg-c-3'>
-              <Icon icon={isEditing ? 'charm:tick' : 'akar-icons:edit'} />
-            </button>
           </div>
         </div>
 

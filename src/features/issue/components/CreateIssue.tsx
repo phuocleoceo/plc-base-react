@@ -60,7 +60,7 @@ export default function CreateIssue(props: Props) {
     mutationFn: (body: CreateIssueRequest) => IssueApi.createIssue(projectId, body)
   })
 
-  const handleCreateIssue = handleSubmit(async (form: FormData) => {
+  const handleCreateIssue = handleSubmit((form: FormData) => {
     const issueData: CreateIssueRequest = {
       ...form,
       description: form.description ?? '',
