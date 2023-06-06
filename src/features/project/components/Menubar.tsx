@@ -1,5 +1,5 @@
+import { useParams, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
@@ -12,6 +12,10 @@ import { useShowing } from '~/common/hooks'
 
 export default function Menubar() {
   const projectId = Number(useParams().projectId)
+
+  // host/project/:projectId/currentTab
+  const currentTab = useLocation().pathname.split('/')[3]
+
   const { isShowing, toggle } = useShowing(true)
 
   const { isAuthenticated } = useContext(AppContext)
@@ -56,18 +60,34 @@ export default function Menubar() {
             </div>
 
             <div className='mt-5 mb-2'>
-              <IconLink to={`/project/${projectId}/board`} icon='bi:kanban' text='kanban_board' />
+              <IconLink
+                to={`/project/${projectId}/board`}
+                icon='bi:kanban'
+                text='kanban_board'
+                isActive={currentTab === 'board'}
+              />
               <IconLink
                 to={`/project/${projectId}/backlog`}
                 icon='fluent-mdl2:backlog-list'
                 text='backlog'
                 rotate={180}
+                isActive={currentTab === 'backlog'}
               />
-              <IconLink to={`/project/${projectId}/member`} icon='mdi:people' text='project_member' />
+              <IconLink
+                to={`/project/${projectId}/member`}
+                icon='mdi:people'
+                text='project_member'
+                isActive={currentTab === 'member' || currentTab === 'invitation'}
+              />
             </div>
             <hr className='border-t-[.5px] border-gray-400' />
             <div className='mt-2'>
-              <IconLink to={`/project/${projectId}/setting`} icon='clarity:settings-solid' text='project_setting' />
+              <IconLink
+                to={`/project/${projectId}/setting`}
+                icon='clarity:settings-solid'
+                text='project_setting'
+                isActive={currentTab === 'setting'}
+              />
             </div>
           </div>
         ))}
