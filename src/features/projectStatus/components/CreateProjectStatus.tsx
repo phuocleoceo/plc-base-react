@@ -56,6 +56,7 @@ export default function CreateProjectStatus(props: Props) {
 
   return (
     <Modal
+      className='w-1/4'
       onSubmit={handleCreateProjectStatus}
       closeLabel='cancle'
       submittingLabel='creating...'
