@@ -49,7 +49,7 @@ export default function DragDropStatus(props: Props) {
       ...statusData
     }
 
-    if (!projectStatusData.name || !projectStatusData.index) {
+    if (projectStatusData.name === undefined || projectStatusData.index === undefined) {
       toast.warn('status_name_required')
       return
     }
@@ -79,7 +79,7 @@ export default function DragDropStatus(props: Props) {
                   value={statusData.name}
                   name='name'
                   onChange={handleChangeStatusData}
-                  className='w-36 border-[1.5px] bg-c-2 pl-2 text-[15px] outline-none focus:border-chakra-blue'
+                  className='w-36 border-[1.5px] pl-2 text-[15px] outline-none focus:border-chakra-blue'
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                 />
@@ -87,21 +87,30 @@ export default function DragDropStatus(props: Props) {
                 <span className='block border-[1.5px] border-transparent pl-2 font-medium'>{projectStatus.name}</span>
               )}
             </div>
-            <span className='mx-2 text-gray-500'>|</span>
-            <span className='text-c-4 pt-[1px] font-bold'>{issues ? issues.length : 0}</span>
+
+            {isShowingUpdateStatus ? (
+              <>
+                <button onClick={handleUpdateProjectStatus} title='save' className='btn-icon hover:bg-c-3 ml-2'>
+                  <Icon icon='charm:tick' className='text-green-500' />
+                </button>
+
+                <button onClick={toggleDeleteStatus} title='delete' className='btn-icon hover:bg-c-3'>
+                  <Icon icon='bx:trash' className='text-red-500' />
+                </button>
+              </>
+            ) : (
+              <>
+                <span className='mx-2 text-gray-500'>|</span>
+                <span className='text-c-4 pt-[1px] font-bold'>{issues ? issues.length : 0}</span>
+              </>
+            )}
           </div>
 
           <div className='flex gap-2'>
             {isShowingUpdateStatus ? (
-              <>
-                <button onClick={toggleDeleteStatus} title='delete' className='btn-icon ml-5 hover:bg-c-3'>
-                  <Icon icon='bx:trash' className='text-red-500' />
-                </button>
-
-                <button onClick={handleUpdateProjectStatus} title='save' className='btn-icon hover:bg-c-3'>
-                  <Icon icon='charm:tick' />
-                </button>
-              </>
+              <button onClick={toggleUpdateStatus} title='cancle' className='btn-icon hover:bg-c-3'>
+                <Icon icon='ion:close-sharp' className='text-blue-500' />
+              </button>
             ) : (
               <button onClick={toggleUpdateStatus} title='edit' className='btn-icon hover:bg-c-3'>
                 <Icon icon='akar-icons:edit' />
