@@ -139,10 +139,10 @@ export default function ProjectBoard() {
 
     // Drag về cuối
     if (dropIssueIndex === issueList?.length - 1) {
-      const newBacklogIndex = (issueList?.at(-1)?.projectStatusIndex ?? 0) + 1
+      const newIssueIndex = (issueList?.at(-1)?.projectStatusIndex ?? 0) + 1
       const currentIssue = issueList.splice(dragIssueIndex, 1)[0]
       issueList.push(currentIssue)
-      return newBacklogIndex
+      return newIssueIndex
     }
 
     // Drag vào giữa 2 element khác
@@ -158,21 +158,51 @@ export default function ProjectBoard() {
     }
     if (firstSegmentIssue?.projectStatusIndex === undefined || toSegmentIssue?.projectStatusIndex === undefined) return
 
-    const newBacklogIndex = (firstSegmentIssue?.projectStatusIndex + toSegmentIssue?.projectStatusIndex) / 2
+    const newIssueIndex = (firstSegmentIssue?.projectStatusIndex + toSegmentIssue?.projectStatusIndex) / 2
     const currentIssue = issueList.splice(dragIssueIndex, 1)[0]
     issueList.splice(dropIssueIndex, 0, currentIssue)
 
-    return newBacklogIndex
+    return newIssueIndex
   }
 
   const getNewIssueIndexHasChangeStatus = (
-    dragIssueId: number,
     dragStatusId: number,
     dragIssueIndex: number,
     dropStatusId: number,
     dropIssueIndex: number
   ) => {
-    console.log('ahihi')
+    const dragIssueList = issues?.find((i) => i.projectStatusId === dragStatusId)?.issues
+    if (dragIssueList === undefined || dragIssueList.length === 0) return
+    const dropIssueList = issues?.find((i) => i.projectStatusId === dropStatusId)?.issues ?? []
+    if (dragIssueList === undefined) return
+
+    // Drag lên đầu
+    if (dropIssueIndex === 0) {
+      const newIssueIndex = (dropIssueList?.at(0)?.projectStatusIndex ?? 1) - 1
+      const currentIssue = dragIssueList.splice(dragIssueIndex, 1)[0]
+      dropIssueList.unshift(currentIssue)
+      return newIssueIndex
+    }
+
+    // Drag về cuối
+    if (dropIssueIndex === dropIssueList?.length) {
+      const newIssueIndex = (dropIssueList?.at(-1)?.projectStatusIndex ?? -1) + 1
+      const currentIssue = dragIssueList.splice(dragIssueIndex, 1)[0]
+      dropIssueList.push(currentIssue)
+      return newIssueIndex
+    }
+
+    // Drag vào giữa 2 element khác
+    const firstSegmentIssue = dropIssueList?.at(dropIssueIndex - 1)
+    const toSegmentIssue = dropIssueList?.at(dropIssueIndex)
+
+    if (firstSegmentIssue?.projectStatusIndex === undefined || toSegmentIssue?.projectStatusIndex === undefined) return
+
+    const newIssueIndex = (firstSegmentIssue?.projectStatusIndex + toSegmentIssue?.projectStatusIndex) / 2
+    const currentIssue = dropIssueList.splice(dragIssueIndex, 1)[0]
+    dropIssueList.splice(dropIssueIndex, 0, currentIssue)
+
+    return newIssueIndex
   }
 
   const handleDragDropIssue = ({ draggableId, source, destination }: DropResult) => {
@@ -196,7 +226,7 @@ export default function ProjectBoard() {
     const newIssueIndex =
       dragStatusId === dropStatusId
         ? getNewIssueIndexNotChangeStatus(dragStatusId, dragIssueIndex, dropIssueIndex)
-        : getNewIssueIndexHasChangeStatus(dragIssueId, dragStatusId, dragIssueIndex, dropStatusId, dropIssueIndex)
+        : getNewIssueIndexHasChangeStatus(dragStatusId, dragIssueIndex, dropStatusId, dropIssueIndex)
 
     if (newIssueIndex === undefined) return
 
