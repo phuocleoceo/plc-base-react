@@ -199,7 +199,7 @@ export default function ProjectBoard() {
     if (firstSegmentIssue?.projectStatusIndex === undefined || toSegmentIssue?.projectStatusIndex === undefined) return
 
     const newIssueIndex = (firstSegmentIssue?.projectStatusIndex + toSegmentIssue?.projectStatusIndex) / 2
-    const currentIssue = dropIssueList.splice(dragIssueIndex, 1)[0]
+    const currentIssue = dragIssueList.splice(dragIssueIndex, 1)[0]
     dropIssueList.splice(dropIssueIndex, 0, currentIssue)
 
     return newIssueIndex
