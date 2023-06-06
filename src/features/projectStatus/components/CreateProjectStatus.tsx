@@ -3,9 +3,9 @@ import { FieldError, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
-import { CreateInvitationForProjectRequest } from '~/features/invitation/models'
+import { CreateProjectStatusRequest } from '~/features/projectStatus/models'
+import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { InputValidation, Modal } from '~/common/components'
-import { InvitationApi } from '~/features/invitation/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 
@@ -15,9 +15,9 @@ interface Props {
   onClose: () => void
 }
 
-type FormData = Pick<CreateInvitationForProjectRequest, 'recipientEmail'>
+type FormData = Pick<CreateProjectStatusRequest, 'name'>
 
-export default function CreateProjectInvitation(props: Props) {
+export default function CreateProjectStatus(props: Props) {
   const { projectId, isShowing, onClose } = props
   const queryClient = useQueryClient()
 
@@ -29,19 +29,19 @@ export default function CreateProjectInvitation(props: Props) {
     formState: { errors, isSubmitting: isLoading }
   } = useForm<FormData>()
 
-  const createInvitationMutation = useMutation({
-    mutationFn: (body: CreateInvitationForProjectRequest) => InvitationApi.createInvitationForProject(projectId, body)
+  const createProjectStatusMutation = useMutation({
+    mutationFn: (body: CreateProjectStatusRequest) => ProjectStatusApi.createProjectStatus(projectId, body)
   })
 
-  const handleCreateProjectInvitation = handleSubmit(async (form: FormData) => {
-    const invitationData: CreateInvitationForProjectRequest = {
+  const handleCreateProjectStatus = handleSubmit(async (form: FormData) => {
+    const projectStatusData: CreateProjectStatusRequest = {
       ...form
     }
 
-    createInvitationMutation.mutate(invitationData, {
+    createProjectStatusMutation.mutate(projectStatusData, {
       onSuccess: () => {
-        toast.success('create_invitation_success')
-        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
+        toast.success('create_status_success')
+        queryClient.invalidateQueries([QueryKey.ProjectStatuses])
         reset()
         onClose()
       },
@@ -56,27 +56,27 @@ export default function CreateProjectInvitation(props: Props) {
 
   return (
     <Modal
-      onSubmit={handleCreateProjectInvitation}
+      onSubmit={handleCreateProjectStatus}
       closeLabel='cancle'
-      submittingLabel='sending...'
-      submitLabel='send'
+      submittingLabel='creating...'
+      submitLabel='create'
       {...{ isShowing, onClose, isLoading }}
     >
       <>
         <div className='mb-4'>
-          <span className='text-[22px] font-[600] text-c-text'>create_invitation</span>
+          <span className='text-[22px] font-[600] text-c-text'>create_project_status</span>
         </div>
         <div className='flex flex-col gap-4'>
           <InputValidation
-            label='recipient_email'
-            placeholder='enter_email_to_invite...'
-            register={register('recipientEmail', {
+            label='name'
+            placeholder='enter_project_status_name...'
+            register={register('name', {
               required: {
                 value: true,
-                message: 'recipient_email_required'
+                message: 'name_required'
               }
             })}
-            error={errors.recipientEmail as FieldError}
+            error={errors.name as FieldError}
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           />

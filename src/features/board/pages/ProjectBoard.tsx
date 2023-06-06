@@ -1,7 +1,8 @@
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { lazy, Suspense, useContext, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import { Icon } from '@iconify/react'
 
 import { GetIssuesInBoardParams, UpdateBoardIssueRequest } from '~/features/issue/models'
 import { UpdateProjectStatusRequest } from '~/features/projectStatus/models'
@@ -12,12 +13,17 @@ import { DroppableWrapper } from '~/common/components'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
+import { useShowing } from '~/common/hooks'
+
+const CreateProjectStatus = lazy(() => import('~/features/projectStatus/components/CreateProjectStatus'))
 
 export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
   const [isDragDisabled, setIsDragDisabled] = useState(false)
+  const { isShowing: isShowingCreateStatus, toggle: toggleCreateStatus } = useShowing()
+
   const queryClient = useQueryClient()
 
   // ---------------------Project Status---------------------
@@ -174,7 +180,7 @@ export default function ProjectBoard() {
     const dragIssueList = issues?.find((i) => i.projectStatusId === dragStatusId)?.issues
     if (dragIssueList === undefined || dragIssueList.length === 0) return
     const dropIssueList = issues?.find((i) => i.projectStatusId === dropStatusId)?.issues ?? []
-    if (dragIssueList === undefined) return
+    if (dropIssueList === undefined) return
 
     // Drag lên đầu
     if (dropIssueIndex === 0) {
@@ -264,32 +270,46 @@ export default function ProjectBoard() {
   }
 
   return (
-    <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
-      <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
-      <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
+    <>
+      <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
+        <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
+        <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 
-      {projectStatuses && projectStatuses?.length > 0 && (
-        <div className='mb-5 flex min-w-max grow items-start'>
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <DroppableWrapper
-              type='projectStatus'
-              className='flex items-start'
-              droppableId='project-board'
-              direction='horizontal'
-            >
-              {projectStatuses.map((projectStatus, idx) => (
-                <DragDropStatus
-                  key={projectStatus.id}
-                  idx={idx}
-                  projectStatus={projectStatus}
-                  issues={getIssuesByStatusId(projectStatus.id)}
-                  isDragDisabled={isDragDisabled}
-                />
-              ))}
-            </DroppableWrapper>
-          </DragDropContext>
-        </div>
+        {projectStatuses && (
+          <div className='mb-5 flex min-w-max grow items-start'>
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <DroppableWrapper
+                type='projectStatus'
+                className='flex items-start'
+                droppableId='project-board'
+                direction='horizontal'
+              >
+                {projectStatuses.map((projectStatus, idx) => (
+                  <DragDropStatus
+                    key={projectStatus.id}
+                    idx={idx}
+                    projectStatus={projectStatus}
+                    issues={getIssuesByStatusId(projectStatus.id)}
+                    isDragDisabled={isDragDisabled}
+                  />
+                ))}
+              </DroppableWrapper>
+
+              <button
+                className='flex items-center gap-5 rounded-md bg-c-2 py-3 px-5 mr-3 text-c-5 hover:bg-c-6 active:bg-blue-100'
+                onClick={toggleCreateStatus}
+              >
+                <Icon icon='ant-design:plus-outlined' /> create_project_status
+              </button>
+            </DragDropContext>
+          </div>
+        )}
+      </div>
+      {isShowingCreateStatus && (
+        <Suspense>
+          <CreateProjectStatus projectId={projectId} isShowing={isShowingCreateStatus} onClose={toggleCreateStatus} />
+        </Suspense>
       )}
-    </div>
+    </>
   )
 }
