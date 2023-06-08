@@ -1,4 +1,4 @@
-import { lazy, Suspense, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Icon } from '@iconify/react'
@@ -9,13 +9,9 @@ import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
-
-const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 
 export default function ProjectMemberList() {
   const projectId = Number(useParams().projectId)
-  const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useShowing()
   const navigate = useNavigate()
 
   const { isAuthenticated } = useContext(AppContext)
@@ -51,12 +47,6 @@ export default function ProjectMemberList() {
 
   const projectMembers = projectData?.data.data.records
   const projectMemberCount = projectData?.data.data.totalRecords ?? 0
-
-  const [selectedMember, setSelectedMember] = useState<number>()
-  const handleClickMemberRow = (userId: number) => {
-    setSelectedMember(userId)
-    toggleMemberDetail()
-  }
 
   if (projectLoading)
     return (
@@ -99,13 +89,7 @@ export default function ProjectMemberList() {
           {projectMembers && projectMembers.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {projectMembers.map((projectMember, idx) => (
-                <ProjectMemberRow
-                  key={idx}
-                  idx={idx}
-                  projectId={projectId}
-                  projectMember={projectMember}
-                  onClick={() => handleClickMemberRow(projectMember.id)}
-                />
+                <ProjectMemberRow key={idx} idx={idx} projectId={projectId} projectMember={projectMember} />
               ))}
             </div>
           ) : (
@@ -119,15 +103,6 @@ export default function ProjectMemberList() {
           onChangePage={handleChangePage}
         />
       </div>
-      {selectedMember && isShowingMemberDetail && (
-        <Suspense>
-          <AnonymousProfileModal
-            userId={selectedMember}
-            isShowing={isShowingMemberDetail}
-            onClose={toggleMemberDetail}
-          />
-        </Suspense>
-      )}
     </>
   )
 }

@@ -9,18 +9,19 @@ import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useShowing } from '~/common/hooks'
 
+const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
   idx: number
   projectId: number
   projectMember: ProjectMember
-  onClick: () => void
 }
 
 export default function ProjectMemberRow(props: Props) {
-  const { idx, projectId, projectMember, onClick } = props
+  const { idx, projectId, projectMember } = props
 
+  const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useShowing()
   const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useShowing()
 
   const queryClient = useQueryClient()
@@ -49,8 +50,8 @@ export default function ProjectMemberRow(props: Props) {
       <div
         key={projectMember.id}
         className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-        onClick={onClick}
-        onKeyDown={onClick}
+        onClick={toggleMemberDetail}
+        onKeyDown={toggleMemberDetail}
         tabIndex={projectMember.id}
         role='button'
       >
@@ -88,6 +89,16 @@ export default function ProjectMemberRow(props: Props) {
             submittingLabel='deleting_project_member...'
             submitLabel='delete_project_member'
             submitClassName='btn-alert'
+          />
+        </Suspense>
+      )}
+
+      {isShowingMemberDetail && (
+        <Suspense>
+          <AnonymousProfileModal
+            userId={projectMember.id}
+            isShowing={isShowingMemberDetail}
+            onClose={toggleMemberDetail}
           />
         </Suspense>
       )}
