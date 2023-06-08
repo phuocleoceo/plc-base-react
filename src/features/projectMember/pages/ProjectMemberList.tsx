@@ -1,19 +1,17 @@
+import { useContext, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
-import { ProjectMemberRow, ProjectMemberDetail } from '~/features/projectMember/components'
+import { ProjectMemberRow } from '~/features/projectMember/components'
 import { GetMemberForProjectParams } from '~/features/projectMember/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
 
 export default function ProjectMemberList() {
   const projectId = Number(useParams().projectId)
-  const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useShowing()
   const navigate = useNavigate()
 
   const { isAuthenticated } = useContext(AppContext)
@@ -49,12 +47,6 @@ export default function ProjectMemberList() {
 
   const projectMembers = projectData?.data.data.records
   const projectMemberCount = projectData?.data.data.totalRecords ?? 0
-
-  const [selectedMember, setSelectedMember] = useState<number>()
-  const handleClickMemberRow = (userId: number) => {
-    setSelectedMember(userId)
-    toggleMemberDetail()
-  }
 
   if (projectLoading)
     return (
@@ -97,13 +89,7 @@ export default function ProjectMemberList() {
           {projectMembers && projectMembers.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {projectMembers.map((projectMember, idx) => (
-                <ProjectMemberRow
-                  key={idx}
-                  idx={idx}
-                  projectId={projectId}
-                  projectMember={projectMember}
-                  onClick={() => handleClickMemberRow(projectMember.id)}
-                />
+                <ProjectMemberRow key={idx} idx={idx} projectId={projectId} projectMember={projectMember} />
               ))}
             </div>
           ) : (
@@ -117,9 +103,6 @@ export default function ProjectMemberList() {
           onChangePage={handleChangePage}
         />
       </div>
-      {selectedMember && (
-        <ProjectMemberDetail userId={selectedMember} isShowing={isShowingMemberDetail} onClose={toggleMemberDetail} />
-      )}
     </>
   )
 }
