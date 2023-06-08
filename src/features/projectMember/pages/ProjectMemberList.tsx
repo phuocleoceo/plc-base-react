@@ -1,15 +1,17 @@
+import { lazy, Suspense, useContext, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
-import { ProjectMemberRow, ProjectMemberDetail } from '~/features/projectMember/components'
+import { ProjectMemberRow } from '~/features/projectMember/components'
 import { GetMemberForProjectParams } from '~/features/projectMember/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useShowing } from '~/common/hooks'
+
+const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 
 export default function ProjectMemberList() {
   const projectId = Number(useParams().projectId)
@@ -117,8 +119,14 @@ export default function ProjectMemberList() {
           onChangePage={handleChangePage}
         />
       </div>
-      {selectedMember && (
-        <ProjectMemberDetail userId={selectedMember} isShowing={isShowingMemberDetail} onClose={toggleMemberDetail} />
+      {selectedMember && isShowingMemberDetail && (
+        <Suspense>
+          <AnonymousProfileModal
+            userId={selectedMember}
+            isShowing={isShowingMemberDetail}
+            onClose={toggleMemberDetail}
+          />
+        </Suspense>
       )}
     </>
   )

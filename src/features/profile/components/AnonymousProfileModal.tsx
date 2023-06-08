@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void
 }
 
-export default function ProjectMemberDetail(props: Props) {
+export default function AnonymousProfileModal(props: Props) {
   const { userId, isShowing, onClose } = props
 
   const { data, isLoading } = useQuery({
