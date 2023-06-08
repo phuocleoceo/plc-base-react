@@ -9,18 +9,19 @@ import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useShowing } from '~/common/hooks'
 
+const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
   idx: number
   projectId: number
   invitation: ProjectInvitation
-  onClick?: () => void
 }
 
 export default function ProjectInvitationRow(props: Props) {
-  const { idx, projectId, invitation, onClick } = props
+  const { idx, projectId, invitation } = props
 
+  const { isShowing: isShowingRecipientDetail, toggle: toggleRecipientDetail } = useShowing()
   const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useShowing()
 
   const queryClient = useQueryClient()
@@ -49,8 +50,8 @@ export default function ProjectInvitationRow(props: Props) {
       <div
         key={invitation.invitationId}
         className='group relative flex cursor-pointer border-y-2 border-c-3 border-t-transparent py-1 hover:border-t-2 hover:border-blue-400'
-        onClick={onClick}
-        onKeyDown={onClick}
+        onClick={toggleRecipientDetail}
+        onKeyDown={toggleRecipientDetail}
         tabIndex={invitation.invitationId}
         role='button'
       >
@@ -93,6 +94,16 @@ export default function ProjectInvitationRow(props: Props) {
             submittingLabel='deleting_project_invitation...'
             submitLabel='delete_project_invitation'
             submitClassName='btn-alert'
+          />
+        </Suspense>
+      )}
+
+      {isShowingRecipientDetail && (
+        <Suspense>
+          <AnonymousProfileModal
+            userId={invitation.recipientId}
+            isShowing={isShowingRecipientDetail}
+            onClose={toggleRecipientDetail}
           />
         </Suspense>
       )}
