@@ -45,4 +45,6 @@ export type IssueDetail = {
   assigneeAvatar: string
   projectStatusId: number
   projectStatusName: string
+  createdAt: Date
+  updatedAt: Date
 }
