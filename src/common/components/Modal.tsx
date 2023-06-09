@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
+import SpinningCircle from './SpinningCircle'
 
 interface Props {
   isShowing: boolean
@@ -21,7 +22,7 @@ export default function Modal(props: Props) {
     isShowing,
     onClose,
     onSubmit,
-    // isLoading,
+    isLoading,
     isMutating,
     children,
     className,
@@ -31,6 +32,37 @@ export default function Modal(props: Props) {
     submitClassName,
     submitDisable
   } = props
+
+  const ModalContent = isLoading ? (
+    <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
+      <div className='flex items-center gap-6'>
+        <SpinningCircle height={50} width={50} />
+      </div>
+    </div>
+  ) : (
+    <motion.div
+      className={`my-8 w-[90%] rounded-[4px] bg-white p-6 ${className ?? 'max-w-[31rem]'}`}
+      initial={{ scale: 0.9 }}
+      animate={{ scale: 1 }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {children}
+      {onSubmit && (
+        <div className='mt-8 flex justify-end gap-x-3'>
+          <button onClick={onClose} className='btn-crystal'>
+            {closeLabel}
+          </button>
+          <button
+            onClick={onSubmit}
+            disabled={submitDisable}
+            className={submitDisable ? `btn-disabled` : `btn ${submitClassName}`}
+          >
+            {isMutating ? submittingLabel : submitLabel}
+          </button>
+        </div>
+      )}
+    </motion.div>
+  )
 
   return isShowing
     ? createPortal(
@@ -43,28 +75,7 @@ export default function Modal(props: Props) {
             if (event.key === 'Esc') onClose()
           }}
         >
-          <motion.div
-            className={`my-8 w-[90%] rounded-[4px] bg-white p-6 ${className ?? 'max-w-[31rem]'}`}
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {children}
-            {onSubmit && (
-              <div className='mt-8 flex justify-end gap-x-3'>
-                <button onClick={onClose} className='btn-crystal'>
-                  {closeLabel}
-                </button>
-                <button
-                  onClick={onSubmit}
-                  disabled={submitDisable}
-                  className={submitDisable ? `btn-disabled` : `btn ${submitClassName}`}
-                >
-                  {isMutating ? submittingLabel : submitLabel}
-                </button>
-              </div>
-            )}
-          </motion.div>
+          {ModalContent}
         </div>,
         document.getElementById('portal') as Element
       )
