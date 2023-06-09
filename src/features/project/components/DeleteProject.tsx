@@ -46,7 +46,7 @@ export default function DeleteProject(props: Props) {
   return (
     <Modal
       onSubmit={handleDeleteProject}
-      isLoading={deleteProjectMutation.isLoading}
+      isMutating={deleteProjectMutation.isLoading}
       closeLabel='cancle'
       submittingLabel='deleting_project...'
       submitLabel='delete_project'

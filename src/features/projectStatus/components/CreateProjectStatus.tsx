@@ -26,7 +26,7 @@ export default function CreateProjectStatus(props: Props) {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isSubmitting: isLoading }
+    formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
   const createProjectStatusMutation = useMutation({
@@ -57,10 +57,11 @@ export default function CreateProjectStatus(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateProjectStatus}
+      isMutating={createProjectStatusMutation.isLoading || isSubmitting}
       closeLabel='cancle'
       submittingLabel='creating...'
       submitLabel='create'
-      {...{ isShowing, onClose, isLoading }}
+      {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-4'>

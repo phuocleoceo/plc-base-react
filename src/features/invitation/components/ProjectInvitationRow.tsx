@@ -88,7 +88,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingDeleteInvitation}
             onClose={toggleDeleteInvitation}
             onSubmit={handleDeleteProjectInvitation}
-            isLoading={deleteProjectinvitationMutation.isLoading}
+            isMutating={deleteProjectinvitationMutation.isLoading}
             confirmMessage={`submit_delete_project_invitation` + `: ${invitation.recipientEmail}`}
             closeLabel='cancle'
             submittingLabel='deleting_project_invitation...'

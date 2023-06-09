@@ -83,7 +83,7 @@ export default function ProjectMemberRow(props: Props) {
             isShowing={isShowingDeleteMember}
             onClose={toggleDeleteMember}
             onSubmit={handleDeleteProjectMember}
-            isLoading={deleteProjectMemberMutation.isLoading}
+            isMutating={deleteProjectMemberMutation.isLoading}
             confirmMessage={`submit_delete_project_member` + `: ${projectMember.name}`}
             closeLabel='cancle'
             submittingLabel='deleting_project_member...'

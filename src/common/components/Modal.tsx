@@ -8,6 +8,7 @@ interface Props {
   onClose: () => void
   onSubmit?: () => Promise<void>
   isLoading?: boolean
+  isMutating?: boolean
   closeLabel?: string
   submitLabel?: string
   submittingLabel?: string
@@ -20,7 +21,8 @@ export default function Modal(props: Props) {
     isShowing,
     onClose,
     onSubmit,
-    isLoading,
+    // isLoading,
+    isMutating,
     children,
     className,
     closeLabel,
@@ -58,7 +60,7 @@ export default function Modal(props: Props) {
                   disabled={submitDisable}
                   className={submitDisable ? `btn-disabled` : `btn ${submitClassName}`}
                 >
-                  {isLoading ? submittingLabel : submitLabel}
+                  {isMutating ? submittingLabel : submitLabel}
                 </button>
               </div>
             )}

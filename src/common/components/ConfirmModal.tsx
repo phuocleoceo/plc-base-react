@@ -6,7 +6,7 @@ interface Props {
   onClose: () => void
   onSubmit?: () => Promise<void>
   className?: string
-  isLoading?: boolean
+  isMutating?: boolean
   closeLabel?: string
   submitLabel?: string
   submittingLabel?: string

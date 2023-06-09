@@ -160,7 +160,7 @@ export default function DragDropStatus(props: Props) {
             isShowing={isShowingDeleteStatus}
             onClose={toggleDeleteStatus}
             onSubmit={handleDeleteProjectStatus}
-            isLoading={deleteProjectStatusMutation.isLoading}
+            isMutating={deleteProjectStatusMutation.isLoading}
             confirmMessage={`submit_delete_status` + `: ${projectStatus.name}`}
             closeLabel='cancle'
             submittingLabel='deleting_status...'

@@ -117,7 +117,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingAcceptInvitation}
             onClose={toggleAcceptInvitation}
             onSubmit={handleAcceptInvitation}
-            isLoading={acceptInvitationMutation.isLoading}
+            isMutating={acceptInvitationMutation.isLoading}
             confirmMessage={`submit_accept_invitation` + `: ${invitation.projectName}`}
             closeLabel='cancle'
             submittingLabel='accepting_invitation...'
@@ -133,7 +133,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingDeclineInvitation}
             onClose={toggleDeclineInvitation}
             onSubmit={handleDeclineInvitation}
-            isLoading={declineInvitationMutation.isLoading}
+            isMutating={declineInvitationMutation.isLoading}
             confirmMessage={`submit_decline_invitation` + `: ${invitation.projectName}`}
             closeLabel='cancle'
             submittingLabel='declining_invitation...'

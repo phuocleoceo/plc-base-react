@@ -28,7 +28,7 @@ export default function CreateProject(props: Props) {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isSubmitting: isLoading }
+    formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
   const createProjectMutation = useMutation({
@@ -72,10 +72,11 @@ export default function CreateProject(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateProject}
+      isMutating={createProjectMutation.isLoading || isSubmitting}
       closeLabel='cancle'
       submittingLabel='creating...'
       submitLabel='create'
-      {...{ isShowing, onClose, isLoading }}
+      {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-8'>
