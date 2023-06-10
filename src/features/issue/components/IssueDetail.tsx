@@ -1,17 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { lazy, Suspense, useContext } from 'react'
+import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
+import { AxiosError } from 'axios'
 
 import { Modal, Item, RichTextInput, LabelWrapper, SelectBox, InputValidation } from '~/common/components'
-import { IssueHelper, LocalStorageHelper, TimeHelper } from '~/shared/helpers'
+import { IssueHelper, LocalStorageHelper, TimeHelper, ValidationHelper } from '~/shared/helpers'
 import { QueryKey, IssueType, IssuePriority } from '~/shared/constants'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateIssueRequest } from '~/features/issue/models'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
-import { useToggle } from '~/common/hooks'
 import { SelectItem } from '~/shared/types'
+import { useToggle } from '~/common/hooks'
 import IssueComment from './IssueComment'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
@@ -33,6 +35,7 @@ export default function IssueDetail(props: Props) {
 
   const {
     control,
+    setError,
     register,
     handleSubmit,
     formState: { errors }
@@ -40,6 +43,7 @@ export default function IssueDetail(props: Props) {
 
   const currentUser = LocalStorageHelper.getUserInfo()
 
+  const { isShowing: isShowingUpdateIssue, toggle: toggleUpdateIssue } = useToggle()
   const { isShowing: isShowingDeleteIssue, toggle: toggleDeleteIssue } = useToggle()
 
   const { isAuthenticated } = useContext(AppContext)
@@ -63,10 +67,37 @@ export default function IssueDetail(props: Props) {
     queryKey: [QueryKey.IssueDetail, projectId, issueId],
     queryFn: () => IssueApi.getIssueDetail(projectId, issueId),
     enabled: isAuthenticated,
-    staleTime: 1000
+    staleTime: 1 * 60 * 1000
   })
 
   const issue = issueData?.data.data
+
+  const updateIssueMutation = useMutation({
+    mutationFn: (body: UpdateIssueRequest) => IssueApi.updateIssue(projectId, issueId, body)
+  })
+
+  const handleUpdateComment = handleSubmit((form: FormData) => {
+    const issueData: UpdateIssueRequest = {
+      ...form,
+      description: form.description ?? '',
+      assigneeId: form.assigneeId?.toString() === 'null' ? null : form.assigneeId
+    }
+
+    updateIssueMutation.mutate(issueData, {
+      onSuccess: () => {
+        toast.success('update_issue_success')
+        queryClient.invalidateQueries([QueryKey.IssueDetail])
+        queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        toggleUpdateIssue()
+      },
+      onError: (error) => {
+        const validateErrors = ValidationHelper.getErrorFromServer(error as AxiosError)
+        Object.keys(validateErrors).forEach((key) => {
+          setError(key as keyof FormData, validateErrors[key])
+        })
+      }
+    })
+  })
 
   const deleteIssueMutation = useMutation({
     mutationFn: () => IssueApi.deleteIssue(projectId, issueId)
@@ -93,13 +124,30 @@ export default function IssueDetail(props: Props) {
             />
 
             <div className='text-black'>
-              {currentUser.id === issue?.reporterId && (
-                <button onClick={toggleDeleteIssue} title='Delete' className='btn-icon text-xl'>
-                  <Icon icon='bx:trash' className='text-red-500' />
-                </button>
-              )}
-              <button onClick={onClose} title='Close' className='btn-icon ml-4 text-lg'>
-                <Icon icon='akar-icons:cross' />
+              {currentUser.id === issue?.reporterId &&
+                (isShowingUpdateIssue ? (
+                  <>
+                    <button onClick={handleUpdateComment} title='update' className='btn-icon text-xl mr-2'>
+                      <Icon width={24} icon='mi:save' className='text-blue-500' />
+                    </button>
+
+                    <button onClick={toggleUpdateIssue} title='cancle' className='btn-icon text-xl mr-2'>
+                      <Icon width={24} icon='carbon:unsaved' className='text-red-500' />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={toggleUpdateIssue} title='update' className='btn-icon text-xl mr-2'>
+                      <Icon width={24} icon='ic:baseline-edit' className='text-blue-500' />
+                    </button>
+
+                    <button onClick={toggleDeleteIssue} title='delete' className='btn-icon text-xl mr-2'>
+                      <Icon width={24} icon='bx:trash' className='text-red-500' />
+                    </button>
+                  </>
+                ))}
+              <button onClick={onClose} title='Close' className='btn-icon text-lg'>
+                <Icon width={22} icon='akar-icons:cross' />
               </button>
             </div>
           </div>

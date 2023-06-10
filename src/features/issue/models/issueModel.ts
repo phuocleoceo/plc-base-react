@@ -51,7 +51,7 @@ export type UpdateIssueRequest = {
   priority: string
   type: string
   reporterId: number
-  assigneeId: number
+  assigneeId: number | null
 }
 
 export type UpdateIssueResponse = BaseResponse<boolean>
