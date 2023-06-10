@@ -75,7 +75,7 @@ function CreateComment(props: Props) {
         <Avatar src={user?.avatar} name={user?.displayName} />
         <input
           placeholder='add_your_comment...'
-          className='max-w-[80%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
+          className='max-w-[83.5%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
           bg-slate-100 hover:border-gray-400 border-transparent'
           {...register('content')}
         />
@@ -83,7 +83,7 @@ function CreateComment(props: Props) {
           <button onClick={handleCreateProject} className='btn'>
             {createCommentMutation.isLoading || isSubmitting ? 'adding...' : 'add'}
           </button>
-          <button className='btn-crystal hover:bg-slate-200'>cancel</button>
+          {/* <button className='btn-crystal hover:bg-slate-200'>cancel</button> */}
         </div>
       </div>
     </>
