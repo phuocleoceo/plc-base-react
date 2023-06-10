@@ -59,9 +59,9 @@ function IssueComment(props: Props) {
 
       <ul className='mt-6'>
         {comments.length > 0 ? (
-          comments.map((comment) => <CommentRow key={comment.id} {...{ comment }} />)
+          comments.map((comment) => <CommentRow key={comment.id} {...{ issueId, comment }} />)
         ) : (
-          <div className='z-10 grid w-full place-items-center bg-c-1 text-c-text mt-5'>no_comment 🚀</div>
+          <div className='z-10 grid w-full place-items-center bg-c-1 text-c-text mt-5'></div>
         )}
       </ul>
 

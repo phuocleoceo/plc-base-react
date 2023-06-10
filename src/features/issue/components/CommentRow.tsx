@@ -1,16 +1,44 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { lazy, Suspense } from 'react'
+
 import { LocalStorageHelper, TimeHelper } from '~/shared/helpers'
+import { IssueCommentApi } from '~/features/issue/apis'
 import { IssueComment } from '~/features/issue/models'
+import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
+import { useToggle } from '~/common/hooks'
+
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
+  issueId: number
   comment: IssueComment
 }
 
 export default function CommentRow(props: Props) {
-  const { comment } = props
+  const { issueId, comment } = props
+
+  const { isShowing: isShowingDeleteComment, toggle: toggleDeleteComment } = useToggle()
+
+  const queryClient = useQueryClient()
 
   const currentUser = LocalStorageHelper.getUserInfo()
   const isCurrentUserComment = currentUser.id === comment.userId
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: () => IssueCommentApi.deleteIssueComment(issueId, comment.id)
+  })
+
+  const handleDeleteComment = async () => {
+    deleteCommentMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('delete_comment_success')
+        queryClient.invalidateQueries([QueryKey.IssueComment])
+        toggleDeleteComment()
+      }
+    })
+  }
 
   return (
     <>
@@ -28,11 +56,30 @@ export default function CommentRow(props: Props) {
             <>
               <button className='text-sm tracking-wide text-gray-700 hover:underline mr-2'>Edit</button>
 
-              <button className='text-sm tracking-wide text-gray-700 hover:underline'>Delete</button>
+              <button onClick={toggleDeleteComment} className='text-sm tracking-wide text-gray-700 hover:underline'>
+                Delete
+              </button>
             </>
           )}
         </div>
       </li>
+
+      {isShowingDeleteComment && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingDeleteComment}
+            onClose={toggleDeleteComment}
+            onSubmit={handleDeleteComment}
+            isMutating={deleteCommentMutation.isLoading}
+            confirmMessage='submit_delete_comment'
+            closeLabel='cancle'
+            submittingLabel='deleting_comment...'
+            submitLabel='delete_comment'
+            submitClassName='btn-alert'
+            className='w-1/4'
+          />
+        </Suspense>
+      )}
     </>
   )
 }
