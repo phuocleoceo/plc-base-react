@@ -166,6 +166,7 @@ export default function DragDropStatus(props: Props) {
             submittingLabel='deleting_status...'
             submitLabel='delete_status'
             submitClassName='btn-alert'
+            className='max-w-[20rem]'
           />
         </Suspense>
       )}
