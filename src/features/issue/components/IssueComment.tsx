@@ -6,6 +6,7 @@ import { IssueCommentApi } from '~/features/issue/apis'
 import { SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
+import CreateComment from './CreateComment'
 import CommentRow from './CommentRow'
 
 interface Props {
@@ -35,8 +36,10 @@ function IssueComment(props: Props) {
   const commentCount = commentData?.data.data.totalRecords ?? 0
 
   return (
-    <div className='max-w-[35rem] py-3 text-c-text sm:mx-3'>
+    <div className='text-c-text sm:mx-3'>
       <span className='tracking-wide font-medium'>comments</span>
+      <CreateComment {...{ issueId }} />
+
       <ul className='mt-6'>
         {comments.length > 0 ? (
           comments.map((comment) => <CommentRow key={comment.id} {...{ comment }} />)

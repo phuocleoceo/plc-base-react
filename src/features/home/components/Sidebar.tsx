@@ -23,7 +23,8 @@ export default function Sidebar() {
   const { data } = useQuery({
     queryKey: [QueryKey.PersonalProfile],
     queryFn: () => ProfileApi.getPersonalProfile(),
-    enabled: isAuthenticated
+    enabled: isAuthenticated,
+    staleTime: 5 * 60 * 1000
   })
 
   const user = data?.data.data

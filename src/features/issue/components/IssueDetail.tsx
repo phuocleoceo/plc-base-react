@@ -91,7 +91,6 @@ export default function IssueDetail(props: Props) {
         <div className='sm:flex md:gap-3'>
           <div className='w-full sm:pr-6'>
             <InputValidation
-              label='title'
               placeholder='issue_title...'
               register={register('title', {
                 required: {
@@ -103,9 +102,11 @@ export default function IssueDetail(props: Props) {
               defaultValue={issue?.title}
             />
 
-            <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
+            <LabelWrapper label='description' margin='mt-3'>
+              <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
+            </LabelWrapper>
 
-            <hr className='mx-3 mt-3' />
+            <hr className='border-t-[.5px] border-gray-300 mx-3 my-5' />
 
             <IssueComment {...{ issueId }} />
           </div>
@@ -121,7 +122,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='assignee' margin='mt-0'>
+            <LabelWrapper label='assignee' margin='mt-5'>
               <SelectBox
                 control={control}
                 controlField='assigneeId'
@@ -138,7 +139,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='type' margin='mt-0'>
+            <LabelWrapper label='type' margin='mt-5'>
               <SelectBox
                 control={control}
                 controlField='type'
@@ -148,7 +149,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='priority' margin='mt-0'>
+            <LabelWrapper label='priority' margin='mt-5'>
               <SelectBox
                 control={control}
                 controlField='priority'
@@ -158,7 +159,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <hr className='border-t-[.5px] border-gray-400 my-3' />
+            <hr className='border-t-[.5px] border-gray-400 my-5' />
 
             <div className='mt-4 text-sm text-gray-700'>
               {issue?.createdAt && (

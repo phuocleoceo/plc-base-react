@@ -4,7 +4,7 @@ type Props = {
   register: UseFormRegisterReturn
   error?: FieldError
   placeholder?: string
-  label: string
+  label?: string
   defaultValue?: string
   readOnly?: boolean
   autoFocus?: boolean
@@ -17,9 +17,11 @@ export default function InputValidation(props: Props) {
 
   return (
     <div>
-      <label htmlFor={label} className='text-sm tracking-wide text-gray-800'>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={label} className='text-sm tracking-wide text-gray-800'>
+          {label}
+        </label>
+      )}
       <input
         id={label}
         defaultValue={defaultValue ?? ''}
