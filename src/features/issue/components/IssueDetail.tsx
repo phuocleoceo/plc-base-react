@@ -1,18 +1,19 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { FieldError, useForm } from 'react-hook-form'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
-import moment from 'moment'
 
-import { Modal, Item, RichTextInput, LabelWrapper, SelectBox } from '~/common/components'
+import { Modal, Item, RichTextInput, LabelWrapper, SelectBox, InputValidation } from '~/common/components'
+import { IssueHelper, LocalStorageHelper, TimeHelper } from '~/shared/helpers'
 import { QueryKey, IssueType, IssuePriority } from '~/shared/constants'
-import { IssueHelper, LocalStorageHelper } from '~/shared/helpers'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateIssueRequest } from '~/features/issue/models'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
-import { SelectItem } from '~/shared/types'
 import { useShowing } from '~/common/hooks'
+import { SelectItem } from '~/shared/types'
+import IssueComment from './IssueComment'
+
 interface Props {
   projectId: number
   issueId: number
@@ -28,7 +29,12 @@ type FormData = Pick<
 export default function IssueDetail(props: Props) {
   const { projectId, issueId, isShowing, onClose } = props
 
-  const { control, register, handleSubmit } = useForm<FormData>()
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormData>()
 
   const currentUser = LocalStorageHelper.getUserInfo()
 
@@ -84,9 +90,24 @@ export default function IssueDetail(props: Props) {
 
         <div className='sm:flex md:gap-3'>
           <div className='w-full sm:pr-6'>
-            <RichTextInput control={control} controlField='title' defaultValue={issue?.title} />
+            <InputValidation
+              label='title'
+              placeholder='issue_title...'
+              register={register('title', {
+                required: {
+                  value: true,
+                  message: 'title_required'
+                }
+              })}
+              error={errors.title as FieldError}
+              defaultValue={issue?.title}
+            />
+
             <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
-            <hr className='mx-3 my-3' />
+
+            <hr className='mx-3 mt-3' />
+
+            <IssueComment {...{ issueId }} />
           </div>
 
           <div className='mt-3 shrink-0 sm:w-[15rem]'>
@@ -140,17 +161,14 @@ export default function IssueDetail(props: Props) {
             <hr className='border-t-[.5px] border-gray-400 my-3' />
 
             <div className='mt-4 text-sm text-gray-700'>
-              {issue?.createdAt && <span className='mb-2 block'>created {parseDate(issue?.createdAt)}</span>}
-              {issue?.updatedAt && <span>updated {parseDate(issue?.updatedAt)}</span>}
+              {issue?.createdAt && (
+                <span className='mb-2 block'>created {TimeHelper.howLongFromNow(issue?.createdAt)}</span>
+              )}
+              {issue?.updatedAt && <span>updated {TimeHelper.howLongFromNow(issue?.updatedAt)}</span>}
             </div>
           </div>
         </div>
       </>
     </Modal>
   )
-}
-
-const parseDate = (s: Date | undefined) => {
-  if (!s) return ''
-  return moment(s).fromNow()
 }
