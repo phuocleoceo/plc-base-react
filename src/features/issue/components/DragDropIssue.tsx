@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'react'
 import { Avatar, DraggableWrapper } from '~/common/components'
 import { IssueInBoard } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const IssueDetail = lazy(() => import('~/features/issue/components/IssueDetail'))
 
@@ -17,7 +17,7 @@ type Props = {
 export default function DragDropIssue(props: Props) {
   const { idx, projectId, isDragDisabled, issue } = props
 
-  const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useShowing()
+  const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
 
   return (
     <>

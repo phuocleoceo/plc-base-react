@@ -10,7 +10,7 @@ import { IssueApi } from '~/features/issue/apis'
 import { IssueHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const CreateIssue = lazy(() => import('~/features/issue/components/CreateIssue'))
 
@@ -18,8 +18,8 @@ export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
-  const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useShowing()
-  const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useShowing()
+  const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
+  const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useToggle()
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 

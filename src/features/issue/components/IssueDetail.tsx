@@ -10,7 +10,7 @@ import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateIssueRequest } from '~/features/issue/models'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 import { SelectItem } from '~/shared/types'
 import IssueComment from './IssueComment'
 
@@ -38,7 +38,7 @@ export default function IssueDetail(props: Props) {
 
   const currentUser = LocalStorageHelper.getUserInfo()
 
-  const { isShowing: isShowingDeleteIssue, toggle: toggleDeleteIssue } = useShowing()
+  const { isShowing: isShowingDeleteIssue, toggle: toggleDeleteIssue } = useToggle()
 
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -90,17 +90,19 @@ export default function IssueDetail(props: Props) {
 
         <div className='sm:flex md:gap-3'>
           <div className='w-full sm:pr-6'>
-            <InputValidation
-              placeholder='issue_title...'
-              register={register('title', {
-                required: {
-                  value: true,
-                  message: 'title_required'
-                }
-              })}
-              error={errors.title as FieldError}
-              defaultValue={issue?.title}
-            />
+            <div className='mt-3'>
+              <InputValidation
+                placeholder='issue_title...'
+                register={register('title', {
+                  required: {
+                    value: true,
+                    message: 'title_required'
+                  }
+                })}
+                error={errors.title as FieldError}
+                defaultValue={issue?.title}
+              />
+            </div>
 
             <LabelWrapper label='description' margin='mt-3'>
               <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
@@ -112,7 +114,21 @@ export default function IssueDetail(props: Props) {
           </div>
 
           <div className='mt-3 shrink-0 sm:w-[15rem]'>
-            <LabelWrapper label='reporter' margin='mt-0'>
+            <InputValidation
+              label='story_point'
+              placeholder='story_point...'
+              register={register('storyPoint', {
+                required: {
+                  value: true,
+                  message: 'story_point_required'
+                }
+              })}
+              type='number'
+              error={errors.storyPoint as FieldError}
+              defaultValue={issue?.storyPoint.toString()}
+            />
+
+            <LabelWrapper label='reporter' margin='mt-5'>
               <SelectBox
                 control={control}
                 controlField='reporterId'

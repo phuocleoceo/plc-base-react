@@ -9,13 +9,13 @@ import { Pagination, SpinningCircle } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const CreateProjectInvitation = lazy(() => import('~/features/invitation/components/CreateProjectInvitation'))
 
 export default function ProjectInvitationList() {
   const projectId = Number(useParams().projectId)
-  const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useShowing()
+  const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useToggle()
 
   const { isAuthenticated } = useContext(AppContext)
 

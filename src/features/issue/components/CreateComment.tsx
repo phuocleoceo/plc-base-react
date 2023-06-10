@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { FieldError, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { memo, useContext } from 'react'
 import { AxiosError } from 'axios'
 
@@ -9,7 +9,8 @@ import { ProfileApi } from '~/features/profile/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { Avatar, InputValidation } from '~/common/components'
+import { Avatar } from '~/common/components'
+import { toast } from 'react-toastify'
 
 interface Props {
   issueId: number
@@ -37,19 +38,24 @@ function CreateComment(props: Props) {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { isSubmitting }
   } = useForm<FormData>()
 
-  const createProjectMutation = useMutation({
+  const createCommentMutation = useMutation({
     mutationFn: (body: CreateIssueCommentRequest) => IssueCommentApi.createIssueComment(issueId, body)
   })
 
-  const handleCreateProject = handleSubmit(async (form: FormData) => {
-    const projectData: CreateIssueCommentRequest = {
+  const handleCreateProject = handleSubmit((form: FormData) => {
+    const commentData: CreateIssueCommentRequest = {
       ...form
     }
 
-    createProjectMutation.mutate(projectData, {
+    if (!commentData.content) {
+      toast.warn('enter_comment')
+      return
+    }
+
+    createCommentMutation.mutate(commentData, {
       onSuccess: () => {
         queryClient.invalidateQueries([QueryKey.IssueComment])
         reset()
@@ -68,15 +74,17 @@ function CreateComment(props: Props) {
       <div className='relative flex items-start gap-3 my-4'>
         <Avatar src={user?.avatar} name={user?.displayName} />
         <input
-          placeholder='your_comment...'
-          className='max-w-[70%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
+          placeholder='add_your_comment...'
+          className='max-w-[80%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
           bg-slate-100 hover:border-gray-400 border-transparent'
           {...register('content')}
         />
-      </div>
-      <div className='flex justify-end gap-1'>
-        <button className='btn'>{createProjectMutation.isLoading ? 'adding...' : 'Add'}</button>
-        <button className='btn-crystal hover:bg-slate-200'>cancel</button>
+        <div className='flex justify-end gap-1'>
+          <button onClick={handleCreateProject} className='btn'>
+            {createCommentMutation.isLoading || isSubmitting ? 'adding...' : 'add'}
+          </button>
+          <button className='btn-crystal hover:bg-slate-200'>cancel</button>
+        </div>
       </div>
     </>
   )

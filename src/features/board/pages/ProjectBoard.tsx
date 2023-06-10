@@ -13,7 +13,7 @@ import { DroppableWrapper } from '~/common/components'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const CreateProjectStatus = lazy(() => import('~/features/projectStatus/components/CreateProjectStatus'))
 
@@ -22,7 +22,7 @@ export default function ProjectBoard() {
 
   const { isAuthenticated } = useContext(AppContext)
   const [isDragDisabled, setIsDragDisabled] = useState(false)
-  const { isShowing: isShowingCreateStatus, toggle: toggleCreateStatus } = useShowing()
+  const { isShowing: isShowingCreateStatus, toggle: toggleCreateStatus } = useToggle()
 
   const queryClient = useQueryClient()
 

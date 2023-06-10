@@ -8,14 +8,14 @@ import { Avatar, IconBtn } from '~/common/components'
 import { ProfileApi } from '~/features/profile/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
 
 const Profile = lazy(() => import('~/features/profile/pages/Profile'))
 
 export default function Sidebar() {
-  const { isShowing, toggle } = useShowing()
+  const { isShowing, toggle } = useToggle()
   const navigate = useNavigate()
 
   const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)

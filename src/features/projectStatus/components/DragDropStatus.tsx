@@ -9,7 +9,7 @@ import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { DragDropIssue } from '~/features/issue/components'
 import { IssueInBoard } from '~/features/issue/models'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
@@ -26,8 +26,8 @@ export default function DragDropStatus(props: Props) {
 
   const queryClient = useQueryClient()
 
-  const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useShowing()
-  const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useShowing()
+  const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useToggle()
+  const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useToggle()
 
   const [statusData, setStatusData] = useState<UpdateProjectStatusRequest>({
     name: projectStatus.name,

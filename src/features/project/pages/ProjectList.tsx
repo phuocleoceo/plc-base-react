@@ -8,13 +8,13 @@ import { ProjectRow } from '~/features/project/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const CreateProject = lazy(() => import('~/features/project/components/CreateProject'))
 
 export default function ProjectList() {
   const { isAuthenticated } = useContext(AppContext)
-  const { isShowing: isShowingCreateProject, toggle: toggleCreateProject } = useShowing()
+  const { isShowing: isShowingCreateProject, toggle: toggleCreateProject } = useToggle()
 
   const [projectParams, setProjectParams] = useState<GetProjectsParams>({
     pageNumber: 1,

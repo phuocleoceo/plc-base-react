@@ -7,7 +7,7 @@ import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { ProjectMember } from '~/features/projectMember/models'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
@@ -21,8 +21,8 @@ interface Props {
 export default function ProjectMemberRow(props: Props) {
   const { idx, projectId, projectMember } = props
 
-  const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useShowing()
-  const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useShowing()
+  const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useToggle()
+  const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useToggle()
 
   const queryClient = useQueryClient()
 
