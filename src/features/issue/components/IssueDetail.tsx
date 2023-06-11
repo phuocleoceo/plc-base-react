@@ -18,7 +18,7 @@ import IssueComment from './IssueComment'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
-const MAX_LENGHT_DESCRIPTION = 450
+const MAX_LENGHT_DESCRIPTION = 300
 
 interface Props {
   projectId: number
@@ -155,7 +155,7 @@ export default function IssueDetail(props: Props) {
             </div>
           </div>
 
-          <div className='sm:flex md:gap-3'>
+          <div className='sm:flex md:gap-3 pl-3'>
             <div className='w-full sm:pr-6'>
               {isShowingUpdateIssue ? (
                 <>
@@ -180,23 +180,26 @@ export default function IssueDetail(props: Props) {
                 </>
               ) : (
                 <>
-                  <div className='mb-4'>
-                    <div className='text-blac font-bold'>{issue?.title}</div>
+                  <div className='mb-2'>
+                    <div className='font-bold text-2xl'>{issue?.title}</div>
                   </div>
 
                   <div className='mb-4'>
-                    <span
-                      className='text-black'
+                    <label htmlFor={issue?.description} className='tracking-wide text-base font-bold'>
+                      description
+                    </label>
+                    <div
+                      className='text-black mt-3 text-90p'
                       dangerouslySetInnerHTML={{
                         __html: isShowingFullDescription
                           ? (issue?.description as TrustedHTML)
                           : (issue?.description.slice(0, MAX_LENGHT_DESCRIPTION) as TrustedHTML)
                       }}
-                    ></span>
+                    ></div>
                   </div>
 
                   {issue?.description && issue.description.length > MAX_LENGHT_DESCRIPTION && (
-                    <button className='text-blue-500 text-sm' onClick={toggleFullDescription}>
+                    <button className='text-blue-500 text-80p' onClick={toggleFullDescription}>
                       {isShowingFullDescription ? 'click_to_show_less...' : 'click_to_show_more...'}
                     </button>
                   )}
