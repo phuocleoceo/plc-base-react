@@ -278,61 +278,74 @@ export default function IssueDetail(props: Props) {
               ) : (
                 <>
                   <div className='mb-4'>
-                    <label htmlFor={issue?.storyPoint.toString()} className='text-sm tracking-wide text-gray-800'>
+                    <label
+                      htmlFor={issue?.storyPoint.toString()}
+                      className='font-bold text-sm tracking-wide text-gray-800'
+                    >
                       story_point
                     </label>
-                    <div className='text-black'>{issue?.storyPoint}</div>
+                    <div className='text-black mt-2'>{issue?.storyPoint}</div>
                   </div>
 
                   <div className='mb-4'>
-                    <label htmlFor={issue?.reporterName} className='text-sm tracking-wide text-gray-800'>
+                    <label htmlFor={issue?.reporterName} className='font-bold text-sm tracking-wide text-gray-800'>
                       reporter
                     </label>
                     <Item
-                      size='w-4 h-4'
+                      size='w-6 h-6'
                       variant='SQUARE'
                       icon={issue?.reporterAvatar}
                       text={issue?.reporterName ?? ''}
+                      className='mt-2'
                     />
                   </div>
 
                   <div className='mb-4'>
-                    <label htmlFor={issue?.assigneeName} className='text-sm tracking-wide text-gray-800'>
+                    <label htmlFor={issue?.assigneeName} className='font-bold text-sm tracking-wide text-gray-800'>
                       assignee
                     </label>
                     {issue?.assigneeName ? (
-                      <Item size='w-4 h-4' variant='SQUARE' icon={issue?.assigneeAvatar} text={issue?.assigneeName} />
+                      <Item
+                        size='w-6 h-6'
+                        variant='SQUARE'
+                        icon={issue?.assigneeAvatar}
+                        text={issue?.assigneeName}
+                        className='mt-2'
+                      />
                     ) : (
                       <Item
-                        size='w-4 h-4'
+                        size='w-5 h-5'
                         variant='SQUARE'
                         icon='https://i.stack.imgur.com/SE2cv.jpg'
                         text='unassigned'
+                        className='mt-2'
                       />
                     )}
                   </div>
 
                   <div className='mb-4'>
-                    <label htmlFor={issue?.type} className='text-sm tracking-wide text-gray-800'>
+                    <label htmlFor={issue?.type} className='font-bold text-sm tracking-wide text-gray-800'>
                       type
                     </label>
                     <Item
-                      size='w-4 h-4'
+                      size='w-5 h-5'
                       variant='SQUARE'
                       icon={IssueType.find((type) => type.value === issue?.type)?.icon}
                       text={issue?.type ?? ''}
+                      className='mt-2'
                     />
                   </div>
 
                   <div className='mb-4'>
-                    <label htmlFor={issue?.priority} className='text-sm tracking-wide text-gray-800'>
+                    <label htmlFor={issue?.priority} className='font-bold text-sm tracking-wide text-gray-800'>
                       priority
                     </label>
                     <Item
-                      size='w-4 h-4'
+                      size='w-5 h-5'
                       variant='SQUARE'
                       icon={IssuePriority.find((priority) => priority.value === issue?.priority)?.icon}
                       text={issue?.priority ?? ''}
+                      className='mt-2'
                     />
                   </div>
                 </>
