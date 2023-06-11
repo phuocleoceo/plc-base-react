@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react'
 
 import { GetUserAccountsParams } from '~/features/admin/features/user/models'
 import { UserAccountApi } from '~/features/admin/features/user/apis'
+import { UserRow } from '~/features/admin/features/user/components'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
@@ -55,11 +56,11 @@ export default function UserAccountList() {
 
   return (
     <>
-      <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-10 pt-12 text-c-5'>
+      <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-5 pt-5 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <span className='text-2xl font-semibold tracking-wide'>users</span>
         </div>
-        <div className='mt-8'>
+        <div className='mt-3'>
           <div className='relative'>
             <input
               className='w-44 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
@@ -73,21 +74,22 @@ export default function UserAccountList() {
         </div>
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
-            <div className='w-32'></div>
-            <div className='w-40'>image</div>
-            <div className='w-40'>key</div>
-            <div className='w-80'>name</div>
-            <div className='flex-grow'>leader</div>
+            <div className='w-16'></div>
+            <div className='w-56'>email</div>
+            <div className='w-56'>name</div>
+            <div className='w-32'>phoneNumber</div>
+            <div className='w-32'>identityNumber</div>
+            <div className='flex-grow'>address</div>
           </div>
-          {/* {projects && projects.length !== 0 ? (
+          {users && users.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
-              {projects.map((project, idx) => (
-                <ProjectRow key={idx} idx={idx} project={project} />
+              {users.map((user, idx) => (
+                <UserRow key={idx} {...{ idx, user }} />
               ))}
             </div>
           ) : (
             <div className='mt-[30vh] grid place-items-center text-xl'>no_projects_found 🚀</div>
-          )} */}
+          )}
         </div>
 
         <Pagination pageSize={userAccountParams.pageSize} totalRecords={userCount} onChangePage={handleChangePage} />
