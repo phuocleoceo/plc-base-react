@@ -17,5 +17,4 @@ export type UserAccountDetail = {
   isVerified: boolean
   isActived: boolean
   roleId: number
-  roleName: string
 }

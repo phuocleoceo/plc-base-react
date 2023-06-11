@@ -6,11 +6,12 @@ import { useContext } from 'react'
 
 import { UpdateUserAccountRequest } from '~/features/admin/features/user/models'
 import { RoleApi } from '~/features/admin/features/accessControl/apis'
+import { LabelWrapper, Modal, SelectBox } from '~/common/components'
 import { UserAccountApi } from '~/features/admin/features/user/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { Modal } from '~/common/components'
+import { SelectItem } from '~/shared/types'
 
 interface Props {
   userId: number
@@ -31,7 +32,7 @@ export default function IssueDetail(props: Props) {
     setError,
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { isSubmitting }
   } = useForm<FormData>()
 
   const updateUserMutation = useMutation({
@@ -42,6 +43,8 @@ export default function IssueDetail(props: Props) {
     const userData: UpdateUserAccountRequest = {
       ...form
     }
+    console.log(userData)
+    return
 
     updateUserMutation.mutate(userData, {
       onSuccess: () => {
@@ -77,12 +80,41 @@ export default function IssueDetail(props: Props) {
     staleTime: 2 * 60 * 1000
   })
 
-  const roles = roleData?.data.data
+  const roles: SelectItem[] =
+    roleData?.data.data.map((r) => ({
+      label: `${r.name} - ${r.description}`,
+      value: r.id.toString()
+    })) || []
 
   return (
     <>
-      <Modal isLoading={isLoadingUser || isLoadingRole} {...{ isShowing, onClose }} className='max-w-[65rem]'>
-        <>{user?.email}</>
+      <Modal
+        isLoading={isLoadingUser || isLoadingRole}
+        onSubmit={handleUpdateUser}
+        isMutating={updateUserMutation.isLoading || isSubmitting}
+        closeLabel='cancle'
+        submittingLabel='updating_user...'
+        submitLabel='update_user'
+        {...{ isShowing, onClose }}
+        className='max-w-[30rem]'
+      >
+        <>
+          <div className='mb-3'>
+            <span className='text-[20px] font-[600] text-c-text'>{`update_user ${user?.email}`}</span>
+          </div>
+
+          <div className='flex flex-col gap-4'>
+            <LabelWrapper label='role' margin='mt-0'>
+              <SelectBox
+                control={control}
+                controlField='roleId'
+                selectList={roles}
+                defaultValue={user?.roleId.toString()}
+                className='w-full'
+              />
+            </LabelWrapper>
+          </div>
+        </>
       </Modal>
     </>
   )
