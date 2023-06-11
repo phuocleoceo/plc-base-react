@@ -34,7 +34,7 @@ export default function UserAccountList() {
 
   const { data: userData, isLoading: isLoadingUser } = useQuery({
     queryKey: [QueryKey.UserAccounts, userAccountParams],
-    queryFn: () => UserAccountApi.getUserAccountListProject(userAccountParams),
+    queryFn: () => UserAccountApi.getUserAccounts(userAccountParams),
     keepPreviousData: true,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
@@ -42,7 +42,6 @@ export default function UserAccountList() {
 
   const users = userData?.data.data.records ?? []
   const userCount = userData?.data.data.totalRecords ?? 0
-  console.log(users)
 
   if (isLoadingUser)
     return (

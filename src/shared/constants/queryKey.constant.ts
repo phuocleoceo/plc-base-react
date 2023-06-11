@@ -12,5 +12,6 @@ export const QueryKey = {
   IssueInBacklog: 'issue_in_backlog',
   IssueDetail: 'issue_detail',
   IssueComment: 'issue_comment',
-  UserAccounts: 'user_accounts'
+  UserAccounts: 'user_accounts',
+  UserAccountDetail: 'user_account_detail'
 } as const

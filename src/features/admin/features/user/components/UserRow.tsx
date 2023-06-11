@@ -1,6 +1,10 @@
+import { Suspense, lazy } from 'react'
+
 import { UserAccount } from '~/features/admin/features/user/models'
 import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
+
+const UpdateUser = lazy(() => import('~/features/admin/features/user/components/UpdateUser'))
 
 interface Props {
   idx: number
@@ -47,7 +51,11 @@ export default function UserRow(props: Props) {
         <div className='flex-grow'>{getFullAddress()}</div>
       </div>
 
-      {isShowingUpdateUser ?? <></>}
+      {isShowingUpdateUser && (
+        <Suspense>
+          <UpdateUser userId={user.userAccountId} isShowing={isShowingUpdateUser} onClose={toggleUpdateUser} />
+        </Suspense>
+      )}
     </>
   )
 }

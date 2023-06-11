@@ -8,13 +8,13 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const userAccountApi = {
-  getUserAccountListProject(params: GetUserAccountsParams) {
+  getUserAccounts(params: GetUserAccountsParams) {
     return HttpHelper.get<GetUserAccountsResponse>('user', { params })
   },
-  getUserAccountDetailProject(userId: number) {
+  getUserAccountDetail(userId: number) {
     return HttpHelper.get<GetUserAccountDetailResponse>(`user/account/${userId}`)
   },
-  updateUserAccountProject(userId: number, body: UpdateUserAccountRequest) {
+  updateUserAccount(userId: number, body: UpdateUserAccountRequest) {
     return HttpHelper.put<UpdateUserAccountResponse>(`user/account/${userId}`, body)
   }
 }
