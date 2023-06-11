@@ -22,6 +22,10 @@ export default {
       },
       borderWidth: {
         2.5: '2.5px'
+      },
+      fontSize: {
+        '90p': '90%',
+        '80p': '80%'
       }
     }
   },

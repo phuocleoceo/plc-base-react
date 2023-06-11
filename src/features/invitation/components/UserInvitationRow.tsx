@@ -7,7 +7,7 @@ import { UserInvitation } from '~/features/invitation/models'
 import { InvitationApi } from '~/features/invitation/apis'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
@@ -20,9 +20,9 @@ interface Props {
 export default function ProjectInvitationRow(props: Props) {
   const { idx, invitation } = props
 
-  const { isShowing: isShowingSenderDetail, toggle: toggleSenderDetail } = useShowing()
-  const { isShowing: isShowingAcceptInvitation, toggle: toggleAcceptInvitation } = useShowing()
-  const { isShowing: isShowingDeclineInvitation, toggle: toggleDeclineInvitation } = useShowing()
+  const { isShowing: isShowingSenderDetail, toggle: toggleSenderDetail } = useToggle()
+  const { isShowing: isShowingAcceptInvitation, toggle: toggleAcceptInvitation } = useToggle()
+  const { isShowing: isShowingDeclineInvitation, toggle: toggleDeclineInvitation } = useToggle()
 
   const queryClient = useQueryClient()
 
@@ -117,7 +117,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingAcceptInvitation}
             onClose={toggleAcceptInvitation}
             onSubmit={handleAcceptInvitation}
-            isLoading={acceptInvitationMutation.isLoading}
+            isMutating={acceptInvitationMutation.isLoading}
             confirmMessage={`submit_accept_invitation` + `: ${invitation.projectName}`}
             closeLabel='cancle'
             submittingLabel='accepting_invitation...'
@@ -133,7 +133,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingDeclineInvitation}
             onClose={toggleDeclineInvitation}
             onSubmit={handleDeclineInvitation}
-            isLoading={declineInvitationMutation.isLoading}
+            isMutating={declineInvitationMutation.isLoading}
             confirmMessage={`submit_decline_invitation` + `: ${invitation.projectName}`}
             closeLabel='cancle'
             submittingLabel='declining_invitation...'

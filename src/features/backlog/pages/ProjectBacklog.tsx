@@ -1,16 +1,16 @@
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { GetIssuesInBacklogParams, UpdateBacklogIssueRequest } from '~/features/issue/models'
-import { Avatar, DraggableWrapper, DroppableWrapper } from '~/common/components'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { IssueBacklog } from '~/features/issue/components'
 import { FilterBar } from '~/features/board/components'
+import { DroppableWrapper } from '~/common/components'
 import { IssueApi } from '~/features/issue/apis'
-import { IssueHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const CreateIssue = lazy(() => import('~/features/issue/components/CreateIssue'))
 
@@ -18,8 +18,7 @@ export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
-  const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useShowing()
-  const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useShowing()
+  const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useToggle()
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 
@@ -134,50 +133,7 @@ export default function ProjectBacklog() {
                 direction='vertical'
               >
                 {issuesBacklog.map((issue, idx) => (
-                  <DraggableWrapper
-                    key={issue.id}
-                    className='w-[60rem] border-[1px] p-[0.1rem] mb-[0.2px]'
-                    index={idx}
-                    draggableId={`issue-${issue.id}`}
-                    isDragDisabled={isDragDisabled}
-                  >
-                    <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
-                      <div className='flex items-center justify-between'>
-                        <div className='flex items-center gap-3'>
-                          <img
-                            className='h-[18px] w-[18px] ml-2'
-                            src={IssueHelper.getIssueType(issue.type)?.icon}
-                            alt={IssueHelper.getIssueType(issue.type)?.label}
-                          />
-                          <span className=''>{issue.title}</span>
-                        </div>
-
-                        <div className='ml-7 flex'>
-                          {issue.assigneeId ? (
-                            <Avatar
-                              key={issue.assigneeId}
-                              src={issue.assigneeAvatar}
-                              name={issue.assigneeName}
-                              style={{ zIndex: 0 }}
-                              className='pointer-events-none -ml-2 h-7 w-7 border-2'
-                            />
-                          ) : (
-                            <div className='h-7 w-7'></div>
-                          )}
-
-                          <img
-                            className='h-[18px] w-[18px] ml-2 mt-1'
-                            src={IssueHelper.getIssuePriority(issue.priority)?.icon}
-                            alt={IssueHelper.getIssuePriority(issue.priority)?.label}
-                          />
-
-                          <div className='rounded-full border border-transparent bg-gray-100 ml-2 text-sm w-9 px-[3px] flex items-center justify-center'>
-                            {issue.storyPoint ?? '-'}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </DraggableWrapper>
+                  <IssueBacklog key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
                 ))}
               </DroppableWrapper>
             </DragDropContext>

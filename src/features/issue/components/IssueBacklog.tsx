@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 
 import { Avatar, DraggableWrapper } from '~/common/components'
-import { IssueInBoard } from '~/features/issue/models'
+import { IssueInBacklog } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
 
@@ -10,43 +10,33 @@ const IssueDetail = lazy(() => import('~/features/issue/components/IssueDetail')
 type Props = {
   idx: number
   projectId: number
-  issue: IssueInBoard
+  issue: IssueInBacklog
   isDragDisabled: boolean
 }
 
-export default function DragDropIssue(props: Props) {
-  const { idx, projectId, isDragDisabled, issue } = props
+export default function IssueBacklog(props: Props) {
+  const { idx, projectId, issue, isDragDisabled } = props
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
 
   return (
     <>
       <DraggableWrapper
-        className='hover:bg-c-4 mb-2 w-full rounded-sm bg-c-1 p-2 shadow-issue'
+        key={issue.id}
+        className='w-[60rem] border-[1px] p-[0.1rem] mb-[0.2px]'
         index={idx}
         draggableId={`issue-${issue.id}`}
         isDragDisabled={isDragDisabled}
       >
         <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
-          <span className=''>{issue.title}</span>
-
-          <div className='mt-[10px] flex items-center justify-between'>
-            <div className='mb-1 flex items-center gap-3'>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-3'>
               <img
-                className='h-[18px] w-[18px]'
+                className='h-[18px] w-[18px] ml-2'
                 src={IssueHelper.getIssueType(issue.type)?.icon}
                 alt={IssueHelper.getIssueType(issue.type)?.label}
               />
-
-              <img
-                className='h-[18px] w-[18px]'
-                src={IssueHelper.getIssuePriority(issue.priority)?.icon}
-                alt={IssueHelper.getIssuePriority(issue.priority)?.label}
-              />
-
-              <div className='rounded-full border border-transparent bg-gray-100 text-sm w-9 px-[3px] flex items-center justify-center'>
-                {issue.storyPoint ?? '-'}
-              </div>
+              <span className=''>{issue.title}</span>
             </div>
 
             <div className='ml-7 flex'>
@@ -61,6 +51,16 @@ export default function DragDropIssue(props: Props) {
               ) : (
                 <div className='h-7 w-7'></div>
               )}
+
+              <img
+                className='h-[18px] w-[18px] ml-2 mt-1'
+                src={IssueHelper.getIssuePriority(issue.priority)?.icon}
+                alt={IssueHelper.getIssuePriority(issue.priority)?.label}
+              />
+
+              <div className='rounded-full border border-transparent bg-gray-100 ml-2 text-sm w-9 px-[3px] flex items-center justify-center'>
+                {issue.storyPoint ?? '-'}
+              </div>
             </div>
           </div>
         </div>

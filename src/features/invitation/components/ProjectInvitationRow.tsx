@@ -7,7 +7,7 @@ import { ProjectInvitation } from '~/features/invitation/models'
 import { InvitationApi } from '~/features/invitation/apis'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
@@ -21,8 +21,8 @@ interface Props {
 export default function ProjectInvitationRow(props: Props) {
   const { idx, projectId, invitation } = props
 
-  const { isShowing: isShowingRecipientDetail, toggle: toggleRecipientDetail } = useShowing()
-  const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useShowing()
+  const { isShowing: isShowingRecipientDetail, toggle: toggleRecipientDetail } = useToggle()
+  const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useToggle()
 
   const queryClient = useQueryClient()
 
@@ -88,7 +88,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingDeleteInvitation}
             onClose={toggleDeleteInvitation}
             onSubmit={handleDeleteProjectInvitation}
-            isLoading={deleteProjectinvitationMutation.isLoading}
+            isMutating={deleteProjectinvitationMutation.isLoading}
             confirmMessage={`submit_delete_project_invitation` + `: ${invitation.recipientEmail}`}
             closeLabel='cancle'
             submittingLabel='deleting_project_invitation...'

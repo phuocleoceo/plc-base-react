@@ -30,7 +30,7 @@ export default function CreateIssue(props: Props) {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isSubmitting: isLoading }
+    formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
   const { isAuthenticated } = useContext(AppContext)
@@ -86,10 +86,11 @@ export default function CreateIssue(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateIssue}
+      isMutating={createIssueMutation.isLoading || isSubmitting}
       closeLabel='cancle'
       submittingLabel='creating_issue...'
       submitLabel='create_issue'
-      {...{ isShowing, onClose, isLoading }}
+      {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-3'>

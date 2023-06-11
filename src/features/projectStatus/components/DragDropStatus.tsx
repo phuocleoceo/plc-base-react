@@ -9,7 +9,7 @@ import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { DragDropIssue } from '~/features/issue/components'
 import { IssueInBoard } from '~/features/issue/models'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
@@ -26,8 +26,8 @@ export default function DragDropStatus(props: Props) {
 
   const queryClient = useQueryClient()
 
-  const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useShowing()
-  const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useShowing()
+  const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useToggle()
+  const { isShowing: isShowingDeleteStatus, toggle: toggleDeleteStatus } = useToggle()
 
   const [statusData, setStatusData] = useState<UpdateProjectStatusRequest>({
     name: projectStatus.name,
@@ -142,7 +142,7 @@ export default function DragDropStatus(props: Props) {
             droppableId={`projectStatus-${projectStatus.id}`}
           >
             {issues?.map((issue, idx) => (
-              <DragDropIssue key={issue.id} isDragDisabled={isDragDisabled} idx={idx} issue={issue} />
+              <DragDropIssue key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
             ))}
           </DroppableWrapper>
         </div>
@@ -154,12 +154,13 @@ export default function DragDropStatus(props: Props) {
             isShowing={isShowingDeleteStatus}
             onClose={toggleDeleteStatus}
             onSubmit={handleDeleteProjectStatus}
-            isLoading={deleteProjectStatusMutation.isLoading}
+            isMutating={deleteProjectStatusMutation.isLoading}
             confirmMessage={`submit_delete_status` + `: ${projectStatus.name}`}
             closeLabel='cancle'
             submittingLabel='deleting_status...'
             submitLabel='delete_status'
             submitClassName='btn-alert'
+            className='max-w-[20rem]'
           />
         </Suspense>
       )}

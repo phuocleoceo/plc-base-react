@@ -50,12 +50,8 @@ export type UpdateIssueRequest = {
   storyPoint: number
   priority: string
   type: string
-  backlogIndex: number
   reporterId: number
-  assigneeId: number
-  projectStatusId: number
-  projectStatusIndex: number
-  sprintId: number
+  assigneeId: number | null
 }
 
 export type UpdateIssueResponse = BaseResponse<boolean>

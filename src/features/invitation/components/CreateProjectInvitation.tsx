@@ -26,7 +26,7 @@ export default function CreateProjectInvitation(props: Props) {
     register,
     setError,
     handleSubmit,
-    formState: { errors, isSubmitting: isLoading }
+    formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
   const createInvitationMutation = useMutation({
@@ -57,10 +57,11 @@ export default function CreateProjectInvitation(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateProjectInvitation}
+      isMutating={createInvitationMutation.isLoading || isSubmitting}
       closeLabel='cancle'
       submittingLabel='sending...'
       submitLabel='send'
-      {...{ isShowing, onClose, isLoading }}
+      {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-4'>

@@ -14,7 +14,7 @@ import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 import { SelectItem } from '~/shared/types'
 
 const DeleteProject = lazy(() => import('~/features/project/components/DeleteProject'))
@@ -25,7 +25,7 @@ export default function ProjectSetting() {
   const projectId = Number(useParams().projectId)
   const { isAuthenticated } = useContext(AppContext)
   const [selectedImage, setSelectedImage] = useState<File>()
-  const { isShowing: isShowingDeleteProject, toggle: toggleShowingDeleteProject } = useShowing()
+  const { isShowing: isShowingDeleteProject, toggle: toggleShowingDeleteProject } = useToggle()
 
   const queryClient = useQueryClient()
 

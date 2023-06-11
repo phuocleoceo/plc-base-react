@@ -1,2 +1,2 @@
 export { default as useQueryParams } from './useQueryParams'
-export { default as useShowing } from './useShowing'
+export { default as useToggle } from './useToggle'

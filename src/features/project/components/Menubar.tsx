@@ -8,7 +8,7 @@ import { Avatar, IconLink, SpinningCircle } from '~/common/components'
 import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useShowing } from '~/common/hooks'
+import { useToggle } from '~/common/hooks'
 
 export default function Menubar() {
   const projectId = Number(useParams().projectId)
@@ -16,7 +16,7 @@ export default function Menubar() {
   // host/project/:projectId/currentTab
   const currentTab = useLocation().pathname.split('/')[3]
 
-  const { isShowing, toggle } = useShowing(true)
+  const { isShowing, toggle } = useToggle(true)
 
   const { isAuthenticated } = useContext(AppContext)
 
