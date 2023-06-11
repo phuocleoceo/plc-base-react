@@ -4,7 +4,7 @@ import {
   GetUserAccountDetailResponse,
   UpdateUserAccountRequest,
   UpdateUserAccountResponse
-} from '~/features/admin/user/models'
+} from '~/features/admin/features/user/models'
 import { HttpHelper } from '~/shared/helpers'
 
 const userAccountApi = {
