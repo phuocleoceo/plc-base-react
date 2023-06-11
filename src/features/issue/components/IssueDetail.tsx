@@ -154,23 +154,38 @@ export default function IssueDetail(props: Props) {
 
           <div className='sm:flex md:gap-3'>
             <div className='w-full sm:pr-6'>
-              <div className='mt-3'>
-                <InputValidation
-                  placeholder='issue_title...'
-                  register={register('title', {
-                    required: {
-                      value: true,
-                      message: 'title_required'
-                    }
-                  })}
-                  error={errors.title as FieldError}
-                  defaultValue={issue?.title}
-                />
-              </div>
+              {isShowingUpdateIssue ? (
+                <>
+                  <div className='mt-3'>
+                    <InputValidation
+                      label='title'
+                      placeholder='issue_title...'
+                      register={register('title', {
+                        required: {
+                          value: true,
+                          message: 'title_required'
+                        }
+                      })}
+                      error={errors.title as FieldError}
+                      defaultValue={issue?.title}
+                    />
+                  </div>
 
-              <LabelWrapper label='description' margin='mt-3'>
-                <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
-              </LabelWrapper>
+                  <LabelWrapper label='description' margin='mt-3'>
+                    <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
+                  </LabelWrapper>
+                </>
+              ) : (
+                <>
+                  <div className='mb-4'>
+                    <div className='text-black'>{issue?.title}</div>
+                  </div>
+
+                  <div className='mb-4'>
+                    <div className='text-black'>{issue?.description}</div>
+                  </div>
+                </>
+              )}
 
               <hr className='border-t-[.5px] border-gray-300 mx-3 my-5' />
 
@@ -178,66 +193,131 @@ export default function IssueDetail(props: Props) {
             </div>
 
             <div className='mt-3 shrink-0 sm:w-[15rem]'>
-              <InputValidation
-                label='story_point'
-                placeholder='story_point...'
-                register={register('storyPoint', {
-                  required: {
-                    value: true,
-                    message: 'story_point_required'
-                  }
-                })}
-                type='number'
-                error={errors.storyPoint as FieldError}
-                defaultValue={issue?.storyPoint.toString()}
-              />
+              {isShowingUpdateIssue ? (
+                <>
+                  <InputValidation
+                    label='story_point'
+                    placeholder='story_point...'
+                    register={register('storyPoint', {
+                      required: {
+                        value: true,
+                        message: 'story_point_required'
+                      }
+                    })}
+                    type='number'
+                    error={errors.storyPoint as FieldError}
+                    defaultValue={issue?.storyPoint.toString()}
+                  />
 
-              <LabelWrapper label='reporter' margin='mt-5'>
-                <SelectBox
-                  control={control}
-                  controlField='reporterId'
-                  selectList={projectMembers}
-                  defaultValue={issue?.reporterId.toString()}
-                  className='w-full'
-                />
-              </LabelWrapper>
+                  <LabelWrapper label='reporter' margin='mt-5'>
+                    <SelectBox
+                      control={control}
+                      controlField='reporterId'
+                      selectList={projectMembers}
+                      defaultValue={issue?.reporterId.toString()}
+                      className='w-full'
+                    />
+                  </LabelWrapper>
 
-              <LabelWrapper label='assignee' margin='mt-5'>
-                <SelectBox
-                  control={control}
-                  controlField='assigneeId'
-                  selectList={[
-                    {
-                      label: 'unassigned',
-                      value: 'null',
-                      icon: 'https://i.stack.imgur.com/SE2cv.jpg'
-                    },
-                    ...projectMembers
-                  ]}
-                  defaultValue={issue?.assigneeId?.toString() || 'null'}
-                  className='w-full'
-                />
-              </LabelWrapper>
+                  <LabelWrapper label='assignee' margin='mt-5'>
+                    <SelectBox
+                      control={control}
+                      controlField='assigneeId'
+                      selectList={[
+                        {
+                          label: 'unassigned',
+                          value: 'null',
+                          icon: 'https://i.stack.imgur.com/SE2cv.jpg'
+                        },
+                        ...projectMembers
+                      ]}
+                      defaultValue={issue?.assigneeId?.toString() || 'null'}
+                      className='w-full'
+                    />
+                  </LabelWrapper>
 
-              <LabelWrapper label='type' margin='mt-5'>
-                <SelectBox
-                  control={control}
-                  controlField='type'
-                  selectList={IssueType}
-                  defaultValue={issue?.type}
-                  className='w-full'
-                />
-              </LabelWrapper>
+                  <LabelWrapper label='type' margin='mt-5'>
+                    <SelectBox
+                      control={control}
+                      controlField='type'
+                      selectList={IssueType}
+                      defaultValue={issue?.type}
+                      className='w-full'
+                    />
+                  </LabelWrapper>
 
-              <LabelWrapper label='priority' margin='mt-5'>
-                <SelectBox
-                  control={control}
-                  controlField='priority'
-                  selectList={IssuePriority}
-                  defaultValue={issue?.priority}
-                  className='w-full'
-                />
-              </LabelWrapper>
+                  <LabelWrapper label='priority' margin='mt-5'>
+                    <SelectBox
+                      control={control}
+                      controlField='priority'
+                      selectList={IssuePriority}
+                      defaultValue={issue?.priority}
+                      className='w-full'
+                    />
+                  </LabelWrapper>
+                </>
+              ) : (
+                <>
+                  <div className='mb-4'>
+                    <label htmlFor={issue?.storyPoint.toString()} className='text-sm tracking-wide text-gray-800'>
+                      story_point
+                    </label>
+                    <div className='text-black'>{issue?.storyPoint}</div>
+                  </div>
+
+                  <div className='mb-4'>
+                    <label htmlFor={issue?.reporterName} className='text-sm tracking-wide text-gray-800'>
+                      reporter
+                    </label>
+                    <Item
+                      size='w-4 h-4'
+                      variant='SQUARE'
+                      icon={issue?.reporterAvatar}
+                      text={issue?.reporterName ?? ''}
+                    />
+                  </div>
+
+                  <div className='mb-4'>
+                    <label htmlFor={issue?.assigneeName} className='text-sm tracking-wide text-gray-800'>
+                      assignee
+                    </label>
+                    {issue?.assigneeName ? (
+                      <Item size='w-4 h-4' variant='SQUARE' icon={issue?.assigneeAvatar} text={issue?.assigneeName} />
+                    ) : (
+                      <Item
+                        size='w-4 h-4'
+                        variant='SQUARE'
+                        icon='https://i.stack.imgur.com/SE2cv.jpg'
+                        text='unassigned'
+                      />
+                    )}
+                  </div>
+
+                  <div className='mb-4'>
+                    <label htmlFor={issue?.type} className='text-sm tracking-wide text-gray-800'>
+                      type
+                    </label>
+                    <Item
+                      size='w-4 h-4'
+                      variant='SQUARE'
+                      icon={IssueType.find((type) => type.value === issue?.type)?.icon}
+                      text={issue?.type ?? ''}
+                    />
+                  </div>
+
+                  <div className='mb-4'>
+                    <label htmlFor={issue?.priority} className='text-sm tracking-wide text-gray-800'>
+                      priority
+                    </label>
+                    <Item
+                      size='w-4 h-4'
+                      variant='SQUARE'
+                      icon={IssuePriority.find((priority) => priority.value === issue?.priority)?.icon}
+                      text={issue?.priority ?? ''}
+                    />
+                  </div>
+                </>
+              )}
 
               <hr className='border-t-[.5px] border-gray-400 my-5' />
 
