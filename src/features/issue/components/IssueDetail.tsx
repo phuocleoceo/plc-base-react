@@ -18,6 +18,8 @@ import IssueComment from './IssueComment'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
+const MAX_LENGHT_DESCRIPTION = 450
+
 interface Props {
   projectId: number
   issueId: number
@@ -45,6 +47,7 @@ export default function IssueDetail(props: Props) {
 
   const { isShowing: isShowingUpdateIssue, toggle: toggleUpdateIssue } = useToggle()
   const { isShowing: isShowingDeleteIssue, toggle: toggleDeleteIssue } = useToggle()
+  const { isShowing: isShowingFullDescription, toggle: toggleFullDescription } = useToggle()
 
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -178,18 +181,31 @@ export default function IssueDetail(props: Props) {
               ) : (
                 <>
                   <div className='mb-4'>
-                    <div className='text-black'>{issue?.title}</div>
+                    <div className='text-blac font-bold'>{issue?.title}</div>
                   </div>
 
                   <div className='mb-4'>
-                    <div className='text-black'>{issue?.description}</div>
+                    <span
+                      className='text-black'
+                      dangerouslySetInnerHTML={{
+                        __html: isShowingFullDescription
+                          ? (issue?.description as TrustedHTML)
+                          : (issue?.description.slice(0, MAX_LENGHT_DESCRIPTION) as TrustedHTML)
+                      }}
+                    ></span>
                   </div>
+
+                  {issue?.description && issue.description.length > MAX_LENGHT_DESCRIPTION && (
+                    <button className='text-blue-500 text-sm' onClick={toggleFullDescription}>
+                      {isShowingFullDescription ? 'click_to_show_less...' : 'click_to_show_more...'}
+                    </button>
+                  )}
                 </>
               )}
 
               <hr className='border-t-[.5px] border-gray-300 mx-3 my-5' />
 
-              <IssueComment {...{ issueId }} />
+              {!isShowingUpdateIssue && <IssueComment {...{ issueId }} />}
             </div>
 
             <div className='mt-3 shrink-0 sm:w-[15rem]'>
