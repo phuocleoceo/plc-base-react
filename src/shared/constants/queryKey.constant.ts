@@ -13,5 +13,6 @@ export const QueryKey = {
   IssueDetail: 'issue_detail',
   IssueComment: 'issue_comment',
   UserAccounts: 'user_accounts',
-  UserAccountDetail: 'user_account_detail'
+  UserAccountDetail: 'user_account_detail',
+  Roles: 'roles'
 } as const
