@@ -6,7 +6,7 @@ import { useContext } from 'react'
 
 import { UpdateUserAccountRequest } from '~/features/admin/features/user/models'
 import { RoleApi } from '~/features/admin/features/accessControl/apis'
-import { LabelWrapper, Modal, SelectBox } from '~/common/components'
+import { LabelWrapper, Modal, SelectBox, SwitchToggle } from '~/common/components'
 import { UserAccountApi } from '~/features/admin/features/user/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
@@ -30,7 +30,6 @@ export default function IssueDetail(props: Props) {
   const {
     control,
     setError,
-    register,
     handleSubmit,
     formState: { isSubmitting }
   } = useForm<FormData>()
@@ -43,14 +42,12 @@ export default function IssueDetail(props: Props) {
     const userData: UpdateUserAccountRequest = {
       ...form
     }
-    console.log(userData)
-    return
 
     updateUserMutation.mutate(userData, {
       onSuccess: () => {
         toast.success('update_user_success')
         queryClient.invalidateQueries([QueryKey.UserAccounts])
-        // queryClient.invalidateQueries([QueryKey.UserAccountDetail])
+        queryClient.invalidateQueries([QueryKey.UserAccountDetail])
         onClose()
       },
       onError: (error) => {
@@ -99,11 +96,11 @@ export default function IssueDetail(props: Props) {
         className='max-w-[30rem]'
       >
         <>
-          <div className='mb-3'>
+          <div className='mt-1 mb-6'>
             <span className='text-[20px] font-[600] text-c-text'>{`update_user ${user?.email}`}</span>
           </div>
 
-          <div className='flex flex-col gap-4'>
+          <div className='flex justify-around'>
             <LabelWrapper label='role' margin='mt-0'>
               <SelectBox
                 control={control}
@@ -112,6 +109,19 @@ export default function IssueDetail(props: Props) {
                 defaultValue={user?.roleId.toString()}
                 className='w-full'
               />
+            </LabelWrapper>
+
+            <LabelWrapper label='isActived' margin='mt-0'>
+              <SwitchToggle
+                control={control}
+                controlField='isActived'
+                defaultValue={user?.isActived}
+                className='mt-2'
+              />
+            </LabelWrapper>
+
+            <LabelWrapper label='isVerified' margin='mt-0'>
+              <SwitchToggle defaultValue={user?.isVerified} readonly={true} className='mt-2' />
             </LabelWrapper>
           </div>
         </>
