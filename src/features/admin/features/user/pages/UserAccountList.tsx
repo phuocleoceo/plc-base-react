@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
-import { GetUserAccountListParams } from '~/features/admin/user/models'
-import { UserAccountApi } from '~/features/admin/user/apis'
+import { GetUserAccountsParams } from '~/features/admin/features/user/models'
+import { UserAccountApi } from '~/features/admin/features/user/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
@@ -11,7 +11,7 @@ import { QueryKey } from '~/shared/constants'
 export default function UserAccountList() {
   const { isAuthenticated } = useContext(AppContext)
 
-  const [userAccountParams, setUserAccountParams] = useState<GetUserAccountListParams>({
+  const [userAccountParams, setUserAccountParams] = useState<GetUserAccountsParams>({
     pageNumber: 1,
     pageSize: 10,
     searchValue: ''
@@ -32,14 +32,16 @@ export default function UserAccountList() {
   }
 
   const { data: userData, isLoading: isLoadingUser } = useQuery({
-    queryKey: [QueryKey.Projects, userAccountParams],
+    queryKey: [QueryKey.UserAccounts, userAccountParams],
     queryFn: () => UserAccountApi.getUserAccountListProject(userAccountParams),
     keepPreviousData: true,
-    enabled: isAuthenticated
+    enabled: isAuthenticated,
+    staleTime: 2 * 60 * 1000
   })
 
   const users = userData?.data.data.records ?? []
   const userCount = userData?.data.data.totalRecords ?? 0
+  console.log(users)
 
   if (isLoadingUser)
     return (

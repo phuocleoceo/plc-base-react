@@ -1,6 +1,6 @@
 import {
-  GetUserAccountListParams,
-  GetUserAccountListResponse,
+  GetUserAccountsParams,
+  GetUserAccountsResponse,
   GetUserAccountDetailResponse,
   UpdateUserAccountRequest,
   UpdateUserAccountResponse
@@ -8,8 +8,8 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const userAccountApi = {
-  getUserAccountListProject(params: GetUserAccountListParams) {
-    return HttpHelper.get<GetUserAccountListResponse>('user', { params })
+  getUserAccountListProject(params: GetUserAccountsParams) {
+    return HttpHelper.get<GetUserAccountsResponse>('user', { params })
   },
   getUserAccountDetailProject(userId: number) {
     return HttpHelper.get<GetUserAccountDetailResponse>(`user/account/${userId}`)

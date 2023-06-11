@@ -1,28 +1,11 @@
 import { BaseResponse, PagedResponse, BaseParams } from '~/shared/types'
+import { UserAccount, UserAccountDetail } from './userAccountType'
 
-export type GetUserAccountListParams = BaseParams
+export type GetUserAccountsParams = BaseParams
 
-export type GetUserAccountListResponse = PagedResponse<{
-  id: number
-  userAccountId: number
-  email: string
-  displayName: string
-  phoneNumber: string
-  identityNumber: string
-  avatar: string
-  address: string
-  addressWard: string
-  addressDistrict: string
-  addressProvince: string
-}>
+export type GetUserAccountsResponse = PagedResponse<UserAccount>
 
-export type GetUserAccountDetailResponse = BaseResponse<{
-  email: string
-  isVerified: boolean
-  isActived: boolean
-  roleId: number
-  roleName: string
-}>
+export type GetUserAccountDetailResponse = BaseResponse<UserAccountDetail>
 
 export type UpdateUserAccountRequest = {
   roleId: number
