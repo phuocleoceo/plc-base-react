@@ -100,11 +100,11 @@ export default function ProjectInvitationRow(props: Props) {
           {!invitation.declinedAt && !invitation.acceptedAt && (
             <div className='flex'>
               <button title='accept_invitation' onClick={handleClickAcceptInvitation} className='btn-icon bg-c-1'>
-                <Icon width={22} icon='mdi:check-outline' className='text-green-500' />
+                <Icon width={22} icon='mdi:check-bold' className='text-green-500' />
               </button>
 
               <button title='decline_invitation' onClick={handleClickDeclineInvitation} className='btn-icon bg-c-1'>
-                <Icon width={22} icon='mdi:close-outline' className='text-red-500' />
+                <Icon width={22} icon='mdi:close-bold' className='text-red-500' />
               </button>
             </div>
           )}
@@ -123,6 +123,7 @@ export default function ProjectInvitationRow(props: Props) {
             submittingLabel='accepting_invitation...'
             submitLabel='accept_invitation'
             submitClassName='btn-alert'
+            className='max-w-[25rem]'
           />
         </Suspense>
       )}
@@ -139,6 +140,7 @@ export default function ProjectInvitationRow(props: Props) {
             submittingLabel='declining_invitation...'
             submitLabel='decline_invitation'
             submitClassName='btn-alert'
+            className='max-w-[25rem]'
           />
         </Suspense>
       )}

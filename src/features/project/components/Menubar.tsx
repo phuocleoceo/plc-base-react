@@ -80,7 +80,9 @@ export default function Menubar() {
                 isActive={currentTab === 'member' || currentTab === 'invitation'}
               />
             </div>
+
             <hr className='border-t-[.5px] border-gray-400' />
+
             <div className='mt-2'>
               <IconLink
                 to={`/project/${projectId}/setting`}

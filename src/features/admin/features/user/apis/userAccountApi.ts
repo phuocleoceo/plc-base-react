@@ -1,20 +1,20 @@
 import {
-  GetUserAccountListParams,
-  GetUserAccountListResponse,
+  GetUserAccountsParams,
+  GetUserAccountsResponse,
   GetUserAccountDetailResponse,
   UpdateUserAccountRequest,
   UpdateUserAccountResponse
-} from '~/features/admin/user/models'
+} from '~/features/admin/features/user/models'
 import { HttpHelper } from '~/shared/helpers'
 
 const userAccountApi = {
-  getUserAccountListProject(params: GetUserAccountListParams) {
-    return HttpHelper.get<GetUserAccountListResponse>('user', { params })
+  getUserAccounts(params: GetUserAccountsParams) {
+    return HttpHelper.get<GetUserAccountsResponse>('user', { params })
   },
-  getUserAccountDetailProject(userId: number) {
+  getUserAccountDetail(userId: number) {
     return HttpHelper.get<GetUserAccountDetailResponse>(`user/account/${userId}`)
   },
-  updateUserAccountProject(userId: number, body: UpdateUserAccountRequest) {
+  updateUserAccount(userId: number, body: UpdateUserAccountRequest) {
     return HttpHelper.put<UpdateUserAccountResponse>(`user/account/${userId}`, body)
   }
 }
