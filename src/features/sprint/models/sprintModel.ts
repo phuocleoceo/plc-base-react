@@ -1,5 +1,15 @@
 import { BaseResponse } from '~/shared/types'
 
+export type GetSprintResponse = BaseResponse<{
+  id: number
+  title: string
+  goal: string
+  fromDate: Date
+  toDate: Date
+  startedAt: Date
+  completedAt: Date
+}>
+
 export type CreateSprintRequest = {
   title: string
   goal: string

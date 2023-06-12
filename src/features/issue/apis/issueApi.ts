@@ -18,8 +18,9 @@ import { HttpHelper } from '~/shared/helpers'
 
 const issueApi = {
   // Board
-  getIssuesInBoard(projectId: number, params: GetIssuesInBoardParams) {
-    return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/issue`, { params })
+  getIssuesInBoard(projectId: number, sprintId: number | undefined, params: GetIssuesInBoardParams) {
+    if (!projectId || !sprintId) return
+    return HttpHelper.get<GetIssuesInBoardResponse>(`project/${projectId}/board/${sprintId}/issue`, { params })
   },
   updateIssuesInBoard(projectId: number, issueId: number, body: UpdateBoardIssueRequest) {
     return HttpHelper.put<UpdateBoardIssueResponse>(`project/${projectId}/board/issue/${issueId}`, body)

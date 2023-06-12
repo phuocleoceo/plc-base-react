@@ -14,5 +14,6 @@ export const QueryKey = {
   IssueComment: 'issue_comment',
   UserAccounts: 'user_accounts',
   UserAccountDetail: 'user_account_detail',
+  Sprint: 'sprint',
   Roles: 'roles'
 } as const

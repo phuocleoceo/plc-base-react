@@ -10,6 +10,7 @@ import { DragDropStatus } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { FilterBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
+import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
@@ -25,6 +26,17 @@ export default function ProjectBoard() {
   const { isShowing: isShowingCreateStatus, toggle: toggleCreateStatus } = useToggle()
 
   const queryClient = useQueryClient()
+
+  // Sprint
+  const { data: sprintData } = useQuery({
+    queryKey: [QueryKey.Sprint, projectId],
+    queryFn: () => SprintApi.getSprint(projectId),
+    enabled: isAuthenticated,
+    keepPreviousData: true,
+    staleTime: 1 * 60 * 1000
+  })
+
+  const sprint = sprintData?.data.data
 
   // ---------------------Project Status---------------------
   const { data: projectStatusData } = useQuery({
@@ -117,8 +129,8 @@ export default function ProjectBoard() {
   })
 
   const { data: issueData } = useQuery({
-    queryKey: [QueryKey.IssueInBoard, projectId, issueParams],
-    queryFn: () => IssueApi.getIssuesInBoard(projectId, issueParams),
+    queryKey: [QueryKey.IssueInBoard, projectId, sprint, issueParams],
+    queryFn: () => IssueApi.getIssuesInBoard(projectId, sprint?.id, issueParams),
     enabled: isAuthenticated,
     keepPreviousData: true,
     staleTime: 1 * 60 * 1000
