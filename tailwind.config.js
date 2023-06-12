@@ -14,7 +14,10 @@ export default {
         'c-3': 'var(--c-3)',
         'c-5': 'var(--c-5)',
         'c-6': 'var(--c-6)',
-        'c-7': 'var(--c-7)'
+        'c-7': 'var(--c-7)',
+        green: {
+          150: '#C6F6D5'
+        }
       },
       boxShadow: {
         issue: '0 1px 2px 0 #091e4240',
