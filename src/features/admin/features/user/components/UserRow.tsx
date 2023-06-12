@@ -32,7 +32,7 @@ export default function UserRow(props: Props) {
       >
         <div className='w-16 text-center'>{idx + 1}</div>
 
-        <div className='w-56'>{user.email}</div>
+        <div className='w-60'>{user.email}</div>
 
         <div className='w-56 flex'>
           <Avatar
@@ -48,7 +48,7 @@ export default function UserRow(props: Props) {
 
         <div className='w-32'>{user.identityNumber}</div>
 
-        <div className='flex-grow'>{getFullAddress()}</div>
+        <div className='w-56 flex-grow'>{getFullAddress()}</div>
       </div>
 
       {isShowingUpdateUser && (

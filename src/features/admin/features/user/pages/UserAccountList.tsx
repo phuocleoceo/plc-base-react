@@ -74,7 +74,7 @@ export default function UserAccountList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-16'></div>
-            <div className='w-56'>email</div>
+            <div className='w-60'>email</div>
             <div className='w-56'>name</div>
             <div className='w-32'>phoneNumber</div>
             <div className='w-32'>identityNumber</div>
