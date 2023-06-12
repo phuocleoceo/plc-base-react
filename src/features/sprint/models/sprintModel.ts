@@ -1,20 +1,13 @@
 import { BaseResponse } from '~/shared/types'
+import { Sprint } from './sprintType'
 
-export type GetSprintResponse = BaseResponse<{
-  id: number
-  title: string
-  goal: string
-  fromDate: Date
-  toDate: Date
-  startedAt: Date
-  completedAt: Date
-}>
+export type GetSprintResponse = BaseResponse<Sprint>
 
 export type CreateSprintRequest = {
   title: string
   goal: string
-  startTime: Date
-  endTime: Date
+  fromDate: Date
+  toDate: Date
 }
 
 export type CreateSprintResponse = BaseResponse<boolean>
@@ -22,8 +15,8 @@ export type CreateSprintResponse = BaseResponse<boolean>
 export type UpdateSprintRequest = {
   title: string
   goal: string
-  startTime: Date
-  endTime: Date
+  fromDate: Date
+  toDate: Date
 }
 
 export type UpdateSprintResponse = BaseResponse<boolean>
