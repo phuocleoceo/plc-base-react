@@ -116,7 +116,7 @@ export default function ProjectBacklog() {
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
         <div className='flex min-w-[43rem] justify-between mb-6'>
-          <span className='text-2xl font-semibold tracking-wide'>backlog</span>
+          <span className='text-xl font-semibold tracking-wide'>backlog</span>
           <button onClick={toggleCreateIssue} className='btn'>
             create_issue
           </button>

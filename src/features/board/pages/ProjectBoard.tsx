@@ -8,7 +8,7 @@ import { GetIssuesInBoardParams, UpdateBoardIssueRequest } from '~/features/issu
 import { UpdateProjectStatusRequest } from '~/features/projectStatus/models'
 import { DragDropStatus } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
-import { FilterBar } from '~/features/board/components'
+import { FilterBar, SprintBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
 import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
@@ -284,7 +284,8 @@ export default function ProjectBoard() {
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
-        <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
+        <SprintBar {...{ sprint }} />
+
         <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 
         {projectStatuses && (

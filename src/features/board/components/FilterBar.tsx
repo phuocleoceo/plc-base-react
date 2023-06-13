@@ -104,7 +104,7 @@ export default function FilterBar(props: Props) {
       )}
 
       {currentUser && (
-        <button className='btn-crystal shrink-0 bg-slate-100 ml-3' onClick={() => handleSelectMember(currentUser.id)}>
+        <button className='btn-gray shrink-0 bg-slate-100 ml-3' onClick={() => handleSelectMember(currentUser.id)}>
           only_my_issues
         </button>
       )}
@@ -112,7 +112,7 @@ export default function FilterBar(props: Props) {
       {(selectedMember || searchValue) && (
         <>
           <div className='pb-[2px] mx-3'>|</div>
-          <button className='btn-crystal shrink-0 bg-slate-100' onClick={handleClearFilter}>
+          <button className='btn-gray shrink-0 bg-slate-100' onClick={handleClearFilter}>
             clear_filter
           </button>
         </>

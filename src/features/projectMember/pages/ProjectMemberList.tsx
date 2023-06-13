@@ -60,7 +60,7 @@ export default function ProjectMemberList() {
 
   return (
     <>
-      <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5'>
+      <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5 mt-6'>
         <div className='flex min-w-[43rem] justify-between'>
           <h1 className='text-xl font-semibold tracking-wide'>project_members</h1>
           <button onClick={() => navigate(`/project/${projectId}/invitation`)} className='btn'>
