@@ -1,17 +1,17 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Tooltip } from 'react-tooltip'
-import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
+import { lazy, Suspense } from 'react'
 
-import { SprintApi } from '~/features/sprint/apis'
-import { CompleteSprintRequest, Sprint } from '~/features/sprint/models'
-import { TimeHelper } from '~/shared/helpers'
-import { QueryKey } from '~/shared/constants'
 import { IssueGroupedInBoard } from '~/features/issue/models'
+import { Sprint } from '~/features/sprint/models'
+import { TimeHelper } from '~/shared/helpers'
+import { useToggle } from '~/common/hooks'
+
+const CompleteSprint = lazy(() => import('~/features/sprint/components/CompleteSprint'))
 
 interface Props {
-  completedStatusId?: number
-  issues?: IssueGroupedInBoard[]
+  completedStatusId: number
+  issues: IssueGroupedInBoard[]
   projectId: number
   sprint?: Sprint
 }
@@ -19,40 +19,7 @@ interface Props {
 export default function SprintBar(props: Props) {
   const { completedStatusId, issues, projectId, sprint } = props
 
-  const completedIssues =
-    issues !== undefined
-      ? issues
-          .filter(({ projectStatusId }) => projectStatusId === completedStatusId)
-          .flatMap(({ issues }) => issues.map((issue) => issue.id))
-      : []
-
-  const unCompletedIssues =
-    issues !== undefined
-      ? issues
-          .filter(({ projectStatusId }) => projectStatusId !== completedStatusId)
-          .flatMap(({ issues }) => issues.map((issue) => issue.id))
-      : []
-
-  const queryClient = useQueryClient()
-
-  const completeSprintMutation = useMutation({
-    mutationFn: (body: CompleteSprintRequest) => SprintApi.completeSprint(projectId, sprint?.id ?? -1, body)
-  })
-
-  const handleCompleteSprint = async (moveType: string) => {
-    const completeSprintData: CompleteSprintRequest = {
-      moveType,
-      completedIssues,
-      unCompletedIssues
-    }
-
-    completeSprintMutation.mutate(completeSprintData, {
-      onSuccess: () => {
-        toast.success('completed_sprint')
-        queryClient.invalidateQueries([QueryKey.Sprint])
-      }
-    })
-  }
+  const { isShowing: isShowingCompleteSprint, toggle: toggleCompleteSprint } = useToggle()
 
   if (!sprint) return null
 
@@ -87,13 +54,25 @@ export default function SprintBar(props: Props) {
             render={({ content }) => <div dangerouslySetInnerHTML={{ __html: content as TrustedHTML }} />}
           />
 
-          <span className='text-sm mr-3'>{TimeHelper.howDayRemainFromNow(sprint.toDate)} days remaining</span>
+          {sprint.toDate && (
+            <span className='text-sm mr-3'>{TimeHelper.howDayRemainFromNow(sprint.toDate)} days remaining</span>
+          )}
 
-          <button onClick={() => handleCompleteSprint('backlog')} className='btn-gray'>
+          <button onClick={toggleCompleteSprint} className='btn-gray'>
             complete_sprint
           </button>
         </div>
       </div>
+
+      {isShowingCompleteSprint && (
+        <Suspense>
+          <CompleteSprint
+            {...{ projectId, sprint, completedStatusId, issues }}
+            isShowing={isShowingCompleteSprint}
+            onClose={toggleCompleteSprint}
+          />
+        </Suspense>
+      )}
     </>
   )
 }
