@@ -281,10 +281,14 @@ export default function ProjectBoard() {
     }
   }
 
+  const completedStatusId = projectStatuses?.reduce((arr, curr) => {
+    return curr.index > arr.index ? curr : arr
+  }).id
+
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
-        <SprintBar {...{ projectId, sprint }} />
+        <SprintBar {...{ completedStatusId, issues, projectId, sprint }} />
 
         <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 

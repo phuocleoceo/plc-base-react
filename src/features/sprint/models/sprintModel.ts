@@ -25,4 +25,10 @@ export type DeleteSprintResponse = BaseResponse<boolean>
 
 export type StartSprintResponse = BaseResponse<boolean>
 
+export type CompleteSprintRequest = {
+  completedIssues: Array<number>
+  unCompletedIssues: Array<number>
+  moveType: string
+}
+
 export type CompleteSprintResponse = BaseResponse<boolean>

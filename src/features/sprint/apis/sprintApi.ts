@@ -6,6 +6,7 @@ import {
   UpdateSprintResponse,
   DeleteSprintResponse,
   StartSprintResponse,
+  CompleteSprintRequest,
   CompleteSprintResponse
 } from '~/features/sprint/models'
 import { HttpHelper } from '~/shared/helpers'
@@ -26,8 +27,8 @@ const sprintApi = {
   startSprint(projectId: number, sprintId: number) {
     return HttpHelper.put<StartSprintResponse>(`project/${projectId}/sprint/${sprintId}/start`)
   },
-  completeSprint(projectId: number, sprintId: number) {
-    return HttpHelper.put<CompleteSprintResponse>(`project/${projectId}/sprint/${sprintId}/complete`)
+  completeSprint(projectId: number, sprintId: number, body: CompleteSprintRequest) {
+    return HttpHelper.put<CompleteSprintResponse>(`project/${projectId}/sprint/${sprintId}/complete`, body)
   }
 }
 
