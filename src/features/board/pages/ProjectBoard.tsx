@@ -284,7 +284,7 @@ export default function ProjectBoard() {
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
-        <SprintBar {...{ sprint }} />
+        <SprintBar {...{ projectId, sprint }} />
 
         <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 

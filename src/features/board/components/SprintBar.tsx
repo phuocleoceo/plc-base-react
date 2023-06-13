@@ -1,15 +1,35 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Tooltip } from 'react-tooltip'
+import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
+import { SprintApi } from '~/features/sprint/apis'
 import { Sprint } from '~/features/sprint/models'
 import { TimeHelper } from '~/shared/helpers'
+import { QueryKey } from '~/shared/constants'
 
 interface Props {
+  projectId: number
   sprint?: Sprint
 }
 
 export default function SprintBar(props: Props) {
-  const { sprint } = props
+  const { projectId, sprint } = props
+
+  const queryClient = useQueryClient()
+
+  const completeSprintMutation = useMutation({
+    mutationFn: () => SprintApi.completeSprint(projectId, sprint?.id ?? -1)
+  })
+
+  const handleCompleteSprint = async () => {
+    completeSprintMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('completed_sprint')
+        queryClient.invalidateQueries([QueryKey.Sprint])
+      }
+    })
+  }
 
   if (!sprint) return null
 
@@ -28,20 +48,19 @@ export default function SprintBar(props: Props) {
           data-tooltip-id='sprint_time'
           data-tooltip-offset={10}
           data-tooltip-place='bottom'
+          data-tooltip-content={`<div className='text-sm'>
+                                  from_date:
+                                  <br />
+                                  ${TimeHelper.format(sprint.fromDate, 'DD/MMM/YY hh:mm A')}
+                                  <br />
+                                  to_date:
+                                  <br />
+                                  ${TimeHelper.format(sprint.toDate, 'DD/MMM/YY hh:mm A')}
+                                </div>`}
         />
         <Tooltip
           id='sprint_time'
-          render={() => (
-            <div className='text-sm'>
-              from_date:
-              <br />
-              {TimeHelper.format(sprint.fromDate, 'DD/MMM/YY hh:mm A')}
-              <br />
-              to_date:
-              <br />
-              {TimeHelper.format(sprint.toDate, 'DD/MMM/YY hh:mm A')}
-            </div>
-          )}
+          render={({ content }) => <div dangerouslySetInnerHTML={{ __html: content as TrustedHTML }} />}
         />
 
         <span className='text-sm mr-3'>{TimeHelper.howDayRemainFromNow(sprint.toDate)} days remaining</span>
