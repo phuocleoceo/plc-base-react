@@ -16,13 +16,18 @@ import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
+import SprintIMG from '~/assets/img/sprint.png'
+
 const CreateProjectStatus = lazy(() => import('~/features/projectStatus/components/CreateProjectStatus'))
+const CreateSprint = lazy(() => import('~/features/sprint/components/CreateSprint'))
 
 export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
   const [isDragDisabled, setIsDragDisabled] = useState(false)
+
+  const { isShowing: isShowingCreateSprint, toggle: toggleCreateSprint } = useToggle()
   const { isShowing: isShowingCreateStatus, toggle: toggleCreateStatus } = useToggle()
 
   const queryClient = useQueryClient()
@@ -285,6 +290,27 @@ export default function ProjectBoard() {
     return curr.index > arr.index ? curr : arr
   }).id
 
+  if (!sprint)
+    return (
+      <>
+        <div className='mt-6 flex items-center justify-center w-screen'>
+          <div className='p-4'>
+            <img className='text-center' width='50%' height='auto' src={SprintIMG} alt='sprint' />
+            <h1 className='text-center text-xl'>there_are_no_available_sprints</h1>
+            <button onClick={toggleCreateSprint} className='btn-gray'>
+              create_sprint
+            </button>
+          </div>
+        </div>
+
+        {isShowingCreateSprint && (
+          <Suspense>
+            <CreateSprint {...{ projectId }} isShowing={isShowingCreateSprint} onClose={toggleCreateSprint} />
+          </Suspense>
+        )}
+      </>
+    )
+
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
@@ -328,9 +354,10 @@ export default function ProjectBoard() {
           </div>
         )}
       </div>
+
       {isShowingCreateStatus && (
         <Suspense>
-          <CreateProjectStatus projectId={projectId} isShowing={isShowingCreateStatus} onClose={toggleCreateStatus} />
+          <CreateProjectStatus {...{ projectId }} isShowing={isShowingCreateStatus} onClose={toggleCreateStatus} />
         </Suspense>
       )}
     </>

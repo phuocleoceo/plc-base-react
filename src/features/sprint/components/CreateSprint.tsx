@@ -3,7 +3,7 @@ import { FieldError, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
-import { InputValidation, Modal } from '~/common/components'
+import { DateTimePicker, InputValidation, LabelWrapper, Modal } from '~/common/components'
 import { CreateSprintRequest } from '~/features/sprint/models'
 import { ValidationHelper } from '~/shared/helpers'
 import { SprintApi } from '~/features/sprint/apis'
@@ -96,6 +96,14 @@ export default function CreateSprint(props: Props) {
             })}
             error={errors.goal as FieldError}
           />
+
+          <LabelWrapper label='from_date' margin='mt-0'>
+            <DateTimePicker control={control} controlField='fromDate' className='w-full' />
+          </LabelWrapper>
+
+          <LabelWrapper label='to_date' margin='mt-0'>
+            <DateTimePicker control={control} controlField='toDate' className='w-full' />
+          </LabelWrapper>
         </div>
       </>
     </Modal>
