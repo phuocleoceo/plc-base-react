@@ -19,7 +19,7 @@ export default function DropDownMenu(props: Props) {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isShowing) {
         toggle()
       }
     }
@@ -28,7 +28,12 @@ export default function DropDownMenu(props: Props) {
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [toggle])
+  }, [toggle, isShowing])
+
+  const handleClickOption = (onClick?: () => void) => {
+    if (onClick) onClick()
+    toggle()
+  }
 
   return (
     <div className='relative inline-block' ref={dropdownRef}>
@@ -44,8 +49,8 @@ export default function DropDownMenu(props: Props) {
               options.map((option, idx) => (
                 <li key={idx}>
                   <div
-                    onClick={option.onClick}
-                    onKeyDown={option.onClick}
+                    onClick={() => handleClickOption(option.onClick)}
+                    onKeyDown={() => handleClickOption(option.onClick)}
                     role='button'
                     tabIndex={0}
                     className='block px-4 py-2 hover:bg-gray-200'

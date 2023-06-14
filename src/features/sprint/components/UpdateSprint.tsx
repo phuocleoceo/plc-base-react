@@ -5,7 +5,7 @@ import { AxiosError } from 'axios'
 
 import { DateTimePicker, InputValidation, LabelWrapper, Modal } from '~/common/components'
 import { UpdateSprintRequest, Sprint } from '~/features/sprint/models'
-import { ValidationHelper } from '~/shared/helpers'
+import { TimeHelper, ValidationHelper } from '~/shared/helpers'
 import { SprintApi } from '~/features/sprint/apis'
 import { QueryKey } from '~/shared/constants'
 
@@ -104,13 +104,18 @@ export default function UpdateSprint(props: Props) {
             <DateTimePicker
               control={control}
               controlField='fromDate'
-              defaultValue={sprint.fromDate}
+              defaultValue={TimeHelper.toLocal(sprint.fromDate)}
               className='w-full'
             />
           </LabelWrapper>
 
           <LabelWrapper label='to_date' margin='mt-0'>
-            <DateTimePicker control={control} controlField='toDate' defaultValue={sprint.toDate} className='w-full' />
+            <DateTimePicker
+              control={control}
+              controlField='toDate'
+              defaultValue={TimeHelper.toLocal(sprint.toDate)}
+              className='w-full'
+            />
           </LabelWrapper>
         </div>
       </>

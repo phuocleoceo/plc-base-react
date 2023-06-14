@@ -1,6 +1,6 @@
+import { Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useState } from 'react'
-import { Controller } from 'react-hook-form'
 
 interface Props {
   control?: any
@@ -13,7 +13,7 @@ interface Props {
 export default function DateTimePicker(props: Props) {
   const { control, controlField, defaultValue, readonly, className } = props
 
-  const [startDate, setStartDate] = useState<Date | null>(defaultValue ? new Date(defaultValue) : null)
+  const [startDate, setStartDate] = useState<Date | null>(defaultValue ?? null)
 
   if (!control || !controlField) return null
 
@@ -21,7 +21,7 @@ export default function DateTimePicker(props: Props) {
     <Controller
       name={controlField}
       control={control}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue?.toISOString()}
       render={({ field: { onChange } }) => (
         <DatePicker
           showIcon={false}
