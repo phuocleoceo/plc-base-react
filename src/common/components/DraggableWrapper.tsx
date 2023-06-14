@@ -1,14 +1,14 @@
 import { Draggable } from '@hello-pangea/dnd'
 
 interface Props {
+  index: number
   children: React.ReactNode
   className?: string
   draggableId: string
-  index: number
   isDragDisabled: boolean
 }
 
-const DraggableWrapper = (props: Props) => {
+export default function DraggableWrapper(props: Props) {
   const { index, draggableId, isDragDisabled, className, children } = props
   return (
     <Draggable {...{ index, draggableId, isDragDisabled }}>
@@ -20,5 +20,3 @@ const DraggableWrapper = (props: Props) => {
     </Draggable>
   )
 }
-
-export default DraggableWrapper

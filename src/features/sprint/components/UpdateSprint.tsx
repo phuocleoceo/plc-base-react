@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { UpdateSprintRequest, Sprint } from '~/features/sprint/models'
-import { InputValidation, Modal } from '~/common/components'
+import { DatePicker, InputValidation, LabelWrapper, Modal } from '~/common/components'
 import { ValidationHelper } from '~/shared/helpers'
 import { SprintApi } from '~/features/sprint/apis'
 import { QueryKey } from '~/shared/constants'
@@ -101,6 +101,14 @@ export default function UpdateSprint(props: Props) {
             error={errors.goal as FieldError}
             defaultValue={sprint.goal}
           />
+
+          <LabelWrapper label='from_date' margin='mt-0'>
+            <DatePicker control={control} controlField='fromDate' defaultValue={'null'} className='w-full' />
+          </LabelWrapper>
+
+          <LabelWrapper label='to_date' margin='mt-0'>
+            <DatePicker control={control} controlField='toDate' defaultValue={'null'} className='w-full' />
+          </LabelWrapper>
         </div>
       </>
     </Modal>
