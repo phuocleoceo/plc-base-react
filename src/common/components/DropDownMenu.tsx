@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Icon } from '@iconify/react'
 
 import { useToggle } from '~/common/hooks'
@@ -14,8 +15,23 @@ export default function DropDownMenu(props: Props) {
 
   const { isShowing, toggle } = useToggle()
 
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        toggle()
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [toggle])
+
   return (
-    <div className='relative inline-block'>
+    <div className='relative inline-block' ref={dropdownRef}>
       <button className='btn-gray rounded-md px-2 py-1' onClick={toggle}>
         <Icon width={17} icon='bi:three-dots' className='text-black inline-block cursor-pointer' />
       </button>

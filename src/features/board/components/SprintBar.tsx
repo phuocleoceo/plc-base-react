@@ -54,6 +54,7 @@ export default function SprintBar(props: Props) {
           />
           <Tooltip
             id='sprint_time'
+            className='z-50'
             render={({ content }) => <div dangerouslySetInnerHTML={{ __html: content as TrustedHTML }} />}
           />
 

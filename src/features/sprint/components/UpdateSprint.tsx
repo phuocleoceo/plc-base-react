@@ -3,8 +3,8 @@ import { FieldError, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
+import { DateTimePicker, InputValidation, LabelWrapper, Modal } from '~/common/components'
 import { UpdateSprintRequest, Sprint } from '~/features/sprint/models'
-import { DatePicker, InputValidation, LabelWrapper, Modal } from '~/common/components'
 import { ValidationHelper } from '~/shared/helpers'
 import { SprintApi } from '~/features/sprint/apis'
 import { QueryKey } from '~/shared/constants'
@@ -40,8 +40,6 @@ export default function UpdateSprint(props: Props) {
     const sprintData: UpdateSprintRequest = {
       ...form
     }
-    console.log(sprintData)
-    return
 
     updateSprintMutation.mutate(sprintData, {
       onSuccess: () => {
@@ -103,11 +101,16 @@ export default function UpdateSprint(props: Props) {
           />
 
           <LabelWrapper label='from_date' margin='mt-0'>
-            <DatePicker control={control} controlField='fromDate' defaultValue={'null'} className='w-full' />
+            <DateTimePicker
+              control={control}
+              controlField='fromDate'
+              defaultValue={sprint.fromDate}
+              className='w-full'
+            />
           </LabelWrapper>
 
           <LabelWrapper label='to_date' margin='mt-0'>
-            <DatePicker control={control} controlField='toDate' defaultValue={'null'} className='w-full' />
+            <DateTimePicker control={control} controlField='toDate' defaultValue={sprint.toDate} className='w-full' />
           </LabelWrapper>
         </div>
       </>
