@@ -35,12 +35,12 @@ export default function CreateSprint(props: Props) {
     mutationFn: (body: CreateSprintRequest) => SprintApi.createSprint(projectId, body)
   })
 
-  const handleCreateIssue = handleSubmit((form: FormData) => {
-    const issueData: CreateSprintRequest = {
+  const handleCreateSprint = handleSubmit((form: FormData) => {
+    const sprintData: CreateSprintRequest = {
       ...form
     }
 
-    createSprintMutation.mutate(issueData, {
+    createSprintMutation.mutate(sprintData, {
       onSuccess: () => {
         toast.success('create_sprint_success')
         queryClient.invalidateQueries([QueryKey.Sprint])
@@ -58,7 +58,7 @@ export default function CreateSprint(props: Props) {
 
   return (
     <Modal
-      onSubmit={handleCreateIssue}
+      onSubmit={handleCreateSprint}
       isMutating={createSprintMutation.isLoading || isSubmitting}
       closeLabel='cancle'
       submittingLabel='creating_sprint...'

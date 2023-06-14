@@ -3,11 +3,13 @@ import { Icon } from '@iconify/react'
 import { lazy, Suspense } from 'react'
 
 import { IssueGroupedInBoard } from '~/features/issue/models'
+import { DropDownMenu } from '~/common/components'
 import { Sprint } from '~/features/sprint/models'
 import { TimeHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
 
 const CompleteSprint = lazy(() => import('~/features/sprint/components/CompleteSprint'))
+const UpdateSprint = lazy(() => import('~/features/sprint/components/UpdateSprint'))
 
 interface Props {
   completedStatusId: number
@@ -19,6 +21,7 @@ interface Props {
 export default function SprintBar(props: Props) {
   const { completedStatusId, issues, projectId, sprint } = props
 
+  const { isShowing: isShowingUpdateSprint, toggle: toggleUpdateSprint } = useToggle()
   const { isShowing: isShowingCompleteSprint, toggle: toggleCompleteSprint } = useToggle()
 
   if (!sprint) return null
@@ -58,9 +61,18 @@ export default function SprintBar(props: Props) {
             <span className='text-sm mr-3'>{TimeHelper.howDayRemainFromNow(sprint.toDate)} days remaining</span>
           )}
 
-          <button onClick={toggleCompleteSprint} className='btn-gray'>
+          <button onClick={toggleCompleteSprint} className='btn-gray mr-2'>
             complete_sprint
           </button>
+
+          <DropDownMenu
+            options={[
+              {
+                label: 'edit_sprint',
+                onClick: toggleUpdateSprint
+              }
+            ]}
+          />
         </div>
       </div>
 
@@ -71,6 +83,12 @@ export default function SprintBar(props: Props) {
             isShowing={isShowingCompleteSprint}
             onClose={toggleCompleteSprint}
           />
+        </Suspense>
+      )}
+
+      {isShowingUpdateSprint && (
+        <Suspense>
+          <UpdateSprint {...{ projectId, sprint }} isShowing={isShowingUpdateSprint} onClose={toggleUpdateSprint} />
         </Suspense>
       )}
     </>

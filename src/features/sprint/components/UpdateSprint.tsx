@@ -36,12 +36,14 @@ export default function UpdateSprint(props: Props) {
     mutationFn: (body: UpdateSprintRequest) => SprintApi.updateSprint(projectId, sprint.id, body)
   })
 
-  const handleCreateIssue = handleSubmit((form: FormData) => {
-    const issueData: UpdateSprintRequest = {
+  const handleUpdateSprint = handleSubmit((form: FormData) => {
+    const sprintData: UpdateSprintRequest = {
       ...form
     }
+    console.log(sprintData)
+    return
 
-    updateSprintMutation.mutate(issueData, {
+    updateSprintMutation.mutate(sprintData, {
       onSuccess: () => {
         toast.success('update_sprint_success')
         queryClient.invalidateQueries([QueryKey.Sprint])
@@ -59,16 +61,16 @@ export default function UpdateSprint(props: Props) {
 
   return (
     <Modal
-      onSubmit={handleCreateIssue}
+      onSubmit={handleUpdateSprint}
       isMutating={updateSprintMutation.isLoading || isSubmitting}
       closeLabel='cancle'
-      submittingLabel='creating_sprint...'
-      submitLabel='create_sprint'
+      submittingLabel='updating_sprint...'
+      submitLabel='update_sprint'
       {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-3'>
-          <span className='text-[22px] font-[600] text-c-text'>create_sprint</span>
+          <span className='text-[22px] font-[600] text-c-text'>update_sprint</span>
         </div>
 
         <div className='flex flex-col gap-4'>

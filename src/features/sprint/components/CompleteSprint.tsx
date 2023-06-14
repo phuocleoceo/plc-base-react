@@ -74,8 +74,12 @@ export default function CompleteSprint(props: Props) {
     >
       <>
         <div className='text-xl font-normal'>complete_sprint: {sprint.title}</div>
-        <div className='mt-3 text-sm'>{completedIssues.length} issues_were_done </div>
-        <div className='text-sm'>{unCompletedIssues.length} issues_were_incomplete</div>
+        <div className='mt-3 text-sm'>
+          <span className='font-bold'>{completedIssues.length}</span> issues_were_done{' '}
+        </div>
+        <div className='text-sm'>
+          <span className='font-bold'>{unCompletedIssues.length}</span> issues_were_incomplete
+        </div>
         <div className='mt-3 text-sm'>select_where_all_the_incomplete_issues_should_be_moved:</div>
 
         <LabelWrapper label='move_to' margin='mt-3'>
