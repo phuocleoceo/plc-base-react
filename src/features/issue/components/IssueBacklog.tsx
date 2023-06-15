@@ -20,6 +20,10 @@ export default function IssueBacklog(props: Props) {
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
 
+  // const handleSelectIssue = (issueId: number) => {
+  //   console.log(issueId)
+  // }
+
   return (
     <>
       <DraggableWrapper
@@ -29,10 +33,25 @@ export default function IssueBacklog(props: Props) {
         draggableId={`issue-${issue.id}`}
         isDragDisabled={isDragDisabled}
       >
-        <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
+        <div
+          onClick={
+            isShowCheckbox
+              ? () => {
+                  return
+                }
+              : toggleIssueDetail
+          }
+          onKeyDown={toggleIssueDetail}
+          tabIndex={issue.id}
+          role='button'
+        >
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
-              {isShowCheckbox && <CheckBoxButton />}
+              {isShowCheckbox && (
+                <span className='ml-2'>
+                  <CheckBoxButton />
+                </span>
+              )}
               <img
                 className='h-[18px] w-[18px] ml-2'
                 src={IssueHelper.getIssueType(issue.type)?.icon}

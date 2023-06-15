@@ -9,7 +9,7 @@ export default function CheckBoxButton() {
   }
 
   return (
-    <label className='flex items-center space-x-2'>
+    <label className='flex items-center'>
       <input
         type='checkbox'
         className='form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'

@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { GetIssuesInBacklogParams, UpdateBacklogIssueRequest } from '~/features/issue/models'
+import { GetIssuesInBacklogParams, MoveIssueToSprintRequest, UpdateBacklogIssueRequest } from '~/features/issue/models'
 import { IssueBacklog } from '~/features/issue/components'
 import { FilterBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
@@ -13,15 +13,18 @@ import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
 const CreateIssue = lazy(() => import('~/features/issue/components/CreateIssue'))
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
-  const { isShowing: isShowingMoveIssue, toggle: toggleMoveIssue } = useToggle()
+  const { isShowing: isShowingMoveIssueModal, toggle: toggleMoveIssueModal } = useToggle()
+  const { isShowing: isShowingMoveIssueSelect, toggle: toggleMoveIssueSelect } = useToggle()
   const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useToggle()
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
+  const [selectedIssues, setSelectedIssues] = useState<Array<number>>([])
 
   const queryClient = useQueryClient()
 
@@ -113,21 +116,45 @@ export default function ProjectBacklog() {
     )
   }
 
+  const moveIssueToSprintMutation = useMutation({
+    mutationFn: (body: MoveIssueToSprintRequest) => IssueApi.moveIssueToSprint(projectId, body)
+  })
+
+  const handleMoveIssueToSprint = async () => {
+    const issues: MoveIssueToSprintRequest = {
+      issues: [...selectedIssues]
+    }
+    console.log(issues)
+    toggleMoveIssueModal()
+    toggleMoveIssueSelect()
+    return
+
+    moveIssueToSprintMutation.mutate(issues, {
+      onSuccess: () => {
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        toggleMoveIssueModal()
+        toggleMoveIssueSelect()
+      }
+    })
+  }
+
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
         <div className='flex min-w-[43rem] justify-between mb-6'>
           <span className='text-xl font-semibold tracking-wide'>backlog</span>
           <div>
-            {isShowingMoveIssue ? (
+            {isShowingMoveIssueSelect ? (
               <>
-                <button onClick={toggleMoveIssue} className='btn-gray mr-3'>
+                <button onClick={toggleMoveIssueSelect} className='btn-gray mr-3'>
                   cancle
                 </button>
-                <button className='btn mr-3'>move</button>
+                <button onClick={toggleMoveIssueModal} className='btn mr-3'>
+                  move
+                </button>
               </>
             ) : (
-              <button onClick={toggleMoveIssue} className='btn-gray mr-3'>
+              <button onClick={toggleMoveIssueSelect} className='btn-gray mr-3'>
                 move_to_sprint
               </button>
             )}
@@ -151,7 +178,7 @@ export default function ProjectBacklog() {
                 {issuesBacklog.map((issue, idx) => (
                   <IssueBacklog
                     key={issue.id}
-                    isShowCheckbox={isShowingMoveIssue}
+                    isShowCheckbox={isShowingMoveIssueSelect}
                     {...{ idx, issue, projectId, isDragDisabled }}
                   />
                 ))}
@@ -164,6 +191,22 @@ export default function ProjectBacklog() {
       {isShowingCreateIssue && (
         <Suspense>
           <CreateIssue projectId={projectId} isShowing={isShowingCreateIssue} onClose={toggleCreateIssue} />
+        </Suspense>
+      )}
+
+      {isShowingMoveIssueModal && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingMoveIssueModal}
+            onClose={toggleMoveIssueModal}
+            onSubmit={handleMoveIssueToSprint}
+            isMutating={moveIssueToSprintMutation.isLoading}
+            confirmMessage='submit_move_issue_to_sprint'
+            closeLabel='cancle'
+            submittingLabel='moving...'
+            submitLabel='move'
+            className='max-w-[20rem]'
+          />
         </Suspense>
       )}
     </>
