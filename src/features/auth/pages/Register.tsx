@@ -38,7 +38,7 @@ export default function Register() {
       ...form,
       avatar: 'https://i.stack.imgur.com/SE2cv.jpg',
       addressWardId: 6351,
-      roleId: 1
+      roleId: 2
     }
 
     registerMutation.mutate(registerData, {

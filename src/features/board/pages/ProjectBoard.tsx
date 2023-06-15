@@ -9,6 +9,7 @@ import { UpdateProjectStatusRequest } from '~/features/projectStatus/models'
 import { DragDropStatus } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { FilterBar, SprintBar } from '~/features/board/components'
+import { BoardContext } from '~/features/board/contexts'
 import { DroppableWrapper } from '~/common/components'
 import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
@@ -25,6 +26,8 @@ export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
+  // const {} = useContext(BoardContext)
+
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 
   const { isShowing: isShowingCreateSprint, toggle: toggleCreateSprint } = useToggle()
