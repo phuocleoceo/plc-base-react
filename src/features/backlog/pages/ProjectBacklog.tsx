@@ -2,6 +2,7 @@ import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dn
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { GetIssuesInBacklogParams, MoveIssueToSprintRequest, UpdateBacklogIssueRequest } from '~/features/issue/models'
 import { IssueBacklog } from '~/features/issue/components'
@@ -121,17 +122,21 @@ export default function ProjectBacklog() {
   })
 
   const handleMoveIssueToSprint = async () => {
+    if (selectedIssues.length == 0) {
+      toast.warn('select_issue_to_move')
+      toggleMoveIssueModal()
+      return
+    }
+
     const issues: MoveIssueToSprintRequest = {
       issues: [...selectedIssues]
     }
-    console.log(issues)
-    toggleMoveIssueModal()
-    toggleMoveIssueSelect()
-    return
 
     moveIssueToSprintMutation.mutate(issues, {
       onSuccess: () => {
+        toast.success('move_issue_to_sprint_success')
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        setSelectedIssues([])
         toggleMoveIssueModal()
         toggleMoveIssueSelect()
       }
@@ -179,7 +184,7 @@ export default function ProjectBacklog() {
                   <IssueBacklog
                     key={issue.id}
                     isShowCheckbox={isShowingMoveIssueSelect}
-                    {...{ idx, issue, projectId, isDragDisabled }}
+                    {...{ idx, issue, projectId, isDragDisabled, selectedIssues, setSelectedIssues }}
                   />
                 ))}
               </DroppableWrapper>

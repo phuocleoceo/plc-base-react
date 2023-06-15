@@ -1,11 +1,18 @@
 import { useState } from 'react'
 
-export default function CheckBoxButton() {
+interface Props {
+  onChange: (isChecked: boolean) => void
+}
+
+export default function CheckBoxButton(props: Props) {
+  const { onChange } = props
+
   const [isChecked, setIsChecked] = useState(false)
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation()
     setIsChecked(!isChecked)
+    onChange(!isChecked)
   }
 
   return (

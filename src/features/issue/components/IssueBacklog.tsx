@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Dispatch, lazy, SetStateAction, Suspense } from 'react'
 
 import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
 import { IssueInBacklog } from '~/features/issue/models'
@@ -13,16 +13,19 @@ type Props = {
   issue: IssueInBacklog
   isDragDisabled: boolean
   isShowCheckbox?: boolean
+  selectedIssues: Array<number>
+  setSelectedIssues: Dispatch<SetStateAction<Array<number>>>
 }
 
 export default function IssueBacklog(props: Props) {
-  const { idx, projectId, issue, isDragDisabled, isShowCheckbox } = props
+  const { idx, projectId, issue, isDragDisabled, isShowCheckbox, selectedIssues, setSelectedIssues } = props
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
 
-  // const handleSelectIssue = (issueId: number) => {
-  //   console.log(issueId)
-  // }
+  const handleSelectBoxChange = (isChecked: boolean) => {
+    if (isChecked) setSelectedIssues([...selectedIssues, issue.id])
+    else setSelectedIssues(selectedIssues.filter((id) => id !== issue.id))
+  }
 
   return (
     <>
@@ -49,7 +52,7 @@ export default function IssueBacklog(props: Props) {
             <div className='flex items-center gap-3'>
               {isShowCheckbox && (
                 <span className='ml-2'>
-                  <CheckBoxButton />
+                  <CheckBoxButton onChange={handleSelectBoxChange} />
                 </span>
               )}
               <img
