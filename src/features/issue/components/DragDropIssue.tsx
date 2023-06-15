@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useContext } from 'react'
 
-import { Avatar, DraggableWrapper } from '~/common/components'
+import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
+import { BoardContext } from '~/features/board/contexts'
 import { IssueInBoard } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
@@ -17,7 +18,14 @@ type Props = {
 export default function DragDropIssue(props: Props) {
   const { idx, projectId, isDragDisabled, issue } = props
 
+  const { isShowingMoveIssueSelect, selectedIssues, setSelectedIssues } = useContext(BoardContext)
+
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
+
+  const handleSelectBoxChange = (isChecked: boolean) => {
+    if (isChecked) setSelectedIssues([...selectedIssues, issue.id])
+    else setSelectedIssues(selectedIssues.filter((id) => id !== issue.id))
+  }
 
   return (
     <>
@@ -27,8 +35,26 @@ export default function DragDropIssue(props: Props) {
         draggableId={`issue-${issue.id}`}
         isDragDisabled={isDragDisabled}
       >
-        <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
-          <span className=''>{issue.title}</span>
+        <div
+          onClick={
+            isShowingMoveIssueSelect
+              ? () => {
+                  return
+                }
+              : toggleIssueDetail
+          }
+          onKeyDown={toggleIssueDetail}
+          tabIndex={issue.id}
+          role='button'
+        >
+          <span className='flex items-center'>
+            {isShowingMoveIssueSelect && (
+              <span className='ml-2 mr-2'>
+                <CheckBoxButton onChange={handleSelectBoxChange} />
+              </span>
+            )}
+            <span>{issue.title}</span>
+          </span>
 
           <div className='mt-[10px] flex items-center justify-between'>
             <div className='mb-1 flex items-center gap-3'>

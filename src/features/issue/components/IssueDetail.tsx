@@ -188,14 +188,16 @@ export default function IssueDetail(props: Props) {
                     <label htmlFor={issue?.description} className='tracking-wide text-base font-bold'>
                       description
                     </label>
-                    <div
-                      className='text-black mt-3 text-90p'
-                      dangerouslySetInnerHTML={{
-                        __html: isShowingFullDescription
-                          ? (issue?.description as TrustedHTML)
-                          : (issue?.description.slice(0, MAX_LENGHT_DESCRIPTION) as TrustedHTML)
-                      }}
-                    ></div>
+                    {issue?.description && (
+                      <div
+                        className='text-black mt-3 text-90p'
+                        dangerouslySetInnerHTML={{
+                          __html: isShowingFullDescription
+                            ? (issue?.description as TrustedHTML)
+                            : (issue?.description.slice(0, MAX_LENGHT_DESCRIPTION) as TrustedHTML)
+                        }}
+                      ></div>
+                    )}
                   </div>
 
                   {issue?.description && issue.description.length > MAX_LENGHT_DESCRIPTION && (

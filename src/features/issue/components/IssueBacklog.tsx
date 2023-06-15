@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useContext } from 'react'
 
 import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
+import { BacklogContext } from '~/features/backlog/contexts'
 import { IssueInBacklog } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
@@ -12,13 +13,19 @@ type Props = {
   projectId: number
   issue: IssueInBacklog
   isDragDisabled: boolean
-  isShowCheckbox?: boolean
 }
 
 export default function IssueBacklog(props: Props) {
-  const { idx, projectId, issue, isDragDisabled, isShowCheckbox } = props
+  const { idx, projectId, issue, isDragDisabled } = props
+
+  const { selectedIssues, setSelectedIssues, isShowingMoveIssueSelect } = useContext(BacklogContext)
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
+
+  const handleSelectBoxChange = (isChecked: boolean) => {
+    if (isChecked) setSelectedIssues([...selectedIssues, issue.id])
+    else setSelectedIssues(selectedIssues.filter((id) => id !== issue.id))
+  }
 
   return (
     <>
@@ -29,10 +36,25 @@ export default function IssueBacklog(props: Props) {
         draggableId={`issue-${issue.id}`}
         isDragDisabled={isDragDisabled}
       >
-        <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
+        <div
+          onClick={
+            isShowingMoveIssueSelect
+              ? () => {
+                  return
+                }
+              : toggleIssueDetail
+          }
+          onKeyDown={toggleIssueDetail}
+          tabIndex={issue.id}
+          role='button'
+        >
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
-              {isShowCheckbox && <CheckBoxButton />}
+              {isShowingMoveIssueSelect && (
+                <span className='ml-2'>
+                  <CheckBoxButton onChange={handleSelectBoxChange} />
+                </span>
+              )}
               <img
                 className='h-[18px] w-[18px] ml-2'
                 src={IssueHelper.getIssueType(issue.type)?.icon}

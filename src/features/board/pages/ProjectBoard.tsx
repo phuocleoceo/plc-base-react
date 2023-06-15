@@ -7,8 +7,8 @@ import { Icon } from '@iconify/react'
 import { GetIssuesInBoardParams, UpdateBoardIssueRequest } from '~/features/issue/models'
 import { UpdateProjectStatusRequest } from '~/features/projectStatus/models'
 import { DragDropStatus } from '~/features/projectStatus/components'
-import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { FilterBar, SprintBar } from '~/features/board/components'
+import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { DroppableWrapper } from '~/common/components'
 import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
@@ -25,6 +25,7 @@ export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
+
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 
   const { isShowing: isShowingCreateSprint, toggle: toggleCreateSprint } = useToggle()
@@ -286,6 +287,7 @@ export default function ProjectBoard() {
     }
   }
 
+  // Status Id for complete sprint
   const completedStatusId = projectStatuses?.reduce((arr, curr) => {
     return curr.index > arr.index ? curr : arr
   }).id
@@ -293,13 +295,15 @@ export default function ProjectBoard() {
   if (!sprint && !isLoadingSprint)
     return (
       <>
-        <div className='mt-6 flex items-center justify-center w-screen'>
-          <div className='p-4'>
-            <img className='text-center' width='50%' height='auto' src={SprintIMG} alt='sprint' />
-            <h1 className='text-center text-xl'>there_are_no_available_sprints</h1>
-            <button onClick={toggleCreateSprint} className='btn-gray'>
-              create_sprint
-            </button>
+        <div className='mt-6 flex items-center justify-center h-[70%]'>
+          <div className='mt-6 flex items-center justify-center w-screen'>
+            <div className='p-4 text-center'>
+              <img className='mx-auto' width='50%' height='auto' src={SprintIMG} alt='sprint' />
+              <h1 className='text-xl'>there_are_no_available_sprints</h1>
+              <button onClick={toggleCreateSprint} className='btn-gray mt-4'>
+                create_sprint
+              </button>
+            </div>
           </div>
         </div>
 
