@@ -8,23 +8,40 @@ import { GetIssuesInBoardParams, UpdateBoardIssueRequest } from '~/features/issu
 import { UpdateProjectStatusRequest } from '~/features/projectStatus/models'
 import { DragDropStatus } from '~/features/projectStatus/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
-import { FilterBar } from '~/features/board/components'
+import { FilterBar, SprintBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
+import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
+import SprintIMG from '~/assets/img/sprint.png'
+
 const CreateProjectStatus = lazy(() => import('~/features/projectStatus/components/CreateProjectStatus'))
+const CreateSprint = lazy(() => import('~/features/sprint/components/CreateSprint'))
 
 export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
   const [isDragDisabled, setIsDragDisabled] = useState(false)
+
+  const { isShowing: isShowingCreateSprint, toggle: toggleCreateSprint } = useToggle()
   const { isShowing: isShowingCreateStatus, toggle: toggleCreateStatus } = useToggle()
 
   const queryClient = useQueryClient()
+
+  // Sprint
+  const { data: sprintData, isLoading: isLoadingSprint } = useQuery({
+    queryKey: [QueryKey.Sprint, projectId],
+    queryFn: () => SprintApi.getSprint(projectId),
+    enabled: isAuthenticated,
+    keepPreviousData: true,
+    staleTime: 1 * 60 * 1000
+  })
+
+  const sprint = sprintData?.data.data
 
   // ---------------------Project Status---------------------
   const { data: projectStatusData } = useQuery({
@@ -117,8 +134,8 @@ export default function ProjectBoard() {
   })
 
   const { data: issueData } = useQuery({
-    queryKey: [QueryKey.IssueInBoard, projectId, issueParams],
-    queryFn: () => IssueApi.getIssuesInBoard(projectId, issueParams),
+    queryKey: [QueryKey.IssueInBoard, projectId, sprint, issueParams],
+    queryFn: () => IssueApi.getIssuesInBoard(projectId, sprint?.id, issueParams),
     enabled: isAuthenticated,
     keepPreviousData: true,
     staleTime: 1 * 60 * 1000
@@ -269,10 +286,41 @@ export default function ProjectBoard() {
     }
   }
 
+  const completedStatusId = projectStatuses?.reduce((arr, curr) => {
+    return curr.index > arr.index ? curr : arr
+  }).id
+
+  if (!sprint && !isLoadingSprint)
+    return (
+      <>
+        <div className='mt-6 flex items-center justify-center w-screen'>
+          <div className='p-4'>
+            <img className='text-center' width='50%' height='auto' src={SprintIMG} alt='sprint' />
+            <h1 className='text-center text-xl'>there_are_no_available_sprints</h1>
+            <button onClick={toggleCreateSprint} className='btn-gray'>
+              create_sprint
+            </button>
+          </div>
+        </div>
+
+        {isShowingCreateSprint && (
+          <Suspense>
+            <CreateSprint {...{ projectId }} isShowing={isShowingCreateSprint} onClose={toggleCreateSprint} />
+          </Suspense>
+        )}
+      </>
+    )
+
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
-        <h1 className='mb-4 text-xl font-semibold text-c-text'>kanban_board</h1>
+        <SprintBar
+          {...{ projectId }}
+          completedStatusId={completedStatusId ?? -1}
+          issues={issues ?? []}
+          sprint={sprint}
+        />
+
         <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 
         {projectStatuses && (
@@ -306,9 +354,10 @@ export default function ProjectBoard() {
           </div>
         )}
       </div>
+
       {isShowingCreateStatus && (
         <Suspense>
-          <CreateProjectStatus projectId={projectId} isShowing={isShowingCreateStatus} onClose={toggleCreateStatus} />
+          <CreateProjectStatus {...{ projectId }} isShowing={isShowingCreateStatus} onClose={toggleCreateStatus} />
         </Suspense>
       )}
     </>

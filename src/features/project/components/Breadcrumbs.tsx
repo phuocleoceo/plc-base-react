@@ -24,7 +24,7 @@ export default function Breadcrumbs() {
   const project = data?.data.data
 
   return (
-    <div className='mt-8 mb-4 min-w-max px-8 text-c-text sm:px-10'>
+    <div className='mt-5 min-w-max px-8 text-c-text sm:px-10'>
       <Link to='/project' className='hover:underline'>
         project
       </Link>

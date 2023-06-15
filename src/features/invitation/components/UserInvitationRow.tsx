@@ -122,7 +122,6 @@ export default function ProjectInvitationRow(props: Props) {
             closeLabel='cancle'
             submittingLabel='accepting_invitation...'
             submitLabel='accept_invitation'
-            submitClassName='btn-alert'
             className='max-w-[25rem]'
           />
         </Suspense>

@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 
-import { Avatar, DraggableWrapper } from '~/common/components'
+import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
 import { IssueInBacklog } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
@@ -12,10 +12,11 @@ type Props = {
   projectId: number
   issue: IssueInBacklog
   isDragDisabled: boolean
+  isShowCheckbox?: boolean
 }
 
 export default function IssueBacklog(props: Props) {
-  const { idx, projectId, issue, isDragDisabled } = props
+  const { idx, projectId, issue, isDragDisabled, isShowCheckbox } = props
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
 
@@ -31,6 +32,7 @@ export default function IssueBacklog(props: Props) {
         <div onClick={toggleIssueDetail} onKeyDown={toggleIssueDetail} tabIndex={issue.id} role='button'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
+              {isShowCheckbox && <CheckBoxButton />}
               <img
                 className='h-[18px] w-[18px] ml-2'
                 src={IssueHelper.getIssueType(issue.type)?.icon}

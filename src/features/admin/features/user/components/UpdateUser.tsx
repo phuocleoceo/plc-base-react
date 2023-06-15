@@ -111,7 +111,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='isActived' margin='mt-0'>
+            <LabelWrapper label='is_actived' margin='mt-0'>
               <SwitchToggle
                 control={control}
                 controlField='isActived'
@@ -120,7 +120,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='isVerified' margin='mt-0'>
+            <LabelWrapper label='is_verified' margin='mt-0'>
               <SwitchToggle defaultValue={user?.isVerified} readonly={true} className='mt-2' />
             </LabelWrapper>
           </div>
