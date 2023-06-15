@@ -47,9 +47,9 @@ export default function DragDropIssue(props: Props) {
           tabIndex={issue.id}
           role='button'
         >
-          <span className='flex'>
+          <span className='flex items-center'>
             {isShowingMoveIssueSelect && (
-              <span className='ml-2'>
+              <span className='ml-2 mr-2'>
                 <CheckBoxButton onChange={handleSelectBoxChange} />
               </span>
             )}

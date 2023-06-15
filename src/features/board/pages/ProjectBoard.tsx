@@ -295,13 +295,15 @@ export default function ProjectBoard() {
   if (!sprint && !isLoadingSprint)
     return (
       <>
-        <div className='mt-6 flex items-center justify-center w-screen'>
-          <div className='p-4'>
-            <img className='text-center' width='50%' height='auto' src={SprintIMG} alt='sprint' />
-            <h1 className='text-center text-xl'>there_are_no_available_sprints</h1>
-            <button onClick={toggleCreateSprint} className='btn-gray'>
-              create_sprint
-            </button>
+        <div className='mt-6 flex items-center justify-center h-[70%]'>
+          <div className='mt-6 flex items-center justify-center w-screen'>
+            <div className='p-4 text-center'>
+              <img className='mx-auto' width='50%' height='auto' src={SprintIMG} alt='sprint' />
+              <h1 className='text-xl'>there_are_no_available_sprints</h1>
+              <button onClick={toggleCreateSprint} className='btn-gray mt-4'>
+                create_sprint
+              </button>
+            </div>
           </div>
         </div>
 
