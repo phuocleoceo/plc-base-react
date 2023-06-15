@@ -136,6 +136,7 @@ export default function ProjectBacklog() {
       onSuccess: () => {
         toast.success('move_issue_to_sprint_success')
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries([QueryKey.IssueInBoard])
         setSelectedIssues([])
         toggleMoveIssueModal()
         toggleMoveIssueSelect()

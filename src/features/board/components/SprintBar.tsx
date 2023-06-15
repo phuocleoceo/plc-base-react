@@ -4,7 +4,7 @@ import { Tooltip } from 'react-tooltip'
 import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
-import { IssueGroupedInBoard } from '~/features/issue/models'
+import { IssueGroupedInBoard, MoveIssueToBacklogRequest } from '~/features/issue/models'
 import { BoardContext } from '~/features/board/contexts'
 import { SprintApi } from '~/features/sprint/apis'
 import { DropDownMenu } from '~/common/components'
@@ -12,6 +12,7 @@ import { Sprint } from '~/features/sprint/models'
 import { TimeHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
+import { IssueApi } from '~/features/issue/apis'
 
 const CompleteSprint = lazy(() => import('~/features/sprint/components/CompleteSprint'))
 const UpdateSprint = lazy(() => import('~/features/sprint/components/UpdateSprint'))
@@ -27,9 +28,15 @@ interface Props {
 export default function SprintBar(props: Props) {
   const { completedStatusId, issues, projectId, sprint } = props
 
-  const { isShowingMoveIssueSelect, toggleMoveIssueSelect } = useContext(BoardContext)
+  const {
+    selectedIssues,
+    setSelectedIssues,
+    isShowingMoveIssueSelect,
+    toggleMoveIssueSelect,
+    isShowingMoveIssueModal,
+    toggleMoveIssueModal
+  } = useContext(BoardContext)
 
-  const { isShowing: isShowingMoveIssueModal, toggle: toggleMoveIssueModal } = useToggle()
   const { isShowing: isShowingUpdateSprint, toggle: toggleUpdateSprint } = useToggle()
   const { isShowing: isShowingStartSprint, toggle: toggleStartSprint } = useToggle()
   const { isShowing: isShowingCompleteSprint, toggle: toggleCompleteSprint } = useToggle()
@@ -46,6 +53,32 @@ export default function SprintBar(props: Props) {
         toast.success('started_sprint')
         queryClient.invalidateQueries([QueryKey.Sprint])
         toggleStartSprint()
+      }
+    })
+  }
+
+  const moveIssueToBacklogMutation = useMutation({
+    mutationFn: (body: MoveIssueToBacklogRequest) => IssueApi.moveIssueToBacklog(projectId, body)
+  })
+
+  const handleMoveIssueToBacklog = async () => {
+    if (selectedIssues.length == 0) {
+      toast.warn('select_issue_to_move')
+      toggleMoveIssueModal()
+      return
+    }
+
+    const issues: MoveIssueToBacklogRequest = {
+      issues: [...selectedIssues]
+    }
+    moveIssueToBacklogMutation.mutate(issues, {
+      onSuccess: () => {
+        toast.success('move_issue_to_backlog_success')
+        queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        setSelectedIssues([])
+        toggleMoveIssueModal()
+        toggleMoveIssueSelect()
       }
     })
   }
@@ -154,6 +187,22 @@ export default function SprintBar(props: Props) {
             closeLabel='cancle'
             submittingLabel='starting_sprint...'
             submitLabel='start_sprint'
+            className='max-w-[20rem]'
+          />
+        </Suspense>
+      )}
+
+      {isShowingMoveIssueModal && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingMoveIssueModal}
+            onClose={toggleMoveIssueModal}
+            onSubmit={handleMoveIssueToBacklog}
+            isMutating={moveIssueToBacklogMutation.isLoading}
+            confirmMessage='submit_move_issue_to_backlog'
+            closeLabel='cancle'
+            submittingLabel='moving...'
+            submitLabel='move'
             className='max-w-[20rem]'
           />
         </Suspense>
