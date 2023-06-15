@@ -18,6 +18,7 @@ export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
+  const { isShowing: isShowingMoveIssue, toggle: toggleMoveIssue } = useToggle()
   const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useToggle()
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
@@ -117,9 +118,24 @@ export default function ProjectBacklog() {
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
         <div className='flex min-w-[43rem] justify-between mb-6'>
           <span className='text-xl font-semibold tracking-wide'>backlog</span>
-          <button onClick={toggleCreateIssue} className='btn'>
-            create_issue
-          </button>
+          <div>
+            {isShowingMoveIssue ? (
+              <>
+                <button onClick={toggleMoveIssue} className='btn-gray mr-3'>
+                  cancle
+                </button>
+                <button className='btn mr-3'>move</button>
+              </>
+            ) : (
+              <button onClick={toggleMoveIssue} className='btn-gray mr-3'>
+                move_to_sprint
+              </button>
+            )}
+
+            <button onClick={toggleCreateIssue} className='btn'>
+              create_issue
+            </button>
+          </div>
         </div>
         <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
 
@@ -133,7 +149,11 @@ export default function ProjectBacklog() {
                 direction='vertical'
               >
                 {issuesBacklog.map((issue, idx) => (
-                  <IssueBacklog key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
+                  <IssueBacklog
+                    key={issue.id}
+                    isShowCheckbox={isShowingMoveIssue}
+                    {...{ idx, issue, projectId, isDragDisabled }}
+                  />
                 ))}
               </DroppableWrapper>
             </DragDropContext>
