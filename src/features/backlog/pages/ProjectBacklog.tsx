@@ -2,9 +2,9 @@ import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dn
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 import { GetIssuesInBacklogParams, MoveIssueToSprintRequest, UpdateBacklogIssueRequest } from '~/features/issue/models'
+import { BacklogContext } from '~/features/backlog/contexts'
 import { IssueBacklog } from '~/features/issue/components'
 import { FilterBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
@@ -12,6 +12,7 @@ import { IssueApi } from '~/features/issue/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
+import { toast } from 'react-toastify'
 
 const CreateIssue = lazy(() => import('~/features/issue/components/CreateIssue'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
@@ -20,12 +21,19 @@ export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
   const { isAuthenticated } = useContext(AppContext)
-  const { isShowing: isShowingMoveIssueModal, toggle: toggleMoveIssueModal } = useToggle()
-  const { isShowing: isShowingMoveIssueSelect, toggle: toggleMoveIssueSelect } = useToggle()
+
+  const {
+    selectedIssues,
+    setSelectedIssues,
+    isShowingMoveIssueModal,
+    toggleMoveIssueModal,
+    isShowingMoveIssueSelect,
+    toggleMoveIssueSelect
+  } = useContext(BacklogContext)
+
   const { isShowing: isShowingCreateIssue, toggle: toggleCreateIssue } = useToggle()
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
-  const [selectedIssues, setSelectedIssues] = useState<Array<number>>([])
 
   const queryClient = useQueryClient()
 
@@ -48,6 +56,33 @@ export default function ProjectBacklog() {
     mutationFn: (data: { projectId: number; issueId: number; body: UpdateBacklogIssueRequest }) =>
       IssueApi.updateIssuesInBacklog(data.projectId, data.issueId, data.body)
   })
+
+  const moveIssueToSprintMutation = useMutation({
+    mutationFn: (body: MoveIssueToSprintRequest) => IssueApi.moveIssueToSprint(projectId, body)
+  })
+
+  const handleMoveIssueToSprint = async () => {
+    if (selectedIssues.length == 0) {
+      toast.warn('select_issue_to_move')
+      toggleMoveIssueModal()
+      return
+    }
+
+    const issues: MoveIssueToSprintRequest = {
+      issues: [...selectedIssues]
+    }
+
+    moveIssueToSprintMutation.mutate(issues, {
+      onSuccess: () => {
+        toast.success('move_issue_to_sprint_success')
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        setSelectedIssues([])
+        toggleMoveIssueModal()
+        toggleMoveIssueSelect()
+      }
+    })
+  }
 
   const getNewBacklogIndex = (source: DraggableLocation, destination: DraggableLocation | null) => {
     if (!issuesBacklog || issuesBacklog.length === 0) return
@@ -117,33 +152,6 @@ export default function ProjectBacklog() {
     )
   }
 
-  const moveIssueToSprintMutation = useMutation({
-    mutationFn: (body: MoveIssueToSprintRequest) => IssueApi.moveIssueToSprint(projectId, body)
-  })
-
-  const handleMoveIssueToSprint = async () => {
-    if (selectedIssues.length == 0) {
-      toast.warn('select_issue_to_move')
-      toggleMoveIssueModal()
-      return
-    }
-
-    const issues: MoveIssueToSprintRequest = {
-      issues: [...selectedIssues]
-    }
-
-    moveIssueToSprintMutation.mutate(issues, {
-      onSuccess: () => {
-        toast.success('move_issue_to_sprint_success')
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
-        queryClient.invalidateQueries([QueryKey.IssueInBoard])
-        setSelectedIssues([])
-        toggleMoveIssueModal()
-        toggleMoveIssueSelect()
-      }
-    })
-  }
-
   return (
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
@@ -182,11 +190,7 @@ export default function ProjectBacklog() {
                 direction='vertical'
               >
                 {issuesBacklog.map((issue, idx) => (
-                  <IssueBacklog
-                    key={issue.id}
-                    isShowCheckbox={isShowingMoveIssueSelect}
-                    {...{ idx, issue, projectId, isDragDisabled, selectedIssues, setSelectedIssues }}
-                  />
+                  <IssueBacklog key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
                 ))}
               </DroppableWrapper>
             </DragDropContext>

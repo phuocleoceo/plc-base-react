@@ -1,6 +1,7 @@
-import { Dispatch, lazy, SetStateAction, Suspense } from 'react'
+import { lazy, Suspense, useContext } from 'react'
 
 import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
+import { BacklogContext } from '~/features/backlog/contexts'
 import { IssueInBacklog } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
@@ -12,13 +13,12 @@ type Props = {
   projectId: number
   issue: IssueInBacklog
   isDragDisabled: boolean
-  isShowCheckbox?: boolean
-  selectedIssues: Array<number>
-  setSelectedIssues: Dispatch<SetStateAction<Array<number>>>
 }
 
 export default function IssueBacklog(props: Props) {
-  const { idx, projectId, issue, isDragDisabled, isShowCheckbox, selectedIssues, setSelectedIssues } = props
+  const { idx, projectId, issue, isDragDisabled } = props
+
+  const { selectedIssues, setSelectedIssues, isShowingMoveIssueSelect } = useContext(BacklogContext)
 
   const { isShowing: isShowingIssueDetail, toggle: toggleIssueDetail } = useToggle()
 
@@ -38,7 +38,7 @@ export default function IssueBacklog(props: Props) {
       >
         <div
           onClick={
-            isShowCheckbox
+            isShowingMoveIssueSelect
               ? () => {
                   return
                 }
@@ -50,7 +50,7 @@ export default function IssueBacklog(props: Props) {
         >
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
-              {isShowCheckbox && (
+              {isShowingMoveIssueSelect && (
                 <span className='ml-2'>
                   <CheckBoxButton onChange={handleSelectBoxChange} />
                 </span>
