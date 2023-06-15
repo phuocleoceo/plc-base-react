@@ -3,10 +3,14 @@ import {
   GetIssuesInBoardResponse,
   UpdateBoardIssueRequest,
   UpdateBoardIssueResponse,
+  MoveIssueToBacklogRequest,
+  MoveIssueToBacklogRespone,
   GetIssuesInBacklogParams,
   GetIssuesInBacklogResponse,
   UpdateBacklogIssueRequest,
   UpdateBacklogIssueResponse,
+  MoveIssueToSprintRequest,
+  MoveIssueToSprintRespone,
   GetIssueDetailResponse,
   CreateIssueRequest,
   CreateIssueResponse,
@@ -25,12 +29,18 @@ const issueApi = {
   updateIssuesInBoard(projectId: number, issueId: number, body: UpdateBoardIssueRequest) {
     return HttpHelper.put<UpdateBoardIssueResponse>(`project/${projectId}/board/issue/${issueId}`, body)
   },
+  moveIssueToBacklog(projectId: number, body: MoveIssueToBacklogRequest) {
+    return HttpHelper.put<MoveIssueToBacklogRespone>(`project/${projectId}/board/issue/move-to-backlog`, body)
+  },
   // Backlog
   getIssuesInBacklog(projectId: number, params: GetIssuesInBacklogParams) {
     return HttpHelper.get<GetIssuesInBacklogResponse>(`project/${projectId}/backlog/issue`, { params })
   },
   updateIssuesInBacklog(projectId: number, issueId: number, body: UpdateBacklogIssueRequest) {
     return HttpHelper.put<UpdateBacklogIssueResponse>(`project/${projectId}/backlog/issue/${issueId}`, body)
+  },
+  moveIssueToSprint(projectId: number, body: MoveIssueToSprintRequest) {
+    return HttpHelper.put<MoveIssueToSprintRespone>(`project/${projectId}/backlog/issue/move-to-sprint`, body)
   },
   // Detail
   getIssueDetail(projectId: number, issueId: number) {

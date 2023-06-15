@@ -33,7 +33,7 @@ export default function ProjectBoard() {
   const queryClient = useQueryClient()
 
   // Sprint
-  const { data: sprintData } = useQuery({
+  const { data: sprintData, isLoading: isLoadingSprint } = useQuery({
     queryKey: [QueryKey.Sprint, projectId],
     queryFn: () => SprintApi.getSprint(projectId),
     enabled: isAuthenticated,
@@ -290,7 +290,7 @@ export default function ProjectBoard() {
     return curr.index > arr.index ? curr : arr
   }).id
 
-  if (!sprint)
+  if (!sprint && !isLoadingSprint)
     return (
       <>
         <div className='mt-6 flex items-center justify-center w-screen'>

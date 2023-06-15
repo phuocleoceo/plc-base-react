@@ -16,6 +16,12 @@ export type UpdateBoardIssueRequest = {
 
 export type UpdateBoardIssueResponse = BaseResponse<boolean>
 
+export type MoveIssueToBacklogRequest = {
+  issues: Array<number>
+}
+
+export type MoveIssueToBacklogRespone = BaseResponse<boolean>
+
 // Backlog
 export type GetIssuesInBacklogParams = {
   searchValue?: string
@@ -29,6 +35,12 @@ export type UpdateBacklogIssueRequest = {
 }
 
 export type UpdateBacklogIssueResponse = BaseResponse<boolean>
+
+export type MoveIssueToSprintRequest = {
+  issues: Array<number>
+}
+
+export type MoveIssueToSprintRespone = BaseResponse<boolean>
 
 // Detail
 export type GetIssueDetailResponse = BaseResponse<IssueDetail>
