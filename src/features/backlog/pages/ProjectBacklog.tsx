@@ -160,7 +160,13 @@ export default function ProjectBacklog() {
           <div>
             {isShowingMoveIssueSelect ? (
               <>
-                <button onClick={toggleMoveIssueSelect} className='btn-gray mr-3'>
+                <button
+                  onClick={() => {
+                    toggleMoveIssueSelect()
+                    setSelectedIssues([])
+                  }}
+                  className='btn-gray mr-3'
+                >
                   cancle
                 </button>
                 <button onClick={toggleMoveIssueModal} className='btn mr-3'>
