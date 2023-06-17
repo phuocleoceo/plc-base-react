@@ -34,6 +34,13 @@ export default function AdminMenubar() {
 
         <div className='mt-5 mb-2'>
           <IconLink to='/admin/user' icon='mdi:account' text='user' isActive={currentTab === 'user'} />
+
+          <IconLink
+            to='/admin/project-role'
+            icon='eos-icons:role-binding'
+            text='project_role'
+            isActive={currentTab === 'project-role'}
+          />
         </div>
 
         <hr className='border-t-[.5px] border-gray-400' />
