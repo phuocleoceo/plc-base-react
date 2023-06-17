@@ -41,7 +41,7 @@ export default function ProjectRoleRow(props: Props) {
           <UpdateProjectRole
             isShowing={isShowingUpdateProjectRole}
             onClose={toggleShowingUpdateProjectRole}
-            {...{ projectRole }}
+            projectRoleId={projectRole.id}
           />
         </Suspense>
       )}
