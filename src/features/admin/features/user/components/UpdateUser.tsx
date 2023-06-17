@@ -47,7 +47,7 @@ export default function IssueDetail(props: Props) {
       onSuccess: () => {
         toast.success('update_user_success')
         queryClient.invalidateQueries([QueryKey.UserAccounts])
-        queryClient.invalidateQueries([QueryKey.UserAccountDetail])
+        queryClient.invalidateQueries([QueryKey.UserAccountDetail, userId])
         onClose()
       },
       onError: (error) => {

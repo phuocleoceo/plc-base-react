@@ -43,7 +43,7 @@ export default function CreateSprint(props: Props) {
     createSprintMutation.mutate(sprintData, {
       onSuccess: () => {
         toast.success('create_sprint_success')
-        queryClient.invalidateQueries([QueryKey.Sprint])
+        queryClient.invalidateQueries([QueryKey.AvailableSprint])
         reset()
         onClose()
       },

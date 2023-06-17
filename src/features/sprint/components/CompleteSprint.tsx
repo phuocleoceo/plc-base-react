@@ -57,7 +57,7 @@ export default function CompleteSprint(props: Props) {
     completeSprintMutation.mutate(completeSprintData, {
       onSuccess: () => {
         toast.success('completed_sprint')
-        queryClient.invalidateQueries([QueryKey.Sprint])
+        queryClient.invalidateQueries([QueryKey.AvailableSprint])
         onClose()
       }
     })
