@@ -1,5 +1,5 @@
+import { Suspense, lazy, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { GetProjectRolesParams } from '~/features/admin/features/projectRole/models'
@@ -8,9 +8,14 @@ import { ProjectRoleApi } from '~/features/admin/features/projectRole/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
+import { useToggle } from '~/common/hooks'
+
+const CreateProjectRole = lazy(() => import('~/features/admin/features/projectRole/components/CreateProjectRole'))
 
 export default function ProjectRoleList() {
   const { isAuthenticated } = useContext(AppContext)
+
+  const { isShowing: isShowingCreateProjectRole, toggle: toggleCreateProjectRole } = useToggle()
 
   const [projectRoleParams, setProjectRoleParams] = useState<GetProjectRolesParams>({
     pageNumber: 1,
@@ -58,7 +63,11 @@ export default function ProjectRoleList() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-5 pt-5 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
           <span className='text-2xl font-semibold tracking-wide'>project_roles</span>
+          <button onClick={toggleCreateProjectRole} className='btn'>
+            create_project_role
+          </button>
         </div>
+
         <div className='mt-3'>
           <div className='relative'>
             <input
@@ -95,6 +104,12 @@ export default function ProjectRoleList() {
           onChangePage={handleChangePage}
         />
       </div>
+
+      {isShowingCreateProjectRole && (
+        <Suspense>
+          <CreateProjectRole isShowing={isShowingCreateProjectRole} onClose={toggleCreateProjectRole} />
+        </Suspense>
+      )}
     </>
   )
 }
