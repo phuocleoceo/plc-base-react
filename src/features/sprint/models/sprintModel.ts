@@ -1,7 +1,9 @@
 import { BaseResponse } from '~/shared/types'
 import { Sprint } from './sprintType'
 
-export type GetSprintResponse = BaseResponse<Sprint>
+export type GetAvailableSprintResponse = BaseResponse<Sprint>
+
+export type GetSprintByIdResponse = BaseResponse<Sprint>
 
 export type CreateSprintRequest = {
   title: string

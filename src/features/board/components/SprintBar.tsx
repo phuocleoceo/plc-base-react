@@ -51,7 +51,7 @@ export default function SprintBar(props: Props) {
     startSprintMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('started_sprint')
-        queryClient.invalidateQueries([QueryKey.Sprint])
+        queryClient.invalidateQueries([QueryKey.AvailableSprint])
         toggleStartSprint()
       }
     })
@@ -178,7 +178,12 @@ export default function SprintBar(props: Props) {
 
       {isShowingUpdateSprint && (
         <Suspense>
-          <UpdateSprint {...{ projectId, sprint }} isShowing={isShowingUpdateSprint} onClose={toggleUpdateSprint} />
+          <UpdateSprint
+            {...{ projectId }}
+            sprintId={sprint.id}
+            isShowing={isShowingUpdateSprint}
+            onClose={toggleUpdateSprint}
+          />
         </Suspense>
       )}
 

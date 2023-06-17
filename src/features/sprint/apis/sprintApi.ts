@@ -1,5 +1,6 @@
 import {
-  GetSprintResponse,
+  GetAvailableSprintResponse,
+  GetSprintByIdResponse,
   CreateSprintRequest,
   CreateSprintResponse,
   UpdateSprintRequest,
@@ -12,8 +13,11 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const sprintApi = {
-  getSprint(projectId: number) {
-    return HttpHelper.get<GetSprintResponse>(`project/${projectId}/sprint`)
+  getAvailableSprin(projectId: number) {
+    return HttpHelper.get<GetAvailableSprintResponse>(`project/${projectId}/sprint`)
+  },
+  getSprintById(projectId: number, sprintId: number) {
+    return HttpHelper.get<GetSprintByIdResponse>(`project/${projectId}/sprint/${sprintId}`)
   },
   createSprint(projectId: number, body: CreateSprintRequest) {
     return HttpHelper.post<CreateSprintResponse>(`project/${projectId}/sprint`, body)

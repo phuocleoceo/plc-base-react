@@ -44,7 +44,7 @@ export default function UpdateProjectRole(props: Props) {
   const projectRole = projectRoleData?.data.data
 
   const updateProjectRoleMutation = useMutation({
-    mutationFn: (body: UpdateProjectRoleRequest) => ProjectRoleApi.updateProjectRole(projectRole?.id ?? -1, body)
+    mutationFn: (body: UpdateProjectRoleRequest) => ProjectRoleApi.updateProjectRole(projectRoleId, body)
   })
 
   const handleUpdateProjectRole = handleSubmit((form: FormData) => {
