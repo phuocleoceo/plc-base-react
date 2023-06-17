@@ -3,6 +3,7 @@ import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { GetProjectRolesParams } from '~/features/admin/features/projectRole/models'
+import { ProjectRoleRow } from '~/features/admin/features/projectRole/components'
 import { ProjectRoleApi } from '~/features/admin/features/projectRole/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
 import { AppContext } from '~/common/contexts'
@@ -61,7 +62,7 @@ export default function ProjectRoleList() {
         <div className='mt-3'>
           <div className='relative'>
             <input
-              className='w-44 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-48 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={projectRoleParams.searchValue}
@@ -72,7 +73,7 @@ export default function ProjectRoleList() {
         </div>
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
-            <div className='w-16'></div>
+            <div className='w-32'></div>
             <div className='w-56'>name</div>
             <div className='w-64'>description</div>
             <div className='flex-grow'>action</div>
@@ -80,8 +81,7 @@ export default function ProjectRoleList() {
           {projectRoles && projectRoles.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
               {projectRoles.map((projectRole, idx) => (
-                // <UserRow key={idx} {...{ idx, user }} />
-                <div key={idx}>{projectRole.name}</div>
+                <ProjectRoleRow key={idx} {...{ idx, projectRole }} />
               ))}
             </div>
           ) : (
