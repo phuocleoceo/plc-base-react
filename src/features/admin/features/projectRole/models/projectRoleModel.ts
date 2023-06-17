@@ -22,3 +22,5 @@ export type UpdateProjectRoleRequest = {
 }
 
 export type UpdateProjectRoleResponse = BaseResponse<boolean>
+
+export type DeleteProjectRoleResponse = BaseResponse<boolean>

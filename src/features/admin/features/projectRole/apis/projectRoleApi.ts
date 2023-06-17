@@ -6,7 +6,8 @@ import {
   CreateProjectRoleRequest,
   CreateProjectRoleResponse,
   UpdateProjectRoleRequest,
-  UpdateProjectRoleResponse
+  UpdateProjectRoleResponse,
+  DeleteProjectRoleResponse
 } from '~/features/admin/features/projectRole/models'
 import { HttpHelper } from '~/shared/helpers'
 
@@ -25,6 +26,9 @@ const projectRoleApi = {
   },
   updateProjectRole(projectRoleId: number, body: UpdateProjectRoleRequest) {
     return HttpHelper.put<UpdateProjectRoleResponse>(`project-role/${projectRoleId}`, body)
+  },
+  deleteProjectRole(projectRoleId: number) {
+    return HttpHelper.delete<DeleteProjectRoleResponse>(`project-role/${projectRoleId}`)
   }
 }
 

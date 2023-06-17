@@ -1,10 +1,15 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 import { lazy, Suspense } from 'react'
 import { Icon } from '@iconify/react'
 
+import { ProjectRoleApi } from '~/features/admin/features/projectRole/apis'
 import { ProjectRole } from '~/features/admin/features/projectRole/models'
+import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
 const UpdateProjectRole = lazy(() => import('~/features/admin/features/projectRole/components/UpdateProjectRole'))
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
   idx: number
@@ -14,7 +19,24 @@ interface Props {
 export default function ProjectRoleRow(props: Props) {
   const { idx, projectRole } = props
 
-  const { isShowing: isShowingUpdateProjectRole, toggle: toggleShowingUpdateProjectRole } = useToggle()
+  const { isShowing: isShowingUpdateProjectRole, toggle: toggleUpdateProjectRole } = useToggle()
+  const { isShowing: isShowingDeleteProjectRole, toggle: toggleDeleteProjectRole } = useToggle()
+
+  const queryClient = useQueryClient()
+
+  const deleteProjectRoleMutation = useMutation({
+    mutationFn: () => ProjectRoleApi.deleteProjectRole(projectRole.id)
+  })
+
+  const handleDeleteProjectRole = async () => {
+    deleteProjectRoleMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('delete_project_role_success')
+        queryClient.invalidateQueries([QueryKey.ProjectRoles])
+        toggleDeleteProjectRole()
+      }
+    })
+  }
 
   return (
     <>
@@ -26,13 +48,15 @@ export default function ProjectRoleRow(props: Props) {
         <div className='w-56'>{projectRole.name}</div>
         <div className='w-64'>{projectRole.description}</div>
         <div className='flex-grow flex'>
-          <button
-            title='update_project_role'
-            onClick={toggleShowingUpdateProjectRole}
-            className='btn-icon absolute ml-2 bg-c-1'
-          >
-            <Icon width={22} icon='ic:baseline-edit' className='text-blue-500' />
-          </button>
+          <div className='flex'>
+            <button title='update_project_role' onClick={toggleUpdateProjectRole} className='btn-icon bg-c-1'>
+              <Icon width={22} icon='ic:baseline-edit' className='text-blue-500' />
+            </button>
+
+            <button title='delete_project_role' onClick={toggleDeleteProjectRole} className='btn-icon bg-c-1'>
+              <Icon width={22} icon='bx:trash' className='text-red-500' />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -40,8 +64,25 @@ export default function ProjectRoleRow(props: Props) {
         <Suspense>
           <UpdateProjectRole
             isShowing={isShowingUpdateProjectRole}
-            onClose={toggleShowingUpdateProjectRole}
+            onClose={toggleUpdateProjectRole}
             projectRoleId={projectRole.id}
+          />
+        </Suspense>
+      )}
+
+      {isShowingDeleteProjectRole && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingDeleteProjectRole}
+            onClose={toggleDeleteProjectRole}
+            onSubmit={handleDeleteProjectRole}
+            isMutating={deleteProjectRoleMutation.isLoading}
+            confirmMessage={`submit_delete_project_role` + `: ${projectRole.name}`}
+            closeLabel='cancle'
+            submittingLabel='deleting_project_role...'
+            submitLabel='delete_project_role'
+            submitClassName='btn-alert'
+            className='max-w-[20rem]'
           />
         </Suspense>
       )}

@@ -25,7 +25,7 @@ export default function ProjectSetting() {
   const projectId = Number(useParams().projectId)
   const { isAuthenticated } = useContext(AppContext)
   const [selectedImage, setSelectedImage] = useState<File>()
-  const { isShowing: isShowingDeleteProject, toggle: toggleShowingDeleteProject } = useToggle()
+  const { isShowing: isShowingDeleteProject, toggle: toggleDeleteProject } = useToggle()
 
   const queryClient = useQueryClient()
 
@@ -147,8 +147,8 @@ export default function ProjectSetting() {
             </button>
 
             <div
-              onClick={toggleShowingDeleteProject}
-              onKeyDown={toggleShowingDeleteProject}
+              onClick={toggleDeleteProject}
+              onKeyDown={toggleDeleteProject}
               className='btn-alert w-2/5 text-center cursor-pointer'
               role='button'
               tabIndex={0}
@@ -164,7 +164,7 @@ export default function ProjectSetting() {
           <DeleteProject
             project={_.pick(project, ['id', 'name'])}
             isShowing={isShowingDeleteProject}
-            onClose={toggleShowingDeleteProject}
+            onClose={toggleDeleteProject}
           />
         </Suspense>
       )}
