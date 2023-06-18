@@ -59,7 +59,7 @@ export default function CommentRow(props: Props) {
 
     updateCommentMutation.mutate(commentData, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.IssueComment])
+        queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
         toggleUpdateComment()
       },
       onError: (error) => {
@@ -78,7 +78,7 @@ export default function CommentRow(props: Props) {
   const handleDeleteComment = async () => {
     deleteCommentMutation.mutate(undefined, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.IssueComment])
+        queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
         toggleDeleteComment()
       }
     })

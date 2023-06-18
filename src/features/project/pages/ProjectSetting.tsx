@@ -82,7 +82,7 @@ export default function ProjectSetting() {
     updateProjectMutation.mutate(updateProjectData, {
       onSuccess: () => {
         toast.success('update_project_success')
-        queryClient.invalidateQueries([QueryKey.ProjectDetail])
+        queryClient.invalidateQueries([QueryKey.ProjectDetail, projectId])
         reset()
       },
       onError: (error) => {

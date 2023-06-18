@@ -79,7 +79,7 @@ export default function IssueDetail(props: Props) {
     mutationFn: (body: UpdateIssueRequest) => IssueApi.updateIssue(projectId, issueId, body)
   })
 
-  const handleUpdateComment = handleSubmit((form: FormData) => {
+  const handleUpdateIssue = handleSubmit((form: FormData) => {
     const issueData: UpdateIssueRequest = {
       ...form,
       description: form.description ?? '',
@@ -89,8 +89,9 @@ export default function IssueDetail(props: Props) {
     updateIssueMutation.mutate(issueData, {
       onSuccess: () => {
         toast.success('update_issue_success')
-        queryClient.invalidateQueries([QueryKey.IssueDetail])
+        queryClient.invalidateQueries([QueryKey.IssueDetail, projectId, issueId])
         queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
         toggleUpdateIssue()
       },
       onError: (error) => {
@@ -109,7 +110,9 @@ export default function IssueDetail(props: Props) {
   const handleDeleteIssue = async () => {
     deleteIssueMutation.mutate(undefined, {
       onSuccess: () => {
+        toast.success('delete_issue_success')
         queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
         toggleDeleteIssue()
       }
     })
@@ -130,7 +133,7 @@ export default function IssueDetail(props: Props) {
               {currentUser.id === issue?.reporterId &&
                 (isShowingUpdateIssue ? (
                   <>
-                    <button onClick={handleUpdateComment} title='update' className='btn-icon text-xl mr-2'>
+                    <button onClick={handleUpdateIssue} title='update' className='btn-icon text-xl mr-2'>
                       <Icon width={24} icon='mi:save' className='text-blue-500' />
                     </button>
 

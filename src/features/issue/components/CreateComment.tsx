@@ -39,7 +39,11 @@ function CreateComment(props: Props) {
     setError,
     handleSubmit,
     formState: { isSubmitting }
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    defaultValues: {
+      content: ''
+    }
+  })
 
   const createCommentMutation = useMutation({
     mutationFn: (body: CreateIssueCommentRequest) => IssueCommentApi.createIssueComment(issueId, body)
@@ -57,7 +61,7 @@ function CreateComment(props: Props) {
 
     createCommentMutation.mutate(commentData, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.IssueComment])
+        queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
         reset()
       },
       onError: (error) => {
