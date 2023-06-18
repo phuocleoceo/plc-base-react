@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 
 import { GetIssuesInBoardParams, GetIssuesInBacklogParams } from '~/features/issue/models'
@@ -20,6 +21,7 @@ interface Props {
 export default function FilterBar(props: Props) {
   const { setIsDragDisabled, setIssueParams, issueParams, projectId, maxMemberDisplay } = props
   const { isAuthenticated } = useContext(AppContext)
+  const { t } = useTranslation()
   const currentUser = LocalStorageHelper.getUserInfo()
 
   const [fold, setFold] = useState(true)
@@ -69,7 +71,7 @@ export default function FilterBar(props: Props) {
         <input
           value={searchValue}
           onChange={handleChangeSearchValue}
-          placeholder='search_issues'
+          placeholder={t('search_issues')}
           className='w-44 rounded-sm border-[1.5px] bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
         />
         <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
@@ -105,7 +107,7 @@ export default function FilterBar(props: Props) {
 
       {currentUser && (
         <button className='btn-gray shrink-0 bg-slate-100 ml-3' onClick={() => handleSelectMember(currentUser.id)}>
-          only_my_issues
+          {t('only_my_issues')}
         </button>
       )}
 
@@ -113,7 +115,7 @@ export default function FilterBar(props: Props) {
         <>
           <div className='pb-[2px] mx-3'>|</div>
           <button className='btn-gray shrink-0 bg-slate-100' onClick={handleClearFilter}>
-            clear_filter
+            {t('clear_filter')}
           </button>
         </>
       )}

@@ -42,7 +42,7 @@ export default function DropDownMenu(props: Props) {
       </button>
 
       {isShowing && (
-        <div className='absolute right-0 mt-2 py-2 w-48 bg-white shadow-lg rounded-md z-50'>
+        <div className='absolute right-0 mt-2 py-2 w-52 bg-white shadow-lg rounded-md z-50'>
           <ul>
             {options &&
               options.length > 0 &&

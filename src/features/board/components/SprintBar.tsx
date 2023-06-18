@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'react-tooltip'
 import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
@@ -9,10 +10,10 @@ import { BoardContext } from '~/features/board/contexts'
 import { SprintApi } from '~/features/sprint/apis'
 import { DropDownMenu } from '~/common/components'
 import { Sprint } from '~/features/sprint/models'
+import { IssueApi } from '~/features/issue/apis'
 import { TimeHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
-import { IssueApi } from '~/features/issue/apis'
 
 const CompleteSprint = lazy(() => import('~/features/sprint/components/CompleteSprint'))
 const UpdateSprint = lazy(() => import('~/features/sprint/components/UpdateSprint'))
@@ -42,6 +43,7 @@ export default function SprintBar(props: Props) {
   const { isShowing: isShowingCompleteSprint, toggle: toggleCompleteSprint } = useToggle()
 
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   const startSprintMutation = useMutation({
     mutationFn: () => SprintApi.startSprint(projectId, sprint?.id ?? -1)
@@ -50,7 +52,7 @@ export default function SprintBar(props: Props) {
   const handleStartSprint = async () => {
     startSprintMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('started_sprint')
+        toast.success(t('started_sprint'))
         queryClient.invalidateQueries([QueryKey.AvailableSprint])
         toggleStartSprint()
       }
@@ -63,7 +65,7 @@ export default function SprintBar(props: Props) {
 
   const handleMoveIssueToBacklog = async () => {
     if (selectedIssues.length == 0) {
-      toast.warn('select_issue_to_move')
+      toast.warn(t('select_issue_to_move'))
       toggleMoveIssueModal()
       return
     }
@@ -73,7 +75,7 @@ export default function SprintBar(props: Props) {
     }
     moveIssueToBacklogMutation.mutate(issues, {
       onSuccess: () => {
-        toast.success('move_issue_to_backlog_success')
+        toast.success(t('move_issue_to_backlog_success'))
         queryClient.invalidateQueries([QueryKey.IssueInBoard])
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
         setSelectedIssues([])
@@ -103,11 +105,11 @@ export default function SprintBar(props: Props) {
               data-tooltip-offset={10}
               data-tooltip-place='bottom'
               data-tooltip-content={`<div className='text-sm'>
-                                  from_date:
+                                  ${t('from_date')}:
                                   <br />
                                   ${TimeHelper.format(sprint.fromDate, 'DD/MMM/YY hh:mm A') || 'n/a'}
                                   <br />
-                                  to_date:
+                                  ${t('to_date')}:
                                   <br />
                                   ${TimeHelper.format(sprint.toDate, 'DD/MMM/YY hh:mm A') || 'n/a'}
                                 </div>`}
@@ -119,28 +121,30 @@ export default function SprintBar(props: Props) {
             />
 
             {sprint.toDate && (
-              <span className='text-sm mr-3'>{TimeHelper.howDayRemainFromNow(sprint.toDate)} days remaining</span>
+              <span className='text-sm mr-3'>
+                {TimeHelper.howDayRemainFromNow(sprint.toDate)} {t('days_remaining')}
+              </span>
             )}
 
             {!sprint.completedAt &&
               (sprint.startedAt ? (
                 <button onClick={toggleCompleteSprint} className='btn-gray mr-2'>
-                  complete_sprint
+                  {t('complete_sprint')}
                 </button>
               ) : (
                 <button onClick={toggleStartSprint} className='btn-gray mr-2'>
-                  start_sprint
+                  {t('start_sprint')}
                 </button>
               ))}
 
             <DropDownMenu
               options={[
                 {
-                  label: 'edit_sprint',
+                  label: t('edit_sprint'),
                   onClick: toggleUpdateSprint
                 },
                 {
-                  label: 'move_issue_to_backlog',
+                  label: t('move_issue_to_backlog'),
                   onClick: toggleMoveIssueSelect
                 }
               ]}
@@ -157,10 +161,10 @@ export default function SprintBar(props: Props) {
               }}
               className='btn-gray mr-3'
             >
-              cancle
+              {t('cancle')}
             </button>
             <button onClick={toggleMoveIssueModal} className='btn mr-3'>
-              move
+              {t('move')}
             </button>
           </div>
         )}
@@ -194,10 +198,10 @@ export default function SprintBar(props: Props) {
             onClose={toggleStartSprint}
             onSubmit={handleStartSprint}
             isMutating={startSprintMutation.isLoading}
-            confirmMessage='submit_start_sprint'
-            closeLabel='cancle'
-            submittingLabel='starting_sprint...'
-            submitLabel='start_sprint'
+            confirmMessage={t('submit_start_sprint')}
+            closeLabel={t('cancle')}
+            submittingLabel={t('starting_sprint...')}
+            submitLabel={t('start_sprint')}
             className='max-w-[20rem]'
           />
         </Suspense>
@@ -210,10 +214,10 @@ export default function SprintBar(props: Props) {
             onClose={toggleMoveIssueModal}
             onSubmit={handleMoveIssueToBacklog}
             isMutating={moveIssueToBacklogMutation.isLoading}
-            confirmMessage='submit_move_issue_to_backlog'
-            closeLabel='cancle'
-            submittingLabel='moving...'
-            submitLabel='move'
+            confirmMessage={t('submit_move_issue_to_backlog')}
+            closeLabel={t('cancle')}
+            submittingLabel={t('moving...')}
+            submitLabel={t('move')}
             className='max-w-[20rem]'
           />
         </Suspense>

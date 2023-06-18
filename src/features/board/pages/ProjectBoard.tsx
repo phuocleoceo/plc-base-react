@@ -1,6 +1,7 @@
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 
@@ -24,6 +25,7 @@ const CreateSprint = lazy(() => import('~/features/sprint/components/CreateSprin
 export default function ProjectBoard() {
   const projectId = Number(useParams().projectId)
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
@@ -301,7 +303,7 @@ export default function ProjectBoard() {
               <img className='mx-auto' width='50%' height='auto' src={SprintIMG} alt='sprint' />
               <h1 className='text-xl'>there_are_no_available_sprints</h1>
               <button onClick={toggleCreateSprint} className='btn-gray mt-4'>
-                create_sprint
+                {t('create_sprint')}
               </button>
             </div>
           </div>
@@ -352,7 +354,7 @@ export default function ProjectBoard() {
                 className='flex items-center gap-5 rounded-md bg-c-2 py-3 px-5 mr-3 text-c-5 hover:bg-c-6 active:bg-blue-100'
                 onClick={toggleCreateStatus}
               >
-                <Icon icon='ant-design:plus-outlined' /> create_project_status
+                <Icon icon='ant-design:plus-outlined' /> {t('create_project_status')}
               </button>
             </DragDropContext>
           </div>
