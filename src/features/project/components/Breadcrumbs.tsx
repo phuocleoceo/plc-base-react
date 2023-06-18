@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
 
@@ -12,6 +13,7 @@ export default function Breadcrumbs() {
   const fragments = location.pathname.slice(1).split('/')
   const projectId = Number(fragments[1])
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const { data } = useQuery({
@@ -26,7 +28,7 @@ export default function Breadcrumbs() {
   return (
     <div className='mt-5 min-w-max px-8 text-c-text sm:px-10'>
       <Link to='/project' className='hover:underline'>
-        project
+        {t('project')}
       </Link>
 
       {fragments[1] && (
@@ -41,7 +43,7 @@ export default function Breadcrumbs() {
         <>
           <Icon className='mx-2 inline text-xl' icon='ei:chevron-right' />
           <Link to={`/project/${fragments[1]}/board`} className='hover:underline'>
-            kanban_board
+            {t('kanban_board')}
           </Link>
         </>
       )}

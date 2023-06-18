@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { LocalStorageHelper } from '~/shared/helpers'
 import { Project } from '~/features/project/models'
@@ -12,6 +13,7 @@ interface Props {
 export default function ProjectRow(props: Props) {
   const { idx, project } = props
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const currentUser = LocalStorageHelper.getUserInfo()
 
@@ -43,7 +45,7 @@ export default function ProjectRow(props: Props) {
           className='h-9 w-9 border-[1px] hover:border-green-500'
         />
         <span className='ml-3'>{project.leaderName}</span>
-        {currentUser.id === project.leaderId ? <span className='ml-1 font-bold'>(you)</span> : ''}
+        {currentUser.id === project.leaderId ? <span className='ml-1 font-bold'>({t('you')})</span> : ''}
       </div>
     </div>
   )

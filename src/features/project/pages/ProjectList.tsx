@@ -1,5 +1,6 @@
 import { useContext, useState, lazy, Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 
 import { Pagination, SpinningCircle } from '~/common/components'
@@ -13,6 +14,7 @@ import { useToggle } from '~/common/hooks'
 const CreateProject = lazy(() => import('~/features/project/components/CreateProject'))
 
 export default function ProjectList() {
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
   const { isShowing: isShowingCreateProject, toggle: toggleCreateProject } = useToggle()
 
@@ -50,7 +52,7 @@ export default function ProjectList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 loading_projects...</span>
+          <span className='text-base'>🚀 {t('loading_projects...')}</span>
           <SpinningCircle />
         </div>
       </div>
@@ -60,9 +62,9 @@ export default function ProjectList() {
     <>
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-10 pt-12 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
-          <span className='text-2xl font-semibold tracking-wide'>projects</span>
+          <span className='text-2xl font-semibold tracking-wide'>{t('projects')}</span>
           <button onClick={toggleCreateProject} className='btn'>
-            create_project
+            {t('create_project')}
           </button>
         </div>
         <div className='mt-8'>
@@ -72,7 +74,7 @@ export default function ProjectList() {
               name='searchValue'
               onChange={handleChangeParams}
               value={projectParams.searchValue}
-              placeholder='search_projects'
+              placeholder={t('search_projects')}
             />
             <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
           </div>
@@ -80,10 +82,10 @@ export default function ProjectList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-32'></div>
-            <div className='w-40'>image</div>
-            <div className='w-40'>key</div>
-            <div className='w-80'>name</div>
-            <div className='flex-grow'>leader</div>
+            <div className='w-40'>{t('image')}</div>
+            <div className='w-40'>{t('key')}</div>
+            <div className='w-80'>{t('name')}</div>
+            <div className='flex-grow'>{t('leader')}</div>
           </div>
           {projects && projects.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
@@ -92,7 +94,7 @@ export default function ProjectList() {
               ))}
             </div>
           ) : (
-            <div className='mt-[30vh] grid place-items-center text-xl'>no_projects_found 🚀</div>
+            <div className='mt-[30vh] grid place-items-center text-xl'>{t('no_projects_found')} 🚀</div>
           )}
         </div>
 

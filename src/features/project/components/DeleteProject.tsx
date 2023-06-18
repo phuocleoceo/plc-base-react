@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 
@@ -22,6 +23,7 @@ export default function DeleteProject(props: Props) {
   const [typeContent, setTypeContent] = useState<string>('')
 
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const deleteProjectMutation = useMutation({
@@ -31,7 +33,7 @@ export default function DeleteProject(props: Props) {
   const handleDeleteProject = async () => {
     deleteProjectMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('delete_project_success')
+        toast.success(t('delete_project_success'))
         queryClient.invalidateQueries([QueryKey.Projects])
         onClose()
         navigate('/')
@@ -47,16 +49,16 @@ export default function DeleteProject(props: Props) {
     <Modal
       onSubmit={handleDeleteProject}
       isMutating={deleteProjectMutation.isLoading}
-      closeLabel='cancle'
-      submittingLabel='deleting_project...'
-      submitLabel='delete_project'
+      closeLabel={t('cancle')}
+      submittingLabel={t('deleting_project...')}
+      submitLabel={t('delete_project')}
       submitClassName='btn-alert'
       submitDisable={typeContent !== project.name}
       {...{ isShowing, onClose }}
     >
       <div>
         <label htmlFor={project.name} className='text-sm tracking-wide text-gray-800'>
-          {`type_project_name_for_delete` + `: ${project.name}`}
+          {t(`type_project_name_to_delete`) + `: ${project.name}`}
         </label>
         <input
           value={typeContent}

@@ -1,5 +1,6 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
@@ -18,6 +19,7 @@ export default function Menubar() {
 
   const { isShowing, toggle } = useToggle(true)
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const { data, isLoading } = useQuery({
@@ -55,7 +57,7 @@ export default function Menubar() {
 
               <div className='ml-2 w-40'>
                 <span className='block truncate text-sm font-medium text-c-5'>{project?.name}</span>
-                <span className='text-[13px] text-c-text'>project_planning</span>
+                <span className='text-[13px] text-c-text'>{t('project_planning')}</span>
               </div>
             </div>
 
@@ -63,20 +65,20 @@ export default function Menubar() {
               <IconLink
                 to={`/project/${projectId}/board`}
                 icon='bi:kanban'
-                text='kanban_board'
+                text={t('kanban_board')}
                 isActive={currentTab === 'board'}
               />
               <IconLink
                 to={`/project/${projectId}/backlog`}
                 icon='fluent-mdl2:backlog-list'
-                text='backlog'
+                text={t('backlog')}
                 rotate={180}
                 isActive={currentTab === 'backlog'}
               />
               <IconLink
                 to={`/project/${projectId}/member`}
                 icon='mdi:people'
-                text='project_member'
+                text={t('project_member')}
                 isActive={currentTab === 'member' || currentTab === 'invitation'}
               />
             </div>
@@ -87,7 +89,7 @@ export default function Menubar() {
               <IconLink
                 to={`/project/${projectId}/setting`}
                 icon='clarity:settings-solid'
-                text='project_setting'
+                text={t('project_setting')}
                 isActive={currentTab === 'setting'}
               />
             </div>

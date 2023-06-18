@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, useState, lazy, Suspense } from 'react'
 import { FieldError, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
@@ -23,7 +24,10 @@ type FormData = Pick<UpdateProjectRequest, 'name' | 'key' | 'leaderId'>
 
 export default function ProjectSetting() {
   const projectId = Number(useParams().projectId)
+
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
+
   const [selectedImage, setSelectedImage] = useState<File>()
   const { isShowing: isShowingDeleteProject, toggle: toggleDeleteProject } = useToggle()
 
@@ -81,7 +85,7 @@ export default function ProjectSetting() {
 
     updateProjectMutation.mutate(updateProjectData, {
       onSuccess: () => {
-        toast.success('update_project_success')
+        toast.success(t('update_project_success'))
         queryClient.invalidateQueries([QueryKey.ProjectDetail, projectId])
         reset()
       },
@@ -113,25 +117,25 @@ export default function ProjectSetting() {
           </div>
 
           <InputValidation
-            label='name'
+            label={t('name')}
             defaultValue={project?.name}
-            placeholder='enter_project_name...'
+            placeholder={t('enter_project_name...')}
             register={register('name', {
-              required: { value: true, message: 'project_name_required' }
+              required: { value: true, message: t('project_name_required') }
             })}
             error={errors.name as FieldError}
           />
           <InputValidation
-            label='key'
+            label={t('key')}
             defaultValue={project?.key}
-            placeholder='enter_project_key...'
+            placeholder={t('enter_project_key...')}
             register={register('key', {
-              required: { value: true, message: 'project_key_required' }
+              required: { value: true, message: t('project_key_required') }
             })}
             error={errors.key as FieldError}
           />
 
-          <LabelWrapper label='leader' margin='mt-1'>
+          <LabelWrapper label={t('leader')} margin='mt-1'>
             <SelectBox
               control={control}
               controlField='leaderId'
@@ -143,7 +147,7 @@ export default function ProjectSetting() {
 
           <div className='mt-2 flex justify-around'>
             <button type='submit' className='btn w-2/5'>
-              {isSubmitting ? 'saving_changes...' : 'save_changes'}
+              {isSubmitting ? t('saving_changes...') : t('save_changes')}
             </button>
 
             <div
@@ -153,7 +157,7 @@ export default function ProjectSetting() {
               role='button'
               tabIndex={0}
             >
-              delete_project
+              {t('delete_project')}
             </div>
           </div>
         </form>

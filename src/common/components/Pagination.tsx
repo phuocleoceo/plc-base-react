@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import ReactPaginate from 'react-paginate'
 import { Icon } from '@iconify/react'
 
@@ -10,6 +11,8 @@ interface Props {
 export default function Pagination(props: Props) {
   const { pageSize, totalRecords, onChangePage } = props
 
+  const { t } = useTranslation()
+
   const totalPages = Math.ceil(totalRecords / pageSize)
 
   const handlePageClick = (selectedItem: { selected: number }) => {
@@ -21,7 +24,9 @@ export default function Pagination(props: Props) {
   return (
     <div className='flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6'>
       <div>
-        <p className='text-black'>total has {totalRecords} results</p>
+        <p className='text-black'>
+          {t('total_has')} {totalRecords} {t('results')}
+        </p>
       </div>
 
       <ReactPaginate
