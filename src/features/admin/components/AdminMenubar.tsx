@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 
@@ -11,6 +12,7 @@ export default function AdminMenubar() {
   // host/admin/currentTab
   const currentTab = useLocation().pathname.split('/')[2]
 
+  const { t } = useTranslation()
   const { isShowing, toggle } = useToggle(true)
 
   return (
@@ -27,18 +29,18 @@ export default function AdminMenubar() {
           </div>
 
           <div className='ml-2 w-40'>
-            <span className='block truncate text-sm font-medium text-c-5'>Scrum with JiPLC</span>
-            <span className='text-[13px] text-c-text'>welcome_admin</span>
+            <span className='block truncate text-sm font-medium text-c-5'>{t('scrum_with_ji_plc')}</span>
+            <span className='text-[13px] text-c-text'>{t('welcome_admin')}</span>
           </div>
         </div>
 
         <div className='mt-5 mb-2'>
-          <IconLink to='/admin/user' icon='mdi:account' text='user' isActive={currentTab === 'user'} />
+          <IconLink to='/admin/user' icon='mdi:account' text={t('user')} isActive={currentTab === 'user'} />
 
           <IconLink
             to='/admin/project-role'
             icon='eos-icons:role-binding'
-            text='project_role'
+            text={t('project_role')}
             isActive={currentTab === 'project-role'}
           />
         </div>
@@ -49,7 +51,7 @@ export default function AdminMenubar() {
           <IconLink
             to='/admin/setting'
             icon='clarity:settings-solid'
-            text='setting'
+            text={t('setting')}
             isActive={currentTab === 'setting'}
           />
         </div>

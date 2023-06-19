@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { lazy, Suspense } from 'react'
 import { Icon } from '@iconify/react'
@@ -22,6 +23,7 @@ export default function ProjectRoleRow(props: Props) {
   const { isShowing: isShowingUpdateProjectRole, toggle: toggleUpdateProjectRole } = useToggle()
   const { isShowing: isShowingDeleteProjectRole, toggle: toggleDeleteProjectRole } = useToggle()
 
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const deleteProjectRoleMutation = useMutation({
@@ -31,7 +33,7 @@ export default function ProjectRoleRow(props: Props) {
   const handleDeleteProjectRole = async () => {
     deleteProjectRoleMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('delete_project_role_success')
+        toast.success(t('delete_project_role_success'))
         queryClient.invalidateQueries([QueryKey.ProjectRoles])
         toggleDeleteProjectRole()
       }
@@ -77,10 +79,10 @@ export default function ProjectRoleRow(props: Props) {
             onClose={toggleDeleteProjectRole}
             onSubmit={handleDeleteProjectRole}
             isMutating={deleteProjectRoleMutation.isLoading}
-            confirmMessage={`submit_delete_project_role` + `: ${projectRole.name}`}
-            closeLabel='cancle'
-            submittingLabel='deleting_project_role...'
-            submitLabel='delete_project_role'
+            confirmMessage={t('submit_delete_project_role') + `: ${projectRole.name}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_project_role...')}
+            submitLabel={t('delete_project_role')}
             submitClassName='btn-alert'
             className='max-w-[20rem]'
           />

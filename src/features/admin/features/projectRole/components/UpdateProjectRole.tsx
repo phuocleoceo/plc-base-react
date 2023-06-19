@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
@@ -30,6 +31,7 @@ export default function UpdateProjectRole(props: Props) {
     formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
@@ -54,7 +56,7 @@ export default function UpdateProjectRole(props: Props) {
 
     updateProjectRoleMutation.mutate(projectRoleData, {
       onSuccess: () => {
-        toast.success('update_project_role_success')
+        toast.success(t('update_project_role_success'))
         queryClient.invalidateQueries([QueryKey.ProjectRoles])
         queryClient.invalidateQueries([QueryKey.ProjectRole, projectRoleId])
         reset()
@@ -74,24 +76,24 @@ export default function UpdateProjectRole(props: Props) {
       isLoading={isLoadingProjectRole}
       onSubmit={handleUpdateProjectRole}
       isMutating={updateProjectRoleMutation.isLoading || isSubmitting}
-      closeLabel='cancle'
-      submittingLabel='updating_project_role...'
-      submitLabel='update_project_role'
+      closeLabel={t('cancle')}
+      submittingLabel={t('updating_project_role...')}
+      submitLabel={t('update_project_role')}
       {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-3'>
-          <span className='text-[22px] font-[600] text-c-text'>update_project_role</span>
+          <span className='text-[22px] font-[600] text-c-text'>{t('update_project_role')}</span>
         </div>
 
         <div className='flex flex-col gap-4'>
           <InputValidation
-            label='name'
-            placeholder='name...'
+            label={t('name')}
+            placeholder={t('role_name...')}
             register={register('name', {
               required: {
                 value: true,
-                message: 'name_required'
+                message: t('role_name_required')
               }
             })}
             error={errors.name as FieldError}
@@ -101,12 +103,12 @@ export default function UpdateProjectRole(props: Props) {
           />
 
           <InputValidation
-            label='description'
-            placeholder='description...'
+            label={t('description')}
+            placeholder={t('description...')}
             register={register('description', {
               required: {
                 value: true,
-                message: 'description_required'
+                message: t('description_required')
               }
             })}
             error={errors.description as FieldError}

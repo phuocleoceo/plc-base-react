@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
+import { LabelWrapper, Modal, SelectBox, SwitchToggle } from '~/common/components'
 import { UpdateUserAccountRequest } from '~/features/admin/features/user/models'
 import { RoleApi } from '~/features/admin/features/accessControl/apis'
-import { LabelWrapper, Modal, SelectBox, SwitchToggle } from '~/common/components'
 import { UserAccountApi } from '~/features/admin/features/user/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
@@ -24,6 +25,7 @@ type FormData = Pick<UpdateUserAccountRequest, 'roleId' | 'isActived'>
 export default function IssueDetail(props: Props) {
   const { userId, isShowing, onClose } = props
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
@@ -45,7 +47,7 @@ export default function IssueDetail(props: Props) {
 
     updateUserMutation.mutate(userData, {
       onSuccess: () => {
-        toast.success('update_user_success')
+        toast.success(t('update_user_success'))
         queryClient.invalidateQueries([QueryKey.UserAccounts])
         queryClient.invalidateQueries([QueryKey.UserAccountDetail, userId])
         onClose()
@@ -89,19 +91,19 @@ export default function IssueDetail(props: Props) {
         isLoading={isLoadingUser || isLoadingRole}
         onSubmit={handleUpdateUser}
         isMutating={updateUserMutation.isLoading || isSubmitting}
-        closeLabel='cancle'
-        submittingLabel='updating_user...'
-        submitLabel='update_user'
+        closeLabel={t('cancle')}
+        submittingLabel={t('updating_user...')}
+        submitLabel={t('update_user')}
         {...{ isShowing, onClose }}
         className='max-w-[30rem]'
       >
         <>
           <div className='mt-1 mb-6'>
-            <span className='text-[20px] font-[600] text-c-text'>{`update_user ${user?.email}`}</span>
+            <span className='text-[20px] font-[600] text-c-text'>{`${t('update_user')} ${user?.email}`}</span>
           </div>
 
           <div className='flex justify-around'>
-            <LabelWrapper label='role' margin='mt-0'>
+            <LabelWrapper label={t('role')} margin='mt-0'>
               <SelectBox
                 control={control}
                 controlField='roleId'
@@ -111,7 +113,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='is_actived' margin='mt-0'>
+            <LabelWrapper label={t('is_actived')} margin='mt-0'>
               <SwitchToggle
                 control={control}
                 controlField='isActived'
@@ -120,7 +122,7 @@ export default function IssueDetail(props: Props) {
               />
             </LabelWrapper>
 
-            <LabelWrapper label='is_verified' margin='mt-0'>
+            <LabelWrapper label={t('is_verified')} margin='mt-0'>
               <SwitchToggle defaultValue={user?.isVerified} readonly={true} className='mt-2' />
             </LabelWrapper>
           </div>

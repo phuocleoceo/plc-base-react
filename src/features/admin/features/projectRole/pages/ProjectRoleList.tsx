@@ -1,5 +1,6 @@
 import { Suspense, lazy, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 
 import { GetProjectRolesParams } from '~/features/admin/features/projectRole/models'
@@ -13,6 +14,7 @@ import { useToggle } from '~/common/hooks'
 const CreateProjectRole = lazy(() => import('~/features/admin/features/projectRole/components/CreateProjectRole'))
 
 export default function ProjectRoleList() {
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const { isShowing: isShowingCreateProjectRole, toggle: toggleCreateProjectRole } = useToggle()
@@ -52,7 +54,7 @@ export default function ProjectRoleList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 loading_project_roles...</span>
+          <span className='text-base'>🚀 {t('loading_project_roles')}...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -62,9 +64,9 @@ export default function ProjectRoleList() {
     <>
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-5 pt-5 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
-          <span className='text-2xl font-semibold tracking-wide'>project_roles</span>
+          <span className='text-2xl font-semibold tracking-wide'>{t('project_roles')}</span>
           <button onClick={toggleCreateProjectRole} className='btn'>
-            create_project_role
+            {t('create_project_role')}
           </button>
         </div>
 
@@ -75,7 +77,7 @@ export default function ProjectRoleList() {
               name='searchValue'
               onChange={handleChangeParams}
               value={projectRoleParams.searchValue}
-              placeholder='search_project_roles'
+              placeholder={t('search_project_roles')}
             />
             <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
           </div>
@@ -83,9 +85,9 @@ export default function ProjectRoleList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-32'></div>
-            <div className='w-56'>name</div>
-            <div className='w-64'>description</div>
-            <div className='flex-grow'>action</div>
+            <div className='w-56'>{t('name')}</div>
+            <div className='w-64'>{t('description')}</div>
+            <div className='flex-grow'>{t('action')}</div>
           </div>
           {projectRoles && projectRoles.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
@@ -94,7 +96,7 @@ export default function ProjectRoleList() {
               ))}
             </div>
           ) : (
-            <div className='mt-[30vh] grid place-items-center text-xl'>no_projects_found 🚀</div>
+            <div className='mt-[30vh] grid place-items-center text-xl'>{t('no_project_roles_found')} 🚀</div>
           )}
         </div>
 

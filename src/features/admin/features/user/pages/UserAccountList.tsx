@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
@@ -10,6 +11,7 @@ import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 
 export default function UserAccountList() {
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const [userAccountParams, setUserAccountParams] = useState<GetUserAccountsParams>({
@@ -47,7 +49,7 @@ export default function UserAccountList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 loading_user_accounts...</span>
+          <span className='text-base'>🚀 {t('loading_user_accounts')}...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -57,7 +59,7 @@ export default function UserAccountList() {
     <>
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 pb-5 pt-5 text-c-5'>
         <div className='flex min-w-[43rem] justify-between'>
-          <span className='text-2xl font-semibold tracking-wide'>users</span>
+          <span className='text-2xl font-semibold tracking-wide'>{t('users')}</span>
         </div>
         <div className='mt-3'>
           <div className='relative'>
@@ -66,7 +68,7 @@ export default function UserAccountList() {
               name='searchValue'
               onChange={handleChangeParams}
               value={userAccountParams.searchValue}
-              placeholder='search_users'
+              placeholder={t('search_users')}
             />
             <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
           </div>
@@ -74,11 +76,11 @@ export default function UserAccountList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-16'></div>
-            <div className='w-60'>email</div>
-            <div className='w-56'>name</div>
-            <div className='w-32'>phoneNumber</div>
-            <div className='w-32'>identityNumber</div>
-            <div className='flex-grow'>address</div>
+            <div className='w-60'>{t('email')}</div>
+            <div className='w-56'>{t('name')}</div>
+            <div className='w-32'>{t('phone_number')}</div>
+            <div className='w-32'>{t('identity_number')}</div>
+            <div className='flex-grow'>{t('address')}</div>
           </div>
           {users && users.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
@@ -87,7 +89,7 @@ export default function UserAccountList() {
               ))}
             </div>
           ) : (
-            <div className='mt-[30vh] grid place-items-center text-xl'>no_projects_found 🚀</div>
+            <div className='mt-[30vh] grid place-items-center text-xl'>{t('no_users_found')} 🚀</div>
           )}
         </div>
 
