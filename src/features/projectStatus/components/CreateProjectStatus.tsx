@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
@@ -19,6 +20,8 @@ type FormData = Pick<CreateProjectStatusRequest, 'name'>
 
 export default function CreateProjectStatus(props: Props) {
   const { projectId, isShowing, onClose } = props
+
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const {
@@ -40,7 +43,7 @@ export default function CreateProjectStatus(props: Props) {
 
     createProjectStatusMutation.mutate(projectStatusData, {
       onSuccess: () => {
-        toast.success('create_status_success')
+        toast.success(t('create_status_success'))
         queryClient.invalidateQueries([QueryKey.ProjectStatuses])
         reset()
         onClose()
@@ -58,23 +61,23 @@ export default function CreateProjectStatus(props: Props) {
     <Modal
       onSubmit={handleCreateProjectStatus}
       isMutating={createProjectStatusMutation.isLoading || isSubmitting}
-      closeLabel='cancle'
-      submittingLabel='creating...'
-      submitLabel='create'
+      closeLabel={t('cancle')}
+      submittingLabel={t('creating...')}
+      submitLabel={t('create')}
       {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-4'>
-          <span className='text-[22px] font-[600] text-c-text'>create_project_status</span>
+          <span className='text-[22px] font-[600] text-c-text'>{t('create_project_status')}</span>
         </div>
         <div className='flex flex-col gap-4'>
           <InputValidation
-            label='name'
-            placeholder='enter_project_status_name...'
+            label={t('name')}
+            placeholder={t('enter_project_status_name...')}
             register={register('name', {
               required: {
                 value: true,
-                message: 'name_required'
+                message: t('status_name_required')
               }
             })}
             error={errors.name as FieldError}

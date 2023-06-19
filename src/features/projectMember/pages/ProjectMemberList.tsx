@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 import { ProjectMemberRow } from '~/features/projectMember/components'
@@ -14,6 +15,7 @@ export default function ProjectMemberList() {
   const projectId = Number(useParams().projectId)
   const navigate = useNavigate()
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const [projectMemberParams, setProjectMemberParams] = useState<GetMemberForProjectParams>({
@@ -52,7 +54,7 @@ export default function ProjectMemberList() {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
-          <span className='text-base'>🚀 loading_project_members...</span>
+          <span className='text-base'>🚀 {t('loading_project_members')}...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -62,9 +64,9 @@ export default function ProjectMemberList() {
     <>
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5 mt-6'>
         <div className='flex min-w-[43rem] justify-between'>
-          <h1 className='text-xl font-semibold tracking-wide'>project_members</h1>
+          <h1 className='text-xl font-semibold tracking-wide'>{t('project_members')}</h1>
           <button onClick={() => navigate(`/project/${projectId}/invitation`)} className='btn'>
-            invitations
+            {t('invitations')}
           </button>
         </div>
         <div className='mt-8'>
@@ -74,7 +76,7 @@ export default function ProjectMemberList() {
               name='searchValue'
               onChange={handleChangeParams}
               value={projectMemberParams.searchValue}
-              placeholder='search_project_members'
+              placeholder={t('search_project_members')}
             />
             <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
           </div>
@@ -82,9 +84,9 @@ export default function ProjectMemberList() {
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
             <div className='w-32'></div>
-            <div className='w-60'>name</div>
-            <div className='w-72'>email</div>
-            <div className='flex-grow'>action</div>
+            <div className='w-60'>{t('name')}</div>
+            <div className='w-72'>{t('email')}</div>
+            <div className='flex-grow'>{t('action')}</div>
           </div>
           {projectMembers && projectMembers.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
@@ -93,7 +95,7 @@ export default function ProjectMemberList() {
               ))}
             </div>
           ) : (
-            <div className='mt-[30vh] grid place-items-center text-xl'>no_project_members_found 🚀</div>
+            <div className='mt-[30vh] grid place-items-center text-xl'>{t('no_project_members_found')} 🚀</div>
           )}
         </div>
 

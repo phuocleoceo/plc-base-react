@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
@@ -24,6 +25,7 @@ type Props = {
 export default function DragDropStatus(props: Props) {
   const { idx, projectId, issues, isDragDisabled, projectStatus } = props
 
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useToggle()
@@ -52,13 +54,13 @@ export default function DragDropStatus(props: Props) {
     }
 
     if (projectStatusData.name === undefined || projectStatusData.index === undefined) {
-      toast.warn('status_name_required')
+      toast.warn(t('status_name_required'))
       return
     }
 
     updateProjectStatusMutation.mutate(projectStatusData, {
       onSuccess: () => {
-        toast.success('update_status_success')
+        toast.success(t('update_status_success'))
         queryClient.invalidateQueries([QueryKey.ProjectStatuses])
         toggleUpdateStatus()
       }
@@ -72,7 +74,7 @@ export default function DragDropStatus(props: Props) {
   const handleDeleteProjectStatus = async () => {
     deleteProjectStatusMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('delete_status_success')
+        toast.success(t('delete_status_success'))
         queryClient.invalidateQueries([QueryKey.ProjectStatuses])
         toggleDeleteStatus()
       }
@@ -155,10 +157,10 @@ export default function DragDropStatus(props: Props) {
             onClose={toggleDeleteStatus}
             onSubmit={handleDeleteProjectStatus}
             isMutating={deleteProjectStatusMutation.isLoading}
-            confirmMessage={`submit_delete_status` + `: ${projectStatus.name}`}
-            closeLabel='cancle'
-            submittingLabel='deleting_status...'
-            submitLabel='delete_status'
+            confirmMessage={t(`submit_delete_status`) + `: ${projectStatus.name}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_status...')}
+            submitLabel={t('delete_status')}
             submitClassName='btn-alert'
             className='max-w-[20rem]'
           />

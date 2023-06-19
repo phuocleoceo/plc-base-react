@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { lazy, Suspense } from 'react'
 import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
@@ -20,6 +21,7 @@ interface Props {
 
 export default function ProjectMemberRow(props: Props) {
   const { idx, projectId, projectMember } = props
+  const { t } = useTranslation()
 
   const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useToggle()
   const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useToggle()
@@ -38,7 +40,7 @@ export default function ProjectMemberRow(props: Props) {
   const handleDeleteProjectMember = async () => {
     deleteProjectMemberMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('delete_project_member_success')
+        toast.success(t('delete_project_member_success'))
         queryClient.invalidateQueries([QueryKey.ProjectMembers])
         toggleDeleteMember()
       }
@@ -84,10 +86,10 @@ export default function ProjectMemberRow(props: Props) {
             onClose={toggleDeleteMember}
             onSubmit={handleDeleteProjectMember}
             isMutating={deleteProjectMemberMutation.isLoading}
-            confirmMessage={`submit_delete_project_member` + `: ${projectMember.name}`}
-            closeLabel='cancle'
-            submittingLabel='deleting_project_member...'
-            submitLabel='delete_project_member'
+            confirmMessage={t(`submit_delete_project_member`) + `: ${projectMember.name}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_project_member...')}
+            submitLabel={t('delete_project_member')}
             submitClassName='btn-alert'
           />
         </Suspense>

@@ -1,6 +1,6 @@
+import { Suspense, lazy, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { Suspense, lazy, useContext } from 'react'
 import { motion } from 'framer-motion'
 
 import { LocalStorageHelper } from '~/shared/helpers'

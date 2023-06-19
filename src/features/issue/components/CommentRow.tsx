@@ -92,7 +92,7 @@ export default function CommentRow(props: Props) {
         <Avatar src={comment.userAvatar} name={comment.userName} className='mt-1 h-7 w-7' />
         <div className='grow'>
           <div className='flex justify-between text-sm'>
-            <span className='font-semibold'>{comment.userName + (isCurrentUserComment ? ` ${t('you')}` : '')}</span>
+            <span className='font-semibold'>{comment.userName + (isCurrentUserComment ? ` (${t('you')})` : '')}</span>
             <span className='mx-3 text-gray-700'>{TimeHelper.howLongFromNow(comment.createdAt)}</span>
           </div>
 
