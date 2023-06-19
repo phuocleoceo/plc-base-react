@@ -301,7 +301,7 @@ export default function ProjectBoard() {
           <div className='mt-6 flex items-center justify-center w-screen'>
             <div className='p-4 text-center'>
               <img className='mx-auto' width='50%' height='auto' src={SprintIMG} alt='sprint' />
-              <h1 className='text-xl'>there_are_no_available_sprints</h1>
+              <h1 className='text-xl'>{t('there_are_no_available_sprints')}</h1>
               <button onClick={toggleCreateSprint} className='btn-gray mt-4'>
                 {t('create_sprint')}
               </button>

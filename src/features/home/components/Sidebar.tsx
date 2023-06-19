@@ -1,11 +1,13 @@
 import { Suspense, lazy, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 import { LocalStorageHelper } from '~/shared/helpers'
 import { Avatar, IconBtn } from '~/common/components'
 import { ProfileApi } from '~/features/profile/apis'
+import { locales } from '~/common/locales/i18n'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
@@ -15,10 +17,17 @@ import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
 const Profile = lazy(() => import('~/features/profile/pages/Profile'))
 
 export default function Sidebar() {
+  const { i18n } = useTranslation()
+  const currentLanguage = locales[i18n.language as keyof typeof locales]
+
   const { isShowing, toggle } = useToggle()
   const navigate = useNavigate()
 
   const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)
+
+  const changeLanguage = (lng: 'en' | 'vi') => {
+    i18n.changeLanguage(lng)
+  }
 
   const { data } = useQuery({
     queryKey: [QueryKey.PersonalProfile],

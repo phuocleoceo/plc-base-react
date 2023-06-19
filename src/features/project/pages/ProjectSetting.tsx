@@ -109,7 +109,7 @@ export default function ProjectSetting() {
   ) : (
     <>
       <div className='px-5 sm:px-10 mt-6'>
-        <h1 className='mb-4 text-xl font-semibold text-c-text'>project_setting</h1>
+        <h1 className='mb-4 text-xl font-semibold text-c-text'>{t('project_setting')}</h1>
 
         <form onSubmit={handleUpdateProfile} className='flex max-w-[30rem] flex-col gap-4'>
           <div>

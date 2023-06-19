@@ -99,11 +99,11 @@ export default function CreateSprint(props: Props) {
             error={errors.goal as FieldError}
           />
 
-          <LabelWrapper label='from_date' margin='mt-0'>
+          <LabelWrapper label={t('from_date')} margin='mt-0'>
             <DateTimePicker control={control} controlField='fromDate' className='w-full' />
           </LabelWrapper>
 
-          <LabelWrapper label='to_date' margin='mt-0'>
+          <LabelWrapper label={t('to_date')} margin='mt-0'>
             <DateTimePicker control={control} controlField='toDate' className='w-full' />
           </LabelWrapper>
         </div>
