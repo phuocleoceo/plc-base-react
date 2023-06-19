@@ -68,6 +68,7 @@ export default function Register() {
             <div className='flex flex-col gap-y-4'>
               <InputValidation
                 label={t('email')}
+                placeholder={t('enter_email...')}
                 register={register('email', {
                   required: { value: true, message: t('email_required') },
                   pattern: {
@@ -83,6 +84,7 @@ export default function Register() {
 
               <InputValidation
                 label={t('password')}
+                placeholder={t('enter_password...')}
                 register={register('password', {
                   required: { value: true, message: t('password_required') }
                 })}
@@ -92,9 +94,10 @@ export default function Register() {
               />
 
               <InputValidation
-                label={t('displayName')}
+                label={t('display_name')}
+                placeholder={t('enter_display_name...')}
                 register={register('displayName', {
-                  required: { value: true, message: t('displayName_required') }
+                  required: { value: true, message: t('display_name_required') }
                 })}
                 error={errors.displayName as FieldError}
                 inputClass='border-gray-500'
@@ -103,18 +106,20 @@ export default function Register() {
 
             <div className='flex flex-col gap-y-4'>
               <InputValidation
-                label={t('identityNumber')}
+                label={t('identity_number')}
+                placeholder={t('enter_identity_number...')}
                 register={register('identityNumber', {
-                  required: { value: true, message: t('identityNumber_required') }
+                  required: { value: true, message: t('identity_number_required') }
                 })}
                 error={errors.identityNumber as FieldError}
                 inputClass='border-gray-500'
               />
 
               <InputValidation
-                label={t('phoneNumber')}
+                label={t('phone_number')}
+                placeholder={t('enter_phone_number...')}
                 register={register('phoneNumber', {
-                  required: { value: true, message: t('phoneNumber_required') }
+                  required: { value: true, message: t('phone_number_required') }
                 })}
                 error={errors.phoneNumber as FieldError}
                 inputClass='border-gray-500'
@@ -122,6 +127,7 @@ export default function Register() {
 
               <InputValidation
                 label={t('address')}
+                placeholder={t('enter_address...')}
                 register={register('address', {
                   required: { value: true, message: t('address_required') }
                 })}

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { UserProfileType } from '~/features/profile/models'
 import { Avatar } from '~/common/components'
 import { ProfileTab } from '~/shared/enums'
@@ -9,6 +11,8 @@ interface Props {
 
 export default function ProfileDetail(props: Props) {
   const { user, onChangeTab } = props
+
+  const { t } = useTranslation()
 
   const getFullAddress = () => {
     return `${user?.address}, ${user?.addressWard}, ${user?.addressDistrict}, ${user?.addressProvince}`
@@ -22,27 +26,27 @@ export default function ProfileDetail(props: Props) {
 
       <div className='ml-10'>
         <div className='mb-4'>
-          <span className='text-gray-600 font-bold'>email:</span>
+          <span className='text-gray-600 font-bold'>{t('email')}:</span>
           <div className='text-black'>{user?.email}</div>
         </div>
 
         <div className='mb-4'>
-          <span className='text-gray-600 font-bold'>display_name:</span>
+          <span className='text-gray-600 font-bold'>{t('display_name')}:</span>
           <div className='text-black'>{user?.displayName}</div>
         </div>
 
         <div className='mb-4'>
-          <span className='text-gray-600 font-bold'>phone_number:</span>
+          <span className='text-gray-600 font-bold'>{t('phone_number')}:</span>
           <div className='text-black'>{user?.phoneNumber}</div>
         </div>
 
         <div className='mb-4'>
-          <span className='text-gray-600 font-bold'>identity_number:</span>
+          <span className='text-gray-600 font-bold'>{t('identity_number')}:</span>
           <div className='text-black'>{user?.identityNumber}</div>
         </div>
 
         <div className='mb-2'>
-          <span className='text-gray-600 font-bold'>address:</span>
+          <span className='text-gray-600 font-bold'>{t('address')}:</span>
           <div className='text-black'>{getFullAddress()}</div>
         </div>
       </div>
@@ -50,13 +54,13 @@ export default function ProfileDetail(props: Props) {
       <div className='text-center'>
         <div className='mb-3'>
           <button onClick={() => onChangeTab(ProfileTab.UpdateProfile)} className='btn w-40'>
-            update_profile
+            {t('update_profile')}
           </button>
         </div>
 
         <div className='mb-3'>
           <button onClick={() => onChangeTab(ProfileTab.ChangePassword)} className='btn w-40'>
-            change_password
+            {t('change_password')}
           </button>
         </div>
       </div>

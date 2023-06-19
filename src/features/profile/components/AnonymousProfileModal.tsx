@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { ProfileApi } from '~/features/profile/apis'
 import { Avatar, Modal } from '~/common/components'
@@ -12,6 +13,8 @@ interface Props {
 
 export default function AnonymousProfileModal(props: Props) {
   const { userId, isShowing, onClose } = props
+
+  const { t } = useTranslation()
 
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.AnonymousProfile, userId],
@@ -41,17 +44,17 @@ export default function AnonymousProfileModal(props: Props) {
 
           <div className='flex flex-col gap-4'>
             <div className='mb-1'>
-              <span className='text-gray-600 font-bold'>email:</span>
+              <span className='text-gray-600 font-bold'>{t('email')}:</span>
               <div className='text-black'>{user?.email}</div>
             </div>
 
             <div className='mb-1'>
-              <span className='text-gray-600 font-bold'>phone_number:</span>
+              <span className='text-gray-600 font-bold'>{t('phone_number')}:</span>
               <div className='text-black'>{user?.phoneNumber}</div>
             </div>
 
             <div className='mb-1'>
-              <span className='text-gray-600 font-bold'>address:</span>
+              <span className='text-gray-600 font-bold'>{t('address')}:</span>
               <div className='text-black'>{getFullAddress()}</div>
             </div>
           </div>

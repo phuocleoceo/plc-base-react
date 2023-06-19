@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
@@ -25,6 +26,7 @@ export default function UpdateProfile(props: Props) {
   const { user, onChangeTab } = props
   const [selectedImage, setSelectedImage] = useState<File>()
 
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const {
@@ -56,7 +58,7 @@ export default function UpdateProfile(props: Props) {
 
     updateProfileMutation.mutate(profileData, {
       onSuccess: () => {
-        toast.success('update_profile_success')
+        toast.success(t('update_profile_success'))
         queryClient.invalidateQueries([QueryKey.PersonalProfile])
         reset()
         onChangeTab(ProfileTab.ProfileDetail)
@@ -137,13 +139,13 @@ export default function UpdateProfile(props: Props) {
 
       <div className='mt-5 ml-2 flex w-[16.5rem] flex-col gap-4'>
         <InputValidation
-          label='display_name'
+          label={t('display_name')}
           defaultValue={user?.displayName}
-          placeholder='enter_display_name...'
+          placeholder={t('enter_display_name...')}
           register={register('displayName', {
             required: {
               value: true,
-              message: 'display_name_required'
+              message: t('display_name_required')
             }
           })}
           // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -152,32 +154,32 @@ export default function UpdateProfile(props: Props) {
         />
 
         <InputValidation
-          label='phone_number'
+          label={t('phone_number')}
           defaultValue={user?.phoneNumber}
-          placeholder='enter_phone_number...'
+          placeholder={t('enter_phone_number...')}
           register={register('phoneNumber', {
             required: {
               value: true,
-              message: 'phone_number_required'
+              message: t('phone_number_required')
             }
           })}
           error={errors.phoneNumber as FieldError}
         />
 
         <InputValidation
-          label='address'
+          label={t('address')}
           defaultValue={user?.address}
-          placeholder='enter_address...'
+          placeholder={t('enter_address...')}
           register={register('address', {
             required: {
               value: true,
-              message: 'address_required'
+              message: t('address_required')
             }
           })}
           error={errors.address as FieldError}
         />
 
-        <LabelWrapper label='address_province' margin='mt-1'>
+        <LabelWrapper label={t('address_province')} margin='mt-1'>
           <SelectBox
             selectList={provinces}
             onSelected={handleSelectProvince}
@@ -186,7 +188,7 @@ export default function UpdateProfile(props: Props) {
           />
         </LabelWrapper>
 
-        <LabelWrapper label='address_district' margin='mt-1'>
+        <LabelWrapper label={t('address_district')} margin='mt-1'>
           <SelectBox
             isDisabled={provinceId === undefined}
             selectList={districts}
@@ -196,7 +198,7 @@ export default function UpdateProfile(props: Props) {
           />
         </LabelWrapper>
 
-        <LabelWrapper label='address_ward' margin='mt-1'>
+        <LabelWrapper label={t('address_ward')} margin='mt-1'>
           <SelectBox
             control={control}
             controlField='addressWardId'
@@ -210,10 +212,10 @@ export default function UpdateProfile(props: Props) {
 
       <div className='mt-5 text-center'>
         <button type='submit' className='btn w-40'>
-          {isSubmitting ? 'updating_profile...' : 'update_profile'}
+          {isSubmitting ? t('updating_profile...') : t('update_profile')}
         </button>
         <button onClick={() => onChangeTab(ProfileTab.ProfileDetail)} className='mt-3 btn w-40'>
-          go_back
+          {t('go_back')}
         </button>
       </div>
     </form>
