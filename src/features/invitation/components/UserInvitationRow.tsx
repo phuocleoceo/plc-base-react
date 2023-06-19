@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { Suspense, lazy } from 'react'
 import { Icon } from '@iconify/react'
@@ -24,6 +25,7 @@ export default function ProjectInvitationRow(props: Props) {
   const { isShowing: isShowingAcceptInvitation, toggle: toggleAcceptInvitation } = useToggle()
   const { isShowing: isShowingDeclineInvitation, toggle: toggleDeclineInvitation } = useToggle()
 
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const acceptInvitationMutation = useMutation({
@@ -38,7 +40,7 @@ export default function ProjectInvitationRow(props: Props) {
   const handleAcceptInvitation = async () => {
     acceptInvitationMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('accept_invitation_success')
+        toast.success(t('accept_invitation_success'))
         queryClient.invalidateQueries([QueryKey.UserInvitations])
       }
     })
@@ -56,7 +58,7 @@ export default function ProjectInvitationRow(props: Props) {
   const handleDeclineInvitation = async () => {
     declineInvitationMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('decline_invitation_success')
+        toast.success(t('decline_invitation_success'))
         queryClient.invalidateQueries([QueryKey.UserInvitations])
       }
     })
@@ -94,8 +96,8 @@ export default function ProjectInvitationRow(props: Props) {
         </div>
 
         <div className='flex-grow flex'>
-          {invitation.acceptedAt && <span>accept</span>}
-          {invitation.declinedAt && <span>declined</span>}
+          {invitation.acceptedAt && <span>{t('accepted')}</span>}
+          {invitation.declinedAt && <span>{t('declined')}</span>}
 
           {!invitation.declinedAt && !invitation.acceptedAt && (
             <div className='flex'>
@@ -118,10 +120,10 @@ export default function ProjectInvitationRow(props: Props) {
             onClose={toggleAcceptInvitation}
             onSubmit={handleAcceptInvitation}
             isMutating={acceptInvitationMutation.isLoading}
-            confirmMessage={`submit_accept_invitation` + `: ${invitation.projectName}`}
-            closeLabel='cancle'
-            submittingLabel='accepting_invitation...'
-            submitLabel='accept_invitation'
+            confirmMessage={t('submit_accept_invitation') + `: ${invitation.projectName}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('accepting_invitation...')}
+            submitLabel={t('accept_invitation')}
             className='max-w-[25rem]'
           />
         </Suspense>
@@ -134,10 +136,10 @@ export default function ProjectInvitationRow(props: Props) {
             onClose={toggleDeclineInvitation}
             onSubmit={handleDeclineInvitation}
             isMutating={declineInvitationMutation.isLoading}
-            confirmMessage={`submit_decline_invitation` + `: ${invitation.projectName}`}
-            closeLabel='cancle'
-            submittingLabel='declining_invitation...'
-            submitLabel='decline_invitation'
+            confirmMessage={t('submit_decline_invitation') + `: ${invitation.projectName}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('declining_invitation...')}
+            submitLabel={t('decline_invitation')}
             submitClassName='btn-alert'
             className='max-w-[25rem]'
           />

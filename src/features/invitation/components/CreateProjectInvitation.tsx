@@ -3,6 +3,8 @@ import { FieldError, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
+import { useTranslation } from 'react-i18next'
+
 import { CreateInvitationForProjectRequest } from '~/features/invitation/models'
 import { InputValidation, Modal } from '~/common/components'
 import { InvitationApi } from '~/features/invitation/apis'
@@ -19,6 +21,8 @@ type FormData = Pick<CreateInvitationForProjectRequest, 'recipientEmail'>
 
 export default function CreateProjectInvitation(props: Props) {
   const { projectId, isShowing, onClose } = props
+
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const {
@@ -40,7 +44,7 @@ export default function CreateProjectInvitation(props: Props) {
 
     createInvitationMutation.mutate(invitationData, {
       onSuccess: () => {
-        toast.success('create_invitation_success')
+        toast.success(t('create_invitation_success'))
         queryClient.invalidateQueries([QueryKey.ProjectInvitations])
         reset()
         onClose()
@@ -58,23 +62,23 @@ export default function CreateProjectInvitation(props: Props) {
     <Modal
       onSubmit={handleCreateProjectInvitation}
       isMutating={createInvitationMutation.isLoading || isSubmitting}
-      closeLabel='cancle'
-      submittingLabel='sending...'
-      submitLabel='send'
+      closeLabel={t('cancle')}
+      submittingLabel={t('sending...')}
+      submitLabel={t('send')}
       {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-4'>
-          <span className='text-[22px] font-[600] text-c-text'>create_invitation</span>
+          <span className='text-[22px] font-[600] text-c-text'>{t('create_invitation')}</span>
         </div>
         <div className='flex flex-col gap-4'>
           <InputValidation
-            label='recipient_email'
-            placeholder='enter_email_to_invite...'
+            label={t('recipient_email')}
+            placeholder={t('enter_email_to_invite...')}
             register={register('recipientEmail', {
               required: {
                 value: true,
-                message: 'recipient_email_required'
+                message: t('recipient_email_required')
               }
             })}
             error={errors.recipientEmail as FieldError}

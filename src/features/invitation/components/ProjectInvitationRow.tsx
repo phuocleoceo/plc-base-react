@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { lazy, Suspense } from 'react'
 import { Icon } from '@iconify/react'
@@ -24,6 +25,7 @@ export default function ProjectInvitationRow(props: Props) {
   const { isShowing: isShowingRecipientDetail, toggle: toggleRecipientDetail } = useToggle()
   const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useToggle()
 
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
 
   const handleClickDeleteProjectInvitation = (event: React.MouseEvent) => {
@@ -38,7 +40,7 @@ export default function ProjectInvitationRow(props: Props) {
   const handleDeleteProjectInvitation = async () => {
     deleteProjectinvitationMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('delete_project_invitation_success')
+        toast.success(t('delete_project_invitation_success'))
         queryClient.invalidateQueries([QueryKey.ProjectInvitations])
         toggleDeleteInvitation()
       }
@@ -67,9 +69,9 @@ export default function ProjectInvitationRow(props: Props) {
         </div>
         <div className='w-72'>{invitation.recipientEmail}</div>
 
-        {invitation.acceptedAt && <div className='w-64'>accept</div>}
-        {invitation.declinedAt && <div className='w-64'>declined</div>}
-        {!invitation.declinedAt && !invitation.acceptedAt && <div className='w-64'>pending</div>}
+        {invitation.acceptedAt && <div className='w-64'>{t('accepted')}</div>}
+        {invitation.declinedAt && <div className='w-64'>{t('declined')}</div>}
+        {!invitation.declinedAt && !invitation.acceptedAt && <div className='w-64'>{t('pending')}</div>}
 
         <div className='flex-grow flex'>
           <button
@@ -89,10 +91,10 @@ export default function ProjectInvitationRow(props: Props) {
             onClose={toggleDeleteInvitation}
             onSubmit={handleDeleteProjectInvitation}
             isMutating={deleteProjectinvitationMutation.isLoading}
-            confirmMessage={`submit_delete_project_invitation` + `: ${invitation.recipientEmail}`}
-            closeLabel='cancle'
-            submittingLabel='deleting_project_invitation...'
-            submitLabel='delete_project_invitation'
+            confirmMessage={t(`submit_delete_project_invitation`) + `: ${invitation.recipientEmail}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_project_invitation...')}
+            submitLabel={t('delete_project_invitation')}
             submitClassName='btn-alert'
           />
         </Suspense>
