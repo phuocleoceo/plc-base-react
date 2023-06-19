@@ -258,5 +258,12 @@
   "loading_project_roles": "Loading project roles",
   "project_roles": "Project roles",
   "search_project_roles": "Search project roles",
-  "no_project_roles_found": "No project roles found"
+  "no_project_roles_found": "No project roles found",
+  "coding_task": "Coding task",
+  "bug": "Bug",
+  "user_story": "User story",
+  "low": "Low",
+  "medium": "Medium",
+  "high": "High",
+  "critical": "Critical"
 }

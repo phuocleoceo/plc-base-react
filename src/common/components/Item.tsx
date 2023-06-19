@@ -1,3 +1,5 @@
+import { TranslateHelper } from '~/shared/helpers'
+
 interface Props {
   text: string
   icon?: string
@@ -18,7 +20,7 @@ export default function Item(props: Props) {
           className={`mr-4 ${size} ${variant === 'ROUND' ? 'rounded-full object-cover' : ''}`}
         />
       )}
-      {text}
+      {TranslateHelper.translate(text)}
     </div>
   )
 }
