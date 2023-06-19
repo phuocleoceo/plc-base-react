@@ -1,11 +1,12 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { CompleteSprintRequest, Sprint } from '~/features/sprint/models'
+import { LabelWrapper, Modal, SelectBox } from '~/common/components'
 import { IssueGroupedInBoard } from '~/features/issue/models'
 import { SprintApi } from '~/features/sprint/apis'
 import { QueryKey } from '~/shared/constants'
-import { LabelWrapper, Modal, SelectBox } from '~/common/components'
 import { SelectItem } from '~/shared/types'
 import { useState } from 'react'
 
@@ -20,6 +21,7 @@ interface Props {
 
 export default function CompleteSprint(props: Props) {
   const { completedStatusId, issues, projectId, sprint, isShowing, onClose } = props
+  const { t } = useTranslation()
 
   const moveOptions: SelectItem[] = [
     {
@@ -56,7 +58,7 @@ export default function CompleteSprint(props: Props) {
 
     completeSprintMutation.mutate(completeSprintData, {
       onSuccess: () => {
-        toast.success('completed_sprint')
+        toast.success(t('completed_sprint'))
         queryClient.invalidateQueries([QueryKey.AvailableSprint])
         onClose()
       }
@@ -67,22 +69,24 @@ export default function CompleteSprint(props: Props) {
     <Modal
       onSubmit={handleCompleteSprint}
       isMutating={completeSprintMutation.isLoading}
-      closeLabel='cancle'
-      submittingLabel='completing...'
-      submitLabel='complete'
+      closeLabel={t('cancle')}
+      submittingLabel={t('completing...')}
+      submitLabel={t('complete')}
       {...{ isShowing, onClose }}
     >
       <>
-        <div className='text-xl font-normal'>complete_sprint: {sprint.title}</div>
+        <div className='text-xl font-normal'>
+          {t('complete_sprint')}: {sprint.title}
+        </div>
         <div className='mt-3 text-sm'>
-          <span className='font-bold'>{completedIssues.length}</span> issues_were_done{' '}
+          <span className='font-bold'>{completedIssues.length}</span> {t('issues_were_done')}
         </div>
         <div className='text-sm'>
-          <span className='font-bold'>{unCompletedIssues.length}</span> issues_were_incomplete
+          <span className='font-bold'>{unCompletedIssues.length}</span> {t('issues_were_incomplete')}
         </div>
-        <div className='mt-3 text-sm'>select_where_all_the_incomplete_issues_should_be_moved:</div>
+        <div className='mt-3 text-sm'>{t('select_where_all_the_incomplete_issues_should_be_moved')}:</div>
 
-        <LabelWrapper label='move_to' margin='mt-3'>
+        <LabelWrapper label={t('move_to')} margin='mt-3'>
           <SelectBox
             selectList={moveOptions}
             defaultValue={'next_sprint'}

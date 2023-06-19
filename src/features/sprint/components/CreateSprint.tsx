@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
@@ -19,6 +20,7 @@ type FormData = Pick<CreateSprintRequest, 'title' | 'goal' | 'fromDate' | 'toDat
 
 export default function CreateSprint(props: Props) {
   const { projectId, isShowing, onClose } = props
+  const { t } = useTranslation()
 
   const {
     reset,
@@ -42,7 +44,7 @@ export default function CreateSprint(props: Props) {
 
     createSprintMutation.mutate(sprintData, {
       onSuccess: () => {
-        toast.success('create_sprint_success')
+        toast.success(t('create_sprint_success'))
         queryClient.invalidateQueries([QueryKey.AvailableSprint])
         reset()
         onClose()
@@ -60,24 +62,24 @@ export default function CreateSprint(props: Props) {
     <Modal
       onSubmit={handleCreateSprint}
       isMutating={createSprintMutation.isLoading || isSubmitting}
-      closeLabel='cancle'
-      submittingLabel='creating_sprint...'
-      submitLabel='create_sprint'
+      closeLabel={t('cancle')}
+      submittingLabel={t('creating_sprint...')}
+      submitLabel={t('create_sprint')}
       {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-3'>
-          <span className='text-[22px] font-[600] text-c-text'>create_sprint</span>
+          <span className='text-[22px] font-[600] text-c-text'>{t('create_sprint')}</span>
         </div>
 
         <div className='flex flex-col gap-4'>
           <InputValidation
-            label='title'
-            placeholder='title...'
+            label={t('title')}
+            placeholder={t('title...')}
             register={register('title', {
               required: {
                 value: true,
-                message: 'title_required'
+                message: t('title_required')
               }
             })}
             error={errors.title as FieldError}
@@ -86,12 +88,12 @@ export default function CreateSprint(props: Props) {
           />
 
           <InputValidation
-            label='goal'
-            placeholder='goal...'
+            label={t('goal')}
+            placeholder={t('goal...')}
             register={register('goal', {
               required: {
                 value: true,
-                message: 'goal_required'
+                message: t('goal_required')
               }
             })}
             error={errors.goal as FieldError}

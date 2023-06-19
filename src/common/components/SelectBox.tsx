@@ -1,6 +1,7 @@
 import Select, { SingleValue } from 'react-select'
 import { Controller } from 'react-hook-form'
 
+import { TranslateHelper } from '~/shared/helpers'
 import { SelectItem } from '~/shared/types'
 import Item from './Item'
 
@@ -30,11 +31,11 @@ export default function SelectBox(props: Prop) {
   } = props
 
   const formatOptionLabel = ({ label, icon }: SelectItem) => (
-    <Item size='w-4 h-4' variant='SQUARE' icon={icon} text={label} />
+    <Item size='w-4 h-4' variant='SQUARE' icon={icon} text={TranslateHelper.translate(label)} />
   )
 
   const NoOptionsMessage = () => {
-    return <div>no_options</div>
+    return <div>{TranslateHelper.translate('no_options')}</div>
   }
 
   const customStyles = {
