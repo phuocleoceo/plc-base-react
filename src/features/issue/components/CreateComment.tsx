@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { memo, useContext } from 'react'
 import { AxiosError } from 'axios'
@@ -21,6 +22,7 @@ type FormData = Pick<CreateIssueCommentRequest, 'content'>
 function CreateComment(props: Props) {
   const { issueId } = props
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
@@ -55,7 +57,7 @@ function CreateComment(props: Props) {
     }
 
     if (!commentData.content) {
-      toast.warn('enter_comment')
+      toast.warn(t('enter_comment'))
       return
     }
 
@@ -78,14 +80,14 @@ function CreateComment(props: Props) {
       <div className='relative flex items-start gap-3 my-4'>
         <Avatar src={user?.avatar} name={user?.displayName} />
         <input
-          placeholder='add_your_comment...'
+          placeholder={t('add_your_comment...')}
           className='max-w-[83.5%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
           bg-slate-100 hover:border-gray-400 border-transparent'
           {...register('content')}
         />
         <div className='flex justify-end gap-1'>
           <button onClick={handleCreateProject} className='btn'>
-            {createCommentMutation.isLoading || isSubmitting ? 'adding...' : 'add'}
+            {createCommentMutation.isLoading || isSubmitting ? t('adding...') : t('add')}
           </button>
           {/* <button className='btn-crystal hover:bg-slate-200'>cancel</button> */}
         </div>

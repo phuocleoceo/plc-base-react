@@ -10,6 +10,7 @@ import { IssueCommentApi } from '~/features/issue/apis'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
+import { useTranslation } from 'react-i18next'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
@@ -22,6 +23,7 @@ type FormData = Pick<UpdateIssueCommentRequest, 'content'>
 
 export default function CommentRow(props: Props) {
   const { issueId, comment } = props
+  const { t } = useTranslation()
 
   const { isShowing: isShowingUpdateComment, toggle: toggleUpdateComment } = useToggle()
   const { isShowing: isShowingDeleteComment, toggle: toggleDeleteComment } = useToggle()
@@ -48,7 +50,7 @@ export default function CommentRow(props: Props) {
     }
 
     if (!commentData.content) {
-      toast.warn('enter_comment')
+      toast.warn(t('enter_comment'))
       return
     }
 
@@ -90,7 +92,7 @@ export default function CommentRow(props: Props) {
         <Avatar src={comment.userAvatar} name={comment.userName} className='mt-1 h-7 w-7' />
         <div className='grow'>
           <div className='flex justify-between text-sm'>
-            <span className='font-semibold'>{comment.userName + (isCurrentUserComment ? ' (you)' : '')}</span>
+            <span className='font-semibold'>{comment.userName + (isCurrentUserComment ? ` ${t('you')}` : '')}</span>
             <span className='mx-3 text-gray-700'>{TimeHelper.howLongFromNow(comment.createdAt)}</span>
           </div>
 
@@ -113,11 +115,11 @@ export default function CommentRow(props: Props) {
                   onClick={handleUpdateComment}
                   className='text-sm tracking-wide text-gray-700 hover:underline mr-2'
                 >
-                  {updateCommentMutation.isLoading || isSubmitting ? 'saving...' : 'save'}
+                  {updateCommentMutation.isLoading || isSubmitting ? t('saving...') : t('save')}
                 </button>
 
                 <button onClick={toggleUpdateComment} className='text-sm tracking-wide text-gray-700 hover:underline'>
-                  cancle
+                  {t('cancle')}
                 </button>
               </>
             ) : (
@@ -126,11 +128,11 @@ export default function CommentRow(props: Props) {
                   onClick={toggleUpdateComment}
                   className='text-sm tracking-wide text-gray-700 hover:underline mr-2'
                 >
-                  edit
+                  {t('edit')}
                 </button>
 
                 <button onClick={toggleDeleteComment} className='text-sm tracking-wide text-gray-700 hover:underline'>
-                  delete
+                  {t('delete')}
                 </button>
               </>
             ))}
@@ -144,10 +146,10 @@ export default function CommentRow(props: Props) {
             onClose={toggleDeleteComment}
             onSubmit={handleDeleteComment}
             isMutating={deleteCommentMutation.isLoading}
-            confirmMessage='submit_delete_comment'
-            closeLabel='cancle'
-            submittingLabel='deleting_comment...'
-            submitLabel='delete_comment'
+            confirmMessage={t('submit_delete_comment')}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_comment...')}
+            submitLabel={t('delete_comment')}
             submitClassName='btn-alert'
             className='max-w-[20rem]'
           />

@@ -15,6 +15,7 @@ import { AppContext } from '~/common/contexts'
 import { SelectItem } from '~/shared/types'
 import { useToggle } from '~/common/hooks'
 import IssueComment from './IssueComment'
+import { useTranslation } from 'react-i18next'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
@@ -34,6 +35,7 @@ type FormData = Pick<
 
 export default function IssueDetail(props: Props) {
   const { projectId, issueId, isShowing, onClose } = props
+  const { t } = useTranslation()
 
   const {
     control,
@@ -88,7 +90,7 @@ export default function IssueDetail(props: Props) {
 
     updateIssueMutation.mutate(issueData, {
       onSuccess: () => {
-        toast.success('update_issue_success')
+        toast.success(t('update_issue_success'))
         queryClient.invalidateQueries([QueryKey.IssueDetail, projectId, issueId])
         queryClient.invalidateQueries([QueryKey.IssueInBoard])
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
@@ -110,7 +112,7 @@ export default function IssueDetail(props: Props) {
   const handleDeleteIssue = async () => {
     deleteIssueMutation.mutate(undefined, {
       onSuccess: () => {
-        toast.success('delete_issue_success')
+        toast.success(t('delete_issue_success'))
         queryClient.invalidateQueries([QueryKey.IssueInBoard])
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
         toggleDeleteIssue()
@@ -164,12 +166,12 @@ export default function IssueDetail(props: Props) {
                 <>
                   <div className='mt-3'>
                     <InputValidation
-                      label='title'
-                      placeholder='issue_title...'
+                      label={t('title')}
+                      placeholder={t('issue_title...')}
                       register={register('title', {
                         required: {
                           value: true,
-                          message: 'title_required'
+                          message: t('title_required')
                         }
                       })}
                       error={errors.title as FieldError}
@@ -177,7 +179,7 @@ export default function IssueDetail(props: Props) {
                     />
                   </div>
 
-                  <LabelWrapper label='description' margin='mt-3'>
+                  <LabelWrapper label={t('description')} margin='mt-3'>
                     <RichTextInput control={control} controlField='description' defaultValue={issue?.description} />
                   </LabelWrapper>
                 </>
@@ -189,7 +191,7 @@ export default function IssueDetail(props: Props) {
 
                   <div className='mb-4'>
                     <label htmlFor={issue?.description} className='tracking-wide text-base font-bold'>
-                      description
+                      {t('description')}
                     </label>
                     {issue?.description && (
                       <div
@@ -205,7 +207,7 @@ export default function IssueDetail(props: Props) {
 
                   {issue?.description && issue.description.length > MAX_LENGHT_DESCRIPTION && (
                     <button className='text-blue-500 text-80p' onClick={toggleFullDescription}>
-                      {isShowingFullDescription ? 'click_to_show_less...' : 'click_to_show_more...'}
+                      {isShowingFullDescription ? t('click_to_show_less...') : t('click_to_show_more...')}
                     </button>
                   )}
                 </>
@@ -220,12 +222,12 @@ export default function IssueDetail(props: Props) {
               {isShowingUpdateIssue ? (
                 <>
                   <InputValidation
-                    label='story_point'
-                    placeholder='story_point...'
+                    label={t('story_point')}
+                    placeholder={t('story_point...')}
                     register={register('storyPoint', {
                       required: {
                         value: true,
-                        message: 'story_point_required'
+                        message: t('story_point_required')
                       }
                     })}
                     type='number'
@@ -233,7 +235,7 @@ export default function IssueDetail(props: Props) {
                     defaultValue={issue?.storyPoint.toString()}
                   />
 
-                  <LabelWrapper label='reporter' margin='mt-5'>
+                  <LabelWrapper label={t('reporter')} margin='mt-5'>
                     <SelectBox
                       control={control}
                       controlField='reporterId'
@@ -243,7 +245,7 @@ export default function IssueDetail(props: Props) {
                     />
                   </LabelWrapper>
 
-                  <LabelWrapper label='assignee' margin='mt-5'>
+                  <LabelWrapper label={t('assignee')} margin='mt-5'>
                     <SelectBox
                       control={control}
                       controlField='assigneeId'
@@ -260,7 +262,7 @@ export default function IssueDetail(props: Props) {
                     />
                   </LabelWrapper>
 
-                  <LabelWrapper label='type' margin='mt-5'>
+                  <LabelWrapper label={t('type')} margin='mt-5'>
                     <SelectBox
                       control={control}
                       controlField='type'
@@ -270,7 +272,7 @@ export default function IssueDetail(props: Props) {
                     />
                   </LabelWrapper>
 
-                  <LabelWrapper label='priority' margin='mt-5'>
+                  <LabelWrapper label={t('priority')} margin='mt-5'>
                     <SelectBox
                       control={control}
                       controlField='priority'
@@ -287,14 +289,14 @@ export default function IssueDetail(props: Props) {
                       htmlFor={issue?.storyPoint.toString()}
                       className='font-bold text-sm tracking-wide text-gray-800'
                     >
-                      story_point
+                      {t('story_point')}
                     </label>
                     <div className='text-black mt-2'>{issue?.storyPoint}</div>
                   </div>
 
                   <div className='mb-4'>
                     <label htmlFor={issue?.reporterName} className='font-bold text-sm tracking-wide text-gray-800'>
-                      reporter
+                      {t('reporter')}
                     </label>
                     <Item
                       size='w-6 h-6'
@@ -307,7 +309,7 @@ export default function IssueDetail(props: Props) {
 
                   <div className='mb-4'>
                     <label htmlFor={issue?.assigneeName} className='font-bold text-sm tracking-wide text-gray-800'>
-                      assignee
+                      {t('assignee')}
                     </label>
                     {issue?.assigneeName ? (
                       <Item
@@ -330,7 +332,7 @@ export default function IssueDetail(props: Props) {
 
                   <div className='mb-4'>
                     <label htmlFor={issue?.type} className='font-bold text-sm tracking-wide text-gray-800'>
-                      type
+                      {t('type')}
                     </label>
                     <Item
                       size='w-5 h-5'
@@ -343,7 +345,7 @@ export default function IssueDetail(props: Props) {
 
                   <div className='mb-4'>
                     <label htmlFor={issue?.priority} className='font-bold text-sm tracking-wide text-gray-800'>
-                      priority
+                      {t('priority')}
                     </label>
                     <Item
                       size='w-5 h-5'
@@ -360,9 +362,15 @@ export default function IssueDetail(props: Props) {
 
               <div className='mt-4 text-sm text-gray-700'>
                 {issue?.createdAt && (
-                  <span className='mb-2 block'>created {TimeHelper.howLongFromNow(issue?.createdAt)}</span>
+                  <span className='mb-2 block'>
+                    {t('created')} {TimeHelper.howLongFromNow(issue?.createdAt)}
+                  </span>
                 )}
-                {issue?.updatedAt && <span>updated {TimeHelper.howLongFromNow(issue?.updatedAt)}</span>}
+                {issue?.updatedAt && (
+                  <span>
+                    {t('updated')} {TimeHelper.howLongFromNow(issue?.updatedAt)}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -376,10 +384,10 @@ export default function IssueDetail(props: Props) {
             onClose={toggleDeleteIssue}
             onSubmit={handleDeleteIssue}
             isMutating={deleteIssueMutation.isLoading}
-            confirmMessage='submit_delete_issue'
-            closeLabel='cancle'
-            submittingLabel='deleting_issue...'
-            submitLabel='delete_issue'
+            confirmMessage={t('submit_delete_issue')}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_issue...')}
+            submitLabel={t('delete_issue')}
             submitClassName='btn-alert'
             className='max-w-[20rem]'
           />

@@ -1,6 +1,7 @@
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, lazy, Suspense, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { GetIssuesInBacklogParams, MoveIssueToSprintRequest, UpdateBacklogIssueRequest } from '~/features/issue/models'
@@ -20,6 +21,7 @@ const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const {
@@ -63,7 +65,7 @@ export default function ProjectBacklog() {
 
   const handleMoveIssueToSprint = async () => {
     if (selectedIssues.length == 0) {
-      toast.warn('select_issue_to_move')
+      toast.warn(t('select_issue_to_move'))
       toggleMoveIssueModal()
       return
     }
@@ -74,7 +76,7 @@ export default function ProjectBacklog() {
 
     moveIssueToSprintMutation.mutate(issues, {
       onSuccess: () => {
-        toast.success('move_issue_to_sprint_success')
+        toast.success(t('move_issue_to_sprint_success'))
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
         queryClient.invalidateQueries([QueryKey.IssueInBoard])
         setSelectedIssues([])
@@ -156,7 +158,7 @@ export default function ProjectBacklog() {
     <>
       <div className='mt-6 flex grow flex-col px-8 sm:px-10'>
         <div className='flex min-w-[43rem] justify-between mb-6'>
-          <span className='text-xl font-semibold tracking-wide'>backlog</span>
+          <span className='text-xl font-semibold tracking-wide'>{t('backlog')}</span>
           <div>
             {isShowingMoveIssueSelect ? (
               <>
@@ -167,20 +169,20 @@ export default function ProjectBacklog() {
                   }}
                   className='btn-gray mr-3'
                 >
-                  cancle
+                  {t('cancle')}
                 </button>
                 <button onClick={toggleMoveIssueModal} className='btn mr-3'>
-                  move
+                  {t('move')}
                 </button>
               </>
             ) : (
               <button onClick={toggleMoveIssueSelect} className='btn-gray mr-3'>
-                move_to_sprint
+                {t('move_issue_to_sprint')}
               </button>
             )}
 
             <button onClick={toggleCreateIssue} className='btn'>
-              create_issue
+              {t('create_issue')}
             </button>
           </div>
         </div>
@@ -217,10 +219,10 @@ export default function ProjectBacklog() {
             onClose={toggleMoveIssueModal}
             onSubmit={handleMoveIssueToSprint}
             isMutating={moveIssueToSprintMutation.isLoading}
-            confirmMessage='submit_move_issue_to_sprint'
-            closeLabel='cancle'
-            submittingLabel='moving...'
-            submitLabel='move'
+            confirmMessage={t('submit_move_issue_to_sprint')}
+            closeLabel={t('cancle')}
+            submittingLabel={t('moving...')}
+            submitLabel={t('move')}
             className='max-w-[20rem]'
           />
         </Suspense>

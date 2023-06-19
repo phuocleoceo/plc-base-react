@@ -1,5 +1,6 @@
 import { memo, useContext, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import { GetIssueCommentsParams } from '~/features/issue/models'
 import { Pagination, SpinningCircle } from '~/common/components'
@@ -16,6 +17,7 @@ interface Props {
 function IssueComment(props: Props) {
   const { issueId } = props
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
   const [commentParams, setCommentParams] = useState<GetIssueCommentsParams>({
@@ -46,7 +48,7 @@ function IssueComment(props: Props) {
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-2'>
-          <span className='text-base mt-4'>🚀 loading_comments...</span>
+          <span className='text-base mt-4'>🚀 {t('loading_comments')}...</span>
           <SpinningCircle />
         </div>
       </div>
@@ -54,7 +56,7 @@ function IssueComment(props: Props) {
 
   return (
     <div className='text-c-text max-h-[350px] overflow-y-auto'>
-      <span className='tracking-wide font-medium'>comments</span>
+      <span className='tracking-wide font-medium'>{t('comments')}</span>
       <CreateComment {...{ issueId }} />
 
       <ul className='mt-6'>

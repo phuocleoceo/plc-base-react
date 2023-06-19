@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
@@ -33,6 +34,7 @@ export default function CreateIssue(props: Props) {
     formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
+  const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
@@ -69,7 +71,7 @@ export default function CreateIssue(props: Props) {
 
     createIssueMutation.mutate(issueData, {
       onSuccess: () => {
-        toast.success('create_issue_success')
+        toast.success(t('create_issue_success'))
         queryClient.invalidateQueries([QueryKey.IssueInBacklog])
         reset()
         onClose()
@@ -87,24 +89,24 @@ export default function CreateIssue(props: Props) {
     <Modal
       onSubmit={handleCreateIssue}
       isMutating={createIssueMutation.isLoading || isSubmitting}
-      closeLabel='cancle'
-      submittingLabel='creating_issue...'
-      submitLabel='create_issue'
+      closeLabel={t('cancle')}
+      submittingLabel={t('creating_issue...')}
+      submitLabel={t('create_issue')}
       {...{ isShowing, onClose }}
     >
       <>
         <div className='mb-3'>
-          <span className='text-[22px] font-[600] text-c-text'>create_issue</span>
+          <span className='text-[22px] font-[600] text-c-text'>{t('create_issue')}</span>
         </div>
 
         <div className='flex flex-col gap-4'>
           <InputValidation
-            label='title'
-            placeholder='title...'
+            label={t('title')}
+            placeholder={t('title...')}
             register={register('title', {
               required: {
                 value: true,
-                message: 'title_required'
+                message: t('title_required')
               }
             })}
             error={errors.title as FieldError}
@@ -112,24 +114,24 @@ export default function CreateIssue(props: Props) {
             autoFocus
           />
 
-          <LabelWrapper label='description' margin='mt-0'>
+          <LabelWrapper label={t('description')} margin='mt-0'>
             <RichTextInput control={control} controlField='description' />
           </LabelWrapper>
 
           <InputValidation
-            label='story_point'
-            placeholder='story_point...'
+            label={t('story_point')}
+            placeholder={t('story_point...')}
             register={register('storyPoint', {
               required: {
                 value: true,
-                message: 'story_point_required'
+                message: t('story_point_required')
               }
             })}
             type='number'
             error={errors.storyPoint as FieldError}
           />
 
-          <LabelWrapper label='type' margin='mt-0'>
+          <LabelWrapper label={t('type')} margin='mt-0'>
             <SelectBox
               control={control}
               controlField='type'
@@ -139,7 +141,7 @@ export default function CreateIssue(props: Props) {
             />
           </LabelWrapper>
 
-          <LabelWrapper label='priority' margin='mt-0'>
+          <LabelWrapper label={t('priority')} margin='mt-0'>
             <SelectBox
               control={control}
               controlField='priority'
@@ -149,7 +151,7 @@ export default function CreateIssue(props: Props) {
             />
           </LabelWrapper>
 
-          <LabelWrapper label='assignee' margin='mt-0'>
+          <LabelWrapper label={t('assignee')} margin='mt-0'>
             <SelectBox
               control={control}
               controlField='assigneeId'
