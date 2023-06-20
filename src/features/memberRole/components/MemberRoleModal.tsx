@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useContext } from 'react'
 
@@ -19,6 +19,7 @@ export default function MemberRoleModal(props: Props) {
   const { projectMemberId, isShowing, onClose } = props
 
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const { isAuthenticated } = useContext(AppContext)
 
   const { data: projectRoleData, isLoading: projectRoleLoading } = useQuery({
@@ -40,6 +41,11 @@ export default function MemberRoleModal(props: Props) {
   })
 
   const memberRoles = memberRoleData?.data.data.map((memberRole) => memberRole.projectRoleId) || []
+
+  const handleClose = () => {
+    onClose()
+    queryClient.invalidateQueries([QueryKey.ProjectMembers])
+  }
 
   return (
     <Modal className='max-w-[23rem]' isLoading={projectRoleLoading || memberRoleLoading} {...{ isShowing, onClose }}>
@@ -63,7 +69,7 @@ export default function MemberRoleModal(props: Props) {
         )}
 
         <div className='mt-4 flex justify-end gap-x-3'>
-          <button onClick={onClose} className='btn-gray'>
+          <button onClick={handleClose} className='btn-gray'>
             {t('close')}
           </button>
         </div>

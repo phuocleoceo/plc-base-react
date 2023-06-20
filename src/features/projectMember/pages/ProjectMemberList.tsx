@@ -83,9 +83,10 @@ export default function ProjectMemberList() {
         </div>
         <div className='min-w-fit'>
           <div className='mt-4 flex py-1 text-sm font-semibold'>
-            <div className='w-32'></div>
+            <div className='w-24'></div>
             <div className='w-60'>{t('name')}</div>
-            <div className='w-72'>{t('email')}</div>
+            <div className='w-64'>{t('email')}</div>
+            <div className='w-64'>{t('role')}</div>
             <div className='flex-grow'>{t('action')}</div>
           </div>
           {projectMembers && projectMembers.length !== 0 ? (

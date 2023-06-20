@@ -300,5 +300,7 @@
   "low": "Thấp",
   "medium": "Trung bình",
   "high": "Cao",
-  "critical": "Nghiêm trọng"
+  "critical": "Nghiêm trọng",
+  "update_member_role": "Cập nhật vai trò thành viên",
+  "close": "Đóng"
 }
