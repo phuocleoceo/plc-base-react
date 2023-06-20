@@ -18,5 +18,7 @@ export const QueryKey = {
   SprintDetail: 'sprint_detail',
   Roles: 'roles',
   ProjectRoles: 'project_roles',
-  ProjectRole: 'project_role'
+  ProjectRole: 'project_role',
+  AllProjectRoles: 'all_project_roles',
+  MemberRoles: 'member_roles'
 } as const
