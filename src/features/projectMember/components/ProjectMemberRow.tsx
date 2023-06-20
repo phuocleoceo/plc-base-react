@@ -98,6 +98,7 @@ export default function ProjectMemberRow(props: Props) {
             submittingLabel={t('deleting_project_member...')}
             submitLabel={t('delete_project_member')}
             submitClassName='btn-alert'
+            className='max-w-[27rem]'
           />
         </Suspense>
       )}

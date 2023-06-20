@@ -26,7 +26,7 @@ export default function MemberRoleModal(props: Props) {
     queryFn: () => ProjectRoleApi.getAllProjectRoles(),
     enabled: isAuthenticated,
     keepPreviousData: true,
-    staleTime: 1000
+    staleTime: 5 * 60 * 1000
   })
 
   const projectRoles = projectRoleData?.data.data
@@ -36,7 +36,7 @@ export default function MemberRoleModal(props: Props) {
     queryFn: () => MemberRoleApi.getMemberRoles(projectMemberId),
     enabled: isAuthenticated,
     keepPreviousData: true,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const memberRoles = memberRoleData?.data.data.map((memberRole) => memberRole.projectRoleId) || []

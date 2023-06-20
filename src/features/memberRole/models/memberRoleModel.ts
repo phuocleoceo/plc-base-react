@@ -10,4 +10,9 @@ export type CreateMemberRoleRequest = {
 
 export type CreateMemberRoleResponse = BaseResponse<boolean>
 
+export type DeleteMemberRoleParams = {
+  projectMemberId: number
+  projectRoleId: number
+}
+
 export type DeleteMemberRoleResponse = BaseResponse<boolean>

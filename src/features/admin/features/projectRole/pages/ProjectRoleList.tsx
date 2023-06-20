@@ -44,7 +44,7 @@ export default function ProjectRoleList() {
     queryFn: () => ProjectRoleApi.getProjectRoles(projectRoleParams),
     keepPreviousData: true,
     enabled: isAuthenticated,
-    staleTime: 2 * 60 * 1000
+    staleTime: 5 * 60 * 1000
   })
 
   const projectRoles = projectRoleData?.data.data.records ?? []
