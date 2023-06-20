@@ -4,4 +4,5 @@ export type ProjectMember = {
   name: string
   avatar: string
   projectMemberId: number
+  memberRoles: Array<string>
 }

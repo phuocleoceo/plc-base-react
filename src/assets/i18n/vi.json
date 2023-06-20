@@ -33,6 +33,7 @@
   "project_status_not_found": "Bảng dự án không tồn tại",
   "invalid_move_type": "Loại di chuyển không hợp lệ",
   "user_not_found": "Người dùng không tồn tại",
+  "member_role_not_found": "Vai trò thành viên không tồn tại",
 
   "page_not_found": "Không tìm thấy trang",
   "access_denied": "Truy cập bị từ chối",
@@ -299,5 +300,7 @@
   "low": "Thấp",
   "medium": "Trung bình",
   "high": "Cao",
-  "critical": "Nghiêm trọng"
+  "critical": "Nghiêm trọng",
+  "update_member_role": "Cập nhật vai trò thành viên",
+  "close": "Đóng"
 }

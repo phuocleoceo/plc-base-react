@@ -33,6 +33,7 @@
   "project_status_not_found": "Project table is not found",
   "invalid_move_type": "Invalid move type",
   "user_not_found": "User is not found",
+  "member_role_not_found": "Member role is not found",
 
   "page_not_found": "Page Not Found",
   "access_denied": "Access Denied",
@@ -299,5 +300,7 @@
   "low": "Low",
   "medium": "Medium",
   "high": "High",
-  "critical": "Critical"
+  "critical": "Critical",
+  "update_member_role": "Update member role",
+  "close": "Close"
 }

@@ -11,6 +11,7 @@ import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
 
 const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
+const MemberRoleModal = lazy(() => import('~/features/memberRole/components/MemberRoleModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
@@ -25,6 +26,7 @@ export default function ProjectMemberRow(props: Props) {
 
   const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useToggle()
   const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useToggle()
+  const { isShowing: isShowingMemberRole, toggle: toggleMemberRole } = useToggle()
 
   const queryClient = useQueryClient()
 
@@ -47,6 +49,13 @@ export default function ProjectMemberRow(props: Props) {
     })
   }
 
+  const handleClickMemberRole = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    toggleMemberRole()
+  }
+
+  const getMemberRoles = () => projectMember.memberRoles.join(', ')
+
   return (
     <>
       <div
@@ -57,7 +66,7 @@ export default function ProjectMemberRow(props: Props) {
         tabIndex={projectMember.id}
         role='button'
       >
-        <div className='w-32 text-center'>{idx + 1}</div>
+        <div className='w-24 text-center'>{idx + 1}</div>
         <div className='w-60 flex'>
           <Avatar
             title={projectMember.name}
@@ -67,13 +76,14 @@ export default function ProjectMemberRow(props: Props) {
           />
           <span className='ml-3'>{projectMember.name}</span>
         </div>
-        <div className='w-72'>{projectMember.email}</div>
+        <div className='w-64'>{projectMember.email}</div>
+        <div className='w-64'>{getMemberRoles()}</div>
         <div className='flex-grow flex'>
-          <button
-            title='delete_project_member'
-            onClick={handleClickDeleteProjectMember}
-            className='btn-icon absolute ml-2 bg-c-1'
-          >
+          <button title='edit_member_role' onClick={handleClickMemberRole} className='btn-icon bg-c-1'>
+            <Icon width={22} icon='iconoir:agile' className='text-blue-500' />
+          </button>
+
+          <button title='delete_project_member' onClick={handleClickDeleteProjectMember} className='btn-icon bg-c-1'>
             <Icon width={22} icon='bx:trash' className='text-red-500' />
           </button>
         </div>
@@ -91,6 +101,7 @@ export default function ProjectMemberRow(props: Props) {
             submittingLabel={t('deleting_project_member...')}
             submitLabel={t('delete_project_member')}
             submitClassName='btn-alert'
+            className='max-w-[27rem]'
           />
         </Suspense>
       )}
@@ -101,6 +112,16 @@ export default function ProjectMemberRow(props: Props) {
             userId={projectMember.id}
             isShowing={isShowingMemberDetail}
             onClose={toggleMemberDetail}
+          />
+        </Suspense>
+      )}
+
+      {isShowingMemberRole && (
+        <Suspense>
+          <MemberRoleModal
+            projectMemberId={projectMember.projectMemberId}
+            isShowing={isShowingMemberRole}
+            onClose={toggleMemberRole}
           />
         </Suspense>
       )}
