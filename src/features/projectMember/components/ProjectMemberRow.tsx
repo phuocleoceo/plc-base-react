@@ -11,7 +11,7 @@ import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
 
 const AnonymousProfileModal = lazy(() => import('~/features/profile/components/AnonymousProfileModal'))
-const MemberRole = lazy(() => import('~/features/memberRole/components/MemberRole'))
+const MemberRoleModal = lazy(() => import('~/features/memberRole/components/MemberRoleModal'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 interface Props {
@@ -114,7 +114,7 @@ export default function ProjectMemberRow(props: Props) {
 
       {isShowingMemberRole && (
         <Suspense>
-          <MemberRole
+          <MemberRoleModal
             projectMemberId={projectMember.projectMemberId}
             isShowing={isShowingMemberRole}
             onClose={toggleMemberRole}

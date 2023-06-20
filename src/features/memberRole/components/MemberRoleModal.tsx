@@ -6,6 +6,7 @@ import { ProjectRoleApi } from '~/features/admin/features/projectRole/apis'
 import { MemberRoleApi } from '~/features/memberRole/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
+import MemberRoleRow from './MemberRoleRow'
 import { Modal } from '~/common/components'
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
   onClose: () => void
 }
 
-export default function ProjectMemberRow(props: Props) {
+export default function MemberRoleModal(props: Props) {
   const { projectMemberId, isShowing, onClose } = props
 
   const { t } = useTranslation()
@@ -41,21 +42,29 @@ export default function ProjectMemberRow(props: Props) {
   const memberRoles = memberRoleData?.data.data.map((memberRole) => memberRole.projectRoleId) || []
 
   return (
-    <Modal isLoading={projectRoleLoading || memberRoleLoading} {...{ isShowing, onClose }}>
+    <Modal className='max-w-[23rem]' isLoading={projectRoleLoading || memberRoleLoading} {...{ isShowing, onClose }}>
       <>
+        <div className='mb-4 ml-3'>
+          <span className='text-[22px] font-[600] text-c-text'>{t('update_member_role')}</span>
+        </div>
+
         {projectRoles && projectRoles.length !== 0 ? (
-          <div className='mt-1 border-t-2 border-c-3'>
+          <div className='mt-1'>
             {projectRoles.map((projectRole) => (
-              <p key={projectRole.id}>{projectRole.name}</p>
+              <MemberRoleRow
+                key={projectRole.id}
+                isMemberGranted={memberRoles.includes(projectRole.id)}
+                {...{ projectRole, projectMemberId }}
+              />
             ))}
           </div>
         ) : (
           <div className='mt-[30vh] grid place-items-center text-xl'>{t('no_project_roles_found')} 🚀</div>
         )}
 
-        <div className='mt-8 flex justify-end gap-x-3'>
+        <div className='mt-4 flex justify-end gap-x-3'>
           <button onClick={onClose} className='btn-gray'>
-            {t('cancle')}
+            {t('close')}
           </button>
         </div>
       </>

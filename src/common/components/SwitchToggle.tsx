@@ -7,10 +7,11 @@ interface Prop {
   defaultValue?: boolean
   readonly?: boolean
   className?: string
+  onClick?: (isEnable: boolean) => void
 }
 
 export default function SwitchToggle(props: Prop) {
-  const { control, controlField, defaultValue, readonly, className } = props
+  const { control, controlField, defaultValue, readonly, className, onClick } = props
 
   const [enabled, setEnabled] = useState<boolean>(defaultValue ?? false)
 
@@ -41,7 +42,7 @@ export default function SwitchToggle(props: Prop) {
     </div>
   )
 
-  if (!control || !controlField) return ToggleButton(null)
+  if (!control || !controlField) return onClick ? ToggleButton(onClick) : ToggleButton(null)
 
   return (
     <Controller

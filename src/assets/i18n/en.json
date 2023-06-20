@@ -300,5 +300,7 @@
   "low": "Low",
   "medium": "Medium",
   "high": "High",
-  "critical": "Critical"
+  "critical": "Critical",
+  "update_member_role": "Update member role",
+  "close": "Close"
 }

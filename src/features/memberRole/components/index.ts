@@ -1,1 +1,1 @@
-export { default as MemberRole } from './MemberRole'
+export { default as MemberRoleModal } from './MemberRoleModal'
