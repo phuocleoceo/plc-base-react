@@ -123,6 +123,7 @@
   "from_date": "From date",
   "to_date": "To date",
   "days_remaining": "days remaining",
+  "days_overdue": "days overdue",
   "complete_sprint": "Complete sprint",
   "start_sprint": "Start sprint",
   "edit_sprint": "Edit sprint",

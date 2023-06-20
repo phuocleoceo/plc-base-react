@@ -123,6 +123,7 @@
   "from_date": "Từ ngày",
   "to_date": "Đến ngày",
   "days_remaining": "ngày còn lại",
+  "days_overdue": "ngày quá hạn",
   "complete_sprint": "Hoàn thành sprint",
   "start_sprint": "Bắt đầu sprint",
   "edit_sprint": "Chỉnh sửa sprint",

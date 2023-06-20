@@ -85,6 +85,18 @@ export default function SprintBar(props: Props) {
     })
   }
 
+  const getSprintDeadline = () => {
+    if (!sprint?.toDate) return ''
+
+    const deadline = TimeHelper.howDayRemainFromNow(sprint.toDate)
+
+    if (deadline === '') return ''
+
+    if (deadline >= 0) return `${deadline} ${t('days_remaining')}`
+
+    return `${-1 * deadline} ${t('days_overdue')}`
+  }
+
   if (!sprint) return null
 
   return (
@@ -120,11 +132,7 @@ export default function SprintBar(props: Props) {
               render={({ content }) => <div dangerouslySetInnerHTML={{ __html: content as TrustedHTML }} />}
             />
 
-            {sprint.toDate && (
-              <span className='text-sm mr-3'>
-                {TimeHelper.howDayRemainFromNow(sprint.toDate)} {t('days_remaining')}
-              </span>
-            )}
+            {sprint.toDate && <span className='text-sm mr-3'>{getSprintDeadline()}</span>}
 
             {!sprint.completedAt &&
               (sprint.startedAt ? (
