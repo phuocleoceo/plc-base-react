@@ -39,7 +39,7 @@ export default function RichTextInput(props: Prop) {
     }
   }
 
-  if (!control || !controlField) return null
+  if (!control || !controlField) return <></>
 
   return (
     <Controller
@@ -54,7 +54,10 @@ export default function RichTextInput(props: Prop) {
             onChange(editor.getData())
           }}
           config={{
-            extraPlugins: [uploadPlugin]
+            extraPlugins: [uploadPlugin],
+            mediaEmbed: {
+              previewsInData: true
+            }
           }}
         />
       )}
