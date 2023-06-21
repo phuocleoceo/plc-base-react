@@ -1,7 +1,9 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { Controller } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
+import { TranslateHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
 
 interface Prop {
@@ -13,7 +15,7 @@ interface Prop {
 export default function RichTextInput(props: Prop) {
   const { control, controlField, defaultValue } = props
 
-  const uploadAdapter = (loader: any) => {
+  function uploadAdapter(loader: any) {
     return {
       upload: () => {
         return loader.file.then(async (file: File) => {
@@ -23,15 +25,15 @@ export default function RichTextInput(props: Prop) {
             return {
               default: imageUrl
             }
-          } catch (err) {
-            console.log(err)
+          } catch {
+            toast.error(TranslateHelper.translate('upload_file_fail'))
           }
         })
       }
     }
   }
 
-  const uploadPlugin = (editor: any) => {
+  function uploadPlugin(editor: any) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
       return uploadAdapter(loader)
     }
