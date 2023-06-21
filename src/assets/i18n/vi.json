@@ -303,5 +303,6 @@
   "high": "Cao",
   "critical": "Nghiêm trọng",
   "update_member_role": "Cập nhật vai trò thành viên",
-  "close": "Đóng"
+  "close": "Đóng",
+  "upload_file_fail": "Tải lên file thất bại"
 }

@@ -303,5 +303,6 @@
   "high": "High",
   "critical": "Critical",
   "update_member_role": "Update member role",
-  "close": "Close"
+  "close": "Close",
+  "upload_file_fail": "Upload file fail"
 }
