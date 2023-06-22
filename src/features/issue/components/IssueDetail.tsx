@@ -19,8 +19,6 @@ import { useTranslation } from 'react-i18next'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
-const MAX_LENGHT_DESCRIPTION = 300
-
 interface Props {
   projectId: number
   issueId: number
@@ -49,7 +47,6 @@ export default function IssueDetail(props: Props) {
 
   const { isShowing: isShowingUpdateIssue, toggle: toggleUpdateIssue } = useToggle()
   const { isShowing: isShowingDeleteIssue, toggle: toggleDeleteIssue } = useToggle()
-  const { isShowing: isShowingFullDescription, toggle: toggleFullDescription } = useToggle()
 
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -161,7 +158,7 @@ export default function IssueDetail(props: Props) {
           </div>
 
           <div className='sm:flex md:gap-3 pl-3'>
-            <div className='w-full sm:pr-6'>
+            <div className='w-full sm:pr-6 text-c-text max-h-[40rem] overflow-y-auto'>
               {isShowingUpdateIssue ? (
                 <>
                   <div className='mt-3'>
@@ -197,19 +194,11 @@ export default function IssueDetail(props: Props) {
                       <div
                         className='text-black mt-3 text-90p'
                         dangerouslySetInnerHTML={{
-                          __html: isShowingFullDescription
-                            ? (issue?.description as TrustedHTML)
-                            : (issue?.description.slice(0, MAX_LENGHT_DESCRIPTION) as TrustedHTML)
+                          __html: issue?.description as TrustedHTML
                         }}
                       ></div>
                     )}
                   </div>
-
-                  {issue?.description && issue.description.length > MAX_LENGHT_DESCRIPTION && (
-                    <button className='text-blue-500 text-80p' onClick={toggleFullDescription}>
-                      {isShowingFullDescription ? t('click_to_show_less...') : t('click_to_show_more...')}
-                    </button>
-                  )}
                 </>
               )}
 
