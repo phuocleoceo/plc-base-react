@@ -304,5 +304,6 @@
   "update_member_role": "Update member role",
   "close": "Close",
   "upload_file_fail": "Upload file fail",
-  "event": "Event"
+  "event": "Event",
+  "loading_events": "Loading events"
 }

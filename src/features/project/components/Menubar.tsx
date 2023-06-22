@@ -75,13 +75,13 @@ export default function Menubar() {
                 rotate={180}
                 isActive={currentTab === 'backlog'}
               />
-              {/* <IconLink
+              <IconLink
                 to={`/project/${projectId}/event`}
                 icon='ic:outline-event-note'
                 text={t('event')}
                 isActive={currentTab === 'event'}
                 iconSize={24}
-              /> */}
+              />
               <IconLink
                 to={`/project/${projectId}/member`}
                 icon='mdi:people'
