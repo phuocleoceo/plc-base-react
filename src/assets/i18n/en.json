@@ -198,6 +198,7 @@
   "loading_project_members": "Loading project members",
   "project_members": "Project members",
   "invitations": "Invitations",
+  "invitation": "Invitation",
   "action": "Action",
   "no_project_members_found": "No project members found",
   "search_project_members": "Search project members",
@@ -302,5 +303,6 @@
   "critical": "Critical",
   "update_member_role": "Update member role",
   "close": "Close",
-  "upload_file_fail": "Upload file fail"
+  "upload_file_fail": "Upload file fail",
+  "event": "Event"
 }

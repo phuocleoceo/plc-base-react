@@ -20,7 +20,7 @@ export default function Breadcrumbs() {
     queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId || -1),
     enabled: isAuthenticated,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const project = data?.data.data
