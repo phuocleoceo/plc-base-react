@@ -38,17 +38,18 @@ export default function ProjectList() {
     })
   }
 
-  const { data, isLoading } = useQuery({
+  const { data: projectData, isLoading: isLoadingProject } = useQuery({
     queryKey: [QueryKey.Projects, projectParams],
     queryFn: () => ProjectApi.getProjects(projectParams),
     keepPreviousData: true,
-    enabled: isAuthenticated
+    enabled: isAuthenticated,
+    staleTime: 2 * 60 * 1000
   })
 
-  const projects = data?.data.data.records
-  const projectCount = data?.data.data.totalRecords ?? 0
+  const projects = projectData?.data.data.records
+  const projectCount = projectData?.data.data.totalRecords ?? 0
 
-  if (isLoading)
+  if (isLoadingProject)
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>

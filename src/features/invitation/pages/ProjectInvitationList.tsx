@@ -48,7 +48,7 @@ export default function ProjectInvitationList() {
     queryFn: () => InvitationApi.getInvitationForProject(projectId, invitationParams),
     enabled: isAuthenticated,
     keepPreviousData: true,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const invitations = invitationData?.data.data.records

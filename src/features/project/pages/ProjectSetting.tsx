@@ -46,7 +46,7 @@ export default function ProjectSetting() {
     queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const project = projectData?.data.data

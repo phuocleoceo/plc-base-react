@@ -7,6 +7,7 @@ import { projectMemberRoute } from '~/features/projectMember/routes'
 import { projectBacklogRoute } from '~/features/backlog/routes'
 import { projectBoardRoute } from '~/features/board/routes'
 import { ProjectLayout } from '~/features/project/layouts'
+import { eventRoute } from '~/features/event/routes'
 import { HomeLayout } from '~/features/home/layouts'
 
 const ProjectList = lazy(() => import('~/features/project/pages/ProjectList'))
@@ -43,7 +44,8 @@ export const projectRoute: RouteObject[] = [
           ...projectBoardRoute,
           ...projectBacklogRoute,
           ...projectMemberRoute,
-          ...projectInvitationRoute
+          ...projectInvitationRoute,
+          ...eventRoute
         ]
       }
     ]

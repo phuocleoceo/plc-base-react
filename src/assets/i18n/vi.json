@@ -198,6 +198,7 @@
   "loading_project_members": "Đang tải thành viên dự án",
   "project_members": "Thành viên dự án",
   "invitations": "Lời mời",
+  "invitation": "Lời mời",
   "action": "Hành động",
   "no_project_members_found": "Không tìm thấy thành viên dự án nào",
   "search_project_members": "Tìm kiếm thành viên dự án",
@@ -302,5 +303,6 @@
   "critical": "Nghiêm trọng",
   "update_member_role": "Cập nhật vai trò thành viên",
   "close": "Đóng",
-  "upload_file_fail": "Tải lên file thất bại"
+  "upload_file_fail": "Tải lên file thất bại",
+  "event": "Sự kiện"
 }

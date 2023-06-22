@@ -26,7 +26,7 @@ export default function Menubar() {
     queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
-    staleTime: 1000
+    staleTime: 2 * 60 * 1000
   })
 
   const project = data?.data.data
@@ -76,10 +76,23 @@ export default function Menubar() {
                 isActive={currentTab === 'backlog'}
               />
               <IconLink
+                to={`/project/${projectId}/event`}
+                icon='ic:outline-event-note'
+                text={t('event')}
+                isActive={currentTab === 'event'}
+                iconSize={24}
+              />
+              <IconLink
                 to={`/project/${projectId}/member`}
                 icon='mdi:people'
                 text={t('project_member')}
-                isActive={currentTab === 'member' || currentTab === 'invitation'}
+                isActive={currentTab === 'member'}
+              />
+              <IconLink
+                to={`/project/${projectId}/invitation`}
+                icon='cib:telegram-plane'
+                text={t('invitation')}
+                isActive={currentTab === 'invitation'}
               />
             </div>
 
