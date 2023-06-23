@@ -85,7 +85,7 @@ export default function Menubar() {
               <IconLink
                 to={`/project/${projectId}/member`}
                 icon='mdi:people'
-                text={t('project_member')}
+                text={t('member')}
                 isActive={currentTab === 'member'}
               />
               <IconLink

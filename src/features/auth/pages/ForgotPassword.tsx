@@ -74,6 +74,7 @@ export default function ForgotPassword() {
               <div className='flex flex-col gap-y-4'>
                 <InputValidation
                   label={t('identityInformation')}
+                  placeholder={t('enter_identity_information...')}
                   register={register('identityInformation', {
                     required: { value: true, message: t('identityInformation_required') }
                   })}

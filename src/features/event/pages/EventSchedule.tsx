@@ -1,3 +1,5 @@
+import { EventClickArg, EventSourceInput } from '@fullcalendar/core'
+import { lazy, Suspense, useContext, useState } from 'react'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -5,19 +7,23 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import FullCalendar from '@fullcalendar/react'
 import { useParams } from 'react-router-dom'
-import { useContext, useState } from 'react'
 
 import { GetEventInScheduleParams } from '~/features/event/models'
 import { SpinningCircle } from '~/common/components'
 import { EventApi } from '~/features/event/apis'
 import { AppContext } from '~/common/contexts'
+import { TimeHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
-import { EventClickArg, EventSourceInput } from '@fullcalendar/core'
+import { useToggle } from '~/common/hooks'
+
+const CreateEvent = lazy(() => import('~/features/event/components/CreateEvent'))
 
 export default function EventSchedule() {
   const projectId = Number(useParams().projectId)
   const { isAuthenticated } = useContext(AppContext)
   const { t } = useTranslation()
+
+  const { isShowing: isShowingCreateEvent, toggle: toggleCreateEvent } = useToggle()
 
   const [eventParams, setEventParams] = useState<GetEventInScheduleParams>({
     month: 6,
@@ -35,8 +41,8 @@ export default function EventSchedule() {
   const events: EventSourceInput =
     eventData?.data.data.map((event) => ({
       title: event.title,
-      start: event.startTime,
-      end: event.endTime,
+      start: TimeHelper.toLocal(event.startTime),
+      end: TimeHelper.toLocal(event.endTime),
       id: event.id.toString()
     })) ?? []
 
@@ -56,19 +62,33 @@ export default function EventSchedule() {
     )
 
   return (
-    <div className='p-4'>
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView={'timeGridWeek'}
-        headerToolbar={{
-          start: 'today prev,next',
-          center: 'title',
-          end: 'timeGridDay,timeGridWeek,dayGridMonth'
-        }}
-        height={'90vh'}
-        events={events}
-        eventClick={handleClickEvent}
-      />
-    </div>
+    <>
+      <div className='p-4'>
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView={'timeGridWeek'}
+          customButtons={{
+            createEventButton: {
+              text: t('create_event'),
+              click: () => toggleCreateEvent()
+            }
+          }}
+          headerToolbar={{
+            start: 'today prev,next',
+            center: 'title',
+            end: 'timeGridDay,timeGridWeek,dayGridMonth createEventButton'
+          }}
+          height={'90vh'}
+          events={events}
+          eventClick={handleClickEvent}
+        />
+      </div>
+
+      {isShowingCreateEvent && (
+        <Suspense>
+          <CreateEvent {...{ projectId }} isShowing={isShowingCreateEvent} onClose={toggleCreateEvent} />
+        </Suspense>
+      )}
+    </>
   )
 }

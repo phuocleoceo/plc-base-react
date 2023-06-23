@@ -305,5 +305,13 @@
   "close": "Close",
   "upload_file_fail": "Upload file fail",
   "event": "Event",
-  "loading_events": "Loading events"
+  "loading_events": "Loading events",
+  "create_event": "Create event",
+  "create_event_success": "Create event success",
+  "creating_event...": "Creating event...",
+  "start_time": "Start time",
+  "end_time": "End time",
+  "please_select_a_date_time": "Please select a datetime !",
+  "member": "Member",
+  "enter_identity_information...": "Enter identity information..."
 }
