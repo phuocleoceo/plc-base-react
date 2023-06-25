@@ -1,10 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 
+import { ConfigSettingApi } from '~/features/admin/features/configSetting/apis'
 import { InputValidation, Modal, ImageUpload } from '~/common/components'
 import { CreateProjectRequest } from '~/features/project/models'
 import { ProjectApi } from '~/features/project/apis'
@@ -24,6 +25,22 @@ export default function CreateProject(props: Props) {
   const [selectedImage, setSelectedImage] = useState<File>()
   const queryClient = useQueryClient()
   const { t } = useTranslation()
+
+  const { data: freeProjectData, isLoading: isLoadingFreeProject } = useQuery({
+    queryKey: [QueryKey.ConfigSettingDetail, 'free_project'],
+    queryFn: () => ConfigSettingApi.getConfigSettingDetail('free_project'),
+    keepPreviousData: true,
+    staleTime: 5 * 60 * 1000
+  })
+  const freeProject = freeProjectData?.data.data
+
+  const { data: projectPriceData, isLoading: isLoadingProjectPrice } = useQuery({
+    queryKey: [QueryKey.ConfigSettingDetail, 'project_price'],
+    queryFn: () => ConfigSettingApi.getConfigSettingDetail('project_price'),
+    keepPreviousData: true,
+    staleTime: 5 * 60 * 1000
+  })
+  const projectPrice = projectPriceData?.data.data
 
   const {
     reset,
@@ -73,6 +90,7 @@ export default function CreateProject(props: Props) {
 
   return (
     <Modal
+      isLoading={isLoadingFreeProject || isLoadingProjectPrice}
       onSubmit={handleCreateProject}
       isMutating={createProjectMutation.isLoading || isSubmitting}
       closeLabel={t('cancle')}
@@ -115,6 +133,11 @@ export default function CreateProject(props: Props) {
           <div className='flex flex-col gap-4'>
             <ImageUpload onSelectedImage={handleSelectImage} />
           </div>
+        </div>
+
+        <div className='text-sm text-gray-500 mt-3'>
+          <div>{`${t('free_project')}: ${freeProject?.value}`}</div>
+          <div>{`${t('project_price')}: ${projectPrice?.value}`}</div>
         </div>
       </>
     </Modal>

@@ -333,5 +333,7 @@
   "amount_required": "Amount is required !",
   "payment_success": "Payment success",
   "payment_failed": "Payment failed",
-  "handling_payment": "Handling payment"
+  "handling_payment": "Handling payment",
+  "free_project": "Number of free projects",
+  "project_price": "Price for creating a project"
 }
