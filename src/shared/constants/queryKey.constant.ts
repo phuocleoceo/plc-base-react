@@ -22,5 +22,7 @@ export const QueryKey = {
   AllProjectRoles: 'all_project_roles',
   MemberRoles: 'member_roles',
   EventSchedule: 'event_schedule',
-  EventDetail: 'event_detail'
+  EventDetail: 'event_detail',
+  ConfigSettings: 'config_settings',
+  ConfigSettingDetail: 'config_setting_detail,'
 } as const

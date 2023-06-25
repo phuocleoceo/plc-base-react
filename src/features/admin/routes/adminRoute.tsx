@@ -5,6 +5,7 @@ import { RequiredAuthenticatedRoute } from '~/common/routings/guardRoute'
 import { AdminLayout } from '~/features/admin/layouts'
 
 const UserAccountList = lazy(() => import('~/features/admin/features/user/pages/UserAccountList'))
+const ConfigSettingList = lazy(() => import('~/features/admin/features/configSetting/pages/ConfigSettingList'))
 const ProjectRoleList = lazy(() => import('~/features/admin/features/projectRole/pages/ProjectRoleList'))
 
 export const adminRoute: RouteObject[] = [
@@ -41,7 +42,7 @@ export const adminRoute: RouteObject[] = [
         element: (
           <AdminLayout>
             <Suspense>
-              <>Setting Work</>
+              <ConfigSettingList />
             </Suspense>
           </AdminLayout>
         )
