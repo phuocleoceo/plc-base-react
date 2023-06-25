@@ -72,6 +72,7 @@ export default function CreateProject(props: Props) {
       onSuccess: () => {
         toast.success(t('create_project_success'))
         queryClient.invalidateQueries([QueryKey.Projects])
+        queryClient.invalidateQueries([QueryKey.PersonalProfile])
         reset()
         onClose()
       },
