@@ -330,5 +330,8 @@
   "create_payment": "Create payment",
   "amount": "Amount",
   "amount...": "Amount...",
-  "amount_required": "Amount is required !"
+  "amount_required": "Amount is required !",
+  "payment_success": "Payment success",
+  "payment_failed": "Payment failed",
+  "handling_payment": "Handling payment"
 }

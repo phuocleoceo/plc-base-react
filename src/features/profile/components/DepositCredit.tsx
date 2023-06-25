@@ -1,6 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { useTranslation } from 'react-i18next'
@@ -9,7 +8,6 @@ import { CreatePaymentRequest } from '~/features/profile/models'
 import { InputValidation, Modal } from '~/common/components'
 import { PaymentApi } from '~/features/profile/apis'
 import { ValidationHelper } from '~/shared/helpers'
-import { QueryKey } from '~/shared/constants'
 
 interface Props {
   isShowing: boolean
@@ -22,7 +20,6 @@ export default function DepositCredit(props: Props) {
   const { isShowing, onClose } = props
 
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
 
   const {
     reset,
@@ -42,9 +39,9 @@ export default function DepositCredit(props: Props) {
     }
 
     createPaymentMutation.mutate(paymentData, {
-      onSuccess: () => {
-        toast.success(t('create_invitation_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
+      onSuccess: (data) => {
+        const paymentUrl = (data.data as any).data
+        window.open(paymentUrl, '_blank')
         reset()
         onClose()
       },
