@@ -335,5 +335,6 @@
   "payment_failed": "Payment failed",
   "handling_payment": "Handling payment",
   "free_project": "Number of free projects",
-  "project_price": "Price for creating a project"
+  "project_price": "Price for creating a project",
+  "attendees": "Attendees"
 }

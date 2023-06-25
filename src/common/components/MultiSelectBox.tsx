@@ -1,4 +1,4 @@
-import Select, { SingleValue } from 'react-select'
+import Select, { MultiValue } from 'react-select'
 import { Controller } from 'react-hook-form'
 
 import { TranslateHelper } from '~/shared/helpers'
@@ -8,9 +8,9 @@ import Item from './Item'
 interface Prop {
   control?: any
   controlField?: string
-  onSelected?: (selectedValue?: string) => void
+  onSelected?: (selectedValue?: string[]) => void
   selectList: SelectItem[]
-  defaultValue?: string
+  defaultValue?: string[]
   isSearchable?: boolean
   isClearable?: boolean
   isDisabled?: boolean
@@ -66,8 +66,9 @@ export default function MultiSelectBox(props: Prop) {
 
   const SelectComponent = (onChange: any) => (
     <Select
+      isMulti
       options={selectList}
-      defaultValue={selectList.find((option) => option.value === defaultValue)}
+      defaultValue={selectList.filter((option) => defaultValue?.includes(option.value))}
       formatOptionLabel={formatOptionLabel}
       styles={customStyles}
       className={className}
@@ -85,11 +86,19 @@ export default function MultiSelectBox(props: Prop) {
         name={controlField}
         control={control}
         defaultValue={defaultValue}
-        render={({ field: { onChange } }) => SelectComponent((val: SingleValue<SelectItem>) => onChange(val?.value))}
+        render={({ field: { onChange } }) =>
+          SelectComponent((values: MultiValue<SelectItem>) => {
+            const selectedValues = values.map((value) => value.value)
+            onChange(selectedValues)
+          })
+        }
         rules={{ required: true }}
       />
     ) : onSelected ? (
-      SelectComponent((val: SingleValue<SelectItem>) => onSelected(val?.value))
+      SelectComponent((values: MultiValue<SelectItem>) => {
+        const selectedValues = values.map((value) => value.value)
+        onSelected(selectedValues)
+      })
     ) : null
   ) : null
 }
