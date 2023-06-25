@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { lazy, Suspense, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 import { AxiosError } from 'axios'
@@ -15,7 +16,6 @@ import { AppContext } from '~/common/contexts'
 import { SelectItem } from '~/shared/types'
 import { useToggle } from '~/common/hooks'
 import IssueComment from './IssueComment'
-import { useTranslation } from 'react-i18next'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 

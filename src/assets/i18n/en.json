@@ -336,5 +336,9 @@
   "handling_payment": "Handling payment",
   "free_project": "Number of free projects",
   "project_price": "Price for creating a project",
-  "attendees": "Attendees"
+  "attendees": "Attendees",
+  "update_event_success": "Update event success",
+  "delete_event_success": "Delete event success",
+  "updating_event...": "Updating event...",
+  "update_event": "Update event"
 }
