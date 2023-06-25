@@ -322,5 +322,13 @@
   "value_required": "Value is required !",
   "update_config_setting_success": "Update config setting success",
   "updating_config_setting...": "Updating config setting...",
-  "update_config_setting": "Update config setting"
+  "update_config_setting": "Update config setting",
+  "current_credit": "Current credit",
+  "deposit_credit": "Deposit credit",
+  "making_payment...": "Making payment...",
+  "make_payment": "Make payment",
+  "create_payment": "Create payment",
+  "amount": "Amount",
+  "amount...": "Amount...",
+  "amount_required": "Amount is required !"
 }

@@ -1,8 +1,13 @@
+import { Suspense, lazy, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { UserProfileType } from '~/features/profile/models'
+import { AppContext } from '~/common/contexts'
 import { Avatar } from '~/common/components'
 import { ProfileTab } from '~/shared/enums'
+import { useToggle } from '~/common/hooks'
+
+const DepositCredit = lazy(() => import('~/features/profile/components/DepositCredit'))
 
 interface Props {
   user?: UserProfileType
@@ -13,6 +18,8 @@ export default function ProfileDetail(props: Props) {
   const { user, onChangeTab } = props
 
   const { t } = useTranslation()
+  const { toggleProfile } = useContext(AppContext)
+  const { isShowing: isShowingDepositCredit, toggle: toggleDepositCredit } = useToggle()
 
   const getFullAddress = () => {
     return `${user?.address}, ${user?.addressWard}, ${user?.addressDistrict}, ${user?.addressProvince}`
@@ -49,6 +56,11 @@ export default function ProfileDetail(props: Props) {
           <span className='text-gray-600 font-bold'>{t('address')}:</span>
           <div className='text-black'>{getFullAddress()}</div>
         </div>
+
+        <div className='mb-2'>
+          <span className='text-gray-600 font-bold'>{t('current_credit')}:</span>
+          <div className='text-black'>{user?.currentCredit}</div>
+        </div>
       </div>
 
       <div className='text-center'>
@@ -63,7 +75,25 @@ export default function ProfileDetail(props: Props) {
             {t('change_password')}
           </button>
         </div>
+
+        <div className='mb-3'>
+          <button
+            onClick={() => {
+              toggleProfile()
+              toggleDepositCredit()
+            }}
+            className='btn w-40'
+          >
+            {t('deposit_credit')}
+          </button>
+        </div>
       </div>
+
+      {isShowingDepositCredit && (
+        <Suspense>
+          <DepositCredit isShowing={isShowingDepositCredit} onClose={toggleDepositCredit} />
+        </Suspense>
+      )}
     </>
   )
 }
