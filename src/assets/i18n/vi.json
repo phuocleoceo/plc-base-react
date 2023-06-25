@@ -304,5 +304,6 @@
   "update_member_role": "Cập nhật vai trò thành viên",
   "close": "Đóng",
   "upload_file_fail": "Tải lên file thất bại",
-  "event": "Sự kiện"
+  "event": "Sự kiện",
+  "create_event": "Tạo sự kiện"
 }

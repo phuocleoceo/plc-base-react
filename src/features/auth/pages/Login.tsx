@@ -69,6 +69,7 @@ export default function Login() {
           <div className='flex flex-col gap-y-4'>
             <InputValidation
               label={t('email')}
+              placeholder={t('enter_email...')}
               register={register('email', {
                 required: { value: true, message: t('email_required') },
                 pattern: {
@@ -84,6 +85,7 @@ export default function Login() {
 
             <InputValidation
               label={t('password')}
+              placeholder={t('enter_password...')}
               register={register('password', {
                 required: { value: true, message: t('password_required') }
               })}

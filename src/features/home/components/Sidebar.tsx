@@ -10,7 +10,6 @@ import { ProfileApi } from '~/features/profile/apis'
 import { locales } from '~/common/locales/i18n'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useToggle } from '~/common/hooks'
 
 import JiraWhiteIcon from '~/assets/svg/jira-white.svg'
 
@@ -20,10 +19,9 @@ export default function Sidebar() {
   const { i18n } = useTranslation()
   const currentLanguage = locales[i18n.language as keyof typeof locales]
 
-  const { isShowing, toggle } = useToggle()
   const navigate = useNavigate()
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, setIsAuthenticated, isShowingProfile, toggleProfile } = useContext(AppContext)
 
   const changeLanguage = (lng: 'en' | 'vi') => {
     i18n.changeLanguage(lng)
@@ -63,7 +61,7 @@ export default function Sidebar() {
                 title='Profile'
                 src={user.avatar}
                 name={user.displayName}
-                onClick={toggle}
+                onClick={toggleProfile}
                 className='h-9 w-9 border-[1px] hover:border-green-500'
               />
               <IconBtn onClick={handleGetInvitation} icon='iconoir:telegram' title='invitations' />
@@ -72,7 +70,7 @@ export default function Sidebar() {
           )}
         </div>
       </div>
-      <motion.div initial={{ width: 0 }} animate={{ width: isShowing ? 320 : 0 }} transition={{ type: 'tween' }}>
+      <motion.div initial={{ width: 0 }} animate={{ width: isShowingProfile ? 320 : 0 }} transition={{ type: 'tween' }}>
         <Suspense>
           <Profile user={user} />
         </Suspense>
