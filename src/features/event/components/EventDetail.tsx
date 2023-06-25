@@ -131,7 +131,7 @@ export default function EventDetail(props: Props) {
       >
         <>
           <div className='mb-3'>
-            <span className='text-[22px] font-[600] text-c-text'>{t('create_event')}</span>
+            <span className='text-[22px] font-[600] text-c-text'>{t('update_event')}</span>
           </div>
 
           <div className='flex flex-col gap-4'>
@@ -179,7 +179,7 @@ export default function EventDetail(props: Props) {
                 control={control}
                 controlField='attendeeIds'
                 selectList={projectMembers}
-                defaultValue={['1']}
+                defaultValue={event?.attendees.map((ea) => ea.id.toString())}
                 className='w-full'
               />
             </LabelWrapper>

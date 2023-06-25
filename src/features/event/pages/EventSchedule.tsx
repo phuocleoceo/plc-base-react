@@ -16,6 +16,7 @@ import { TimeHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
+const EventDetail = lazy(() => import('~/features/event/components/EventDetail'))
 const CreateEvent = lazy(() => import('~/features/event/components/CreateEvent'))
 
 export default function EventSchedule() {
@@ -23,8 +24,10 @@ export default function EventSchedule() {
   const { isAuthenticated } = useContext(AppContext)
   const { t } = useTranslation()
 
+  const { isShowing: isShowingEventDetail, toggle: toggleEventDetail } = useToggle()
   const { isShowing: isShowingCreateEvent, toggle: toggleCreateEvent } = useToggle()
 
+  const [selectedEventId, setSelectedEventId] = useState<number>(-1)
   const [eventParams, setEventParams] = useState<GetEventInScheduleParams>({
     month: 6,
     year: 2023
@@ -48,7 +51,8 @@ export default function EventSchedule() {
 
   const handleClickEvent = (event: EventClickArg) => {
     const eventId = parseInt(event.event.id)
-    console.log(eventId)
+    setSelectedEventId(eventId)
+    toggleEventDetail()
   }
 
   if (isLoadingEvent)
@@ -87,6 +91,17 @@ export default function EventSchedule() {
       {isShowingCreateEvent && (
         <Suspense>
           <CreateEvent {...{ projectId }} isShowing={isShowingCreateEvent} onClose={toggleCreateEvent} />
+        </Suspense>
+      )}
+
+      {isShowingEventDetail && (
+        <Suspense>
+          <EventDetail
+            {...{ projectId }}
+            eventId={selectedEventId}
+            isShowing={isShowingEventDetail}
+            onClose={toggleEventDetail}
+          />
         </Suspense>
       )}
     </>
