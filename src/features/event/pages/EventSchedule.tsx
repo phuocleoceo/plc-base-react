@@ -1,4 +1,4 @@
-import { EventClickArg, EventSourceInput } from '@fullcalendar/core'
+import { DatesSetArg, EventClickArg, EventSourceInput } from '@fullcalendar/core'
 import { lazy, Suspense, useContext, useState } from 'react'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -29,8 +29,8 @@ export default function EventSchedule() {
 
   const [selectedEventId, setSelectedEventId] = useState<number>(-1)
   const [eventParams, setEventParams] = useState<GetEventInScheduleParams>({
-    month: 6,
-    year: 2023
+    start: '',
+    end: ''
   })
 
   const { data: eventData, isLoading: isLoadingEvent } = useQuery({
@@ -53,6 +53,13 @@ export default function EventSchedule() {
     const eventId = parseInt(event.event.id)
     setSelectedEventId(eventId)
     toggleEventDetail()
+  }
+
+  const handleDates = (rangeInfo: DatesSetArg) => {
+    setEventParams({
+      start: rangeInfo.start?.toISOString() ?? new Date().toISOString(),
+      end: rangeInfo.end?.toISOString() ?? new Date().toISOString()
+    })
   }
 
   if (isLoadingEvent)
@@ -85,6 +92,8 @@ export default function EventSchedule() {
           height={'90vh'}
           events={events}
           eventClick={handleClickEvent}
+          datesSet={handleDates}
+          // weekends={false}
         />
       </div>
 

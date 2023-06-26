@@ -24,3 +24,9 @@ export const toLocal = (s: Date | undefined) => {
 
   return moment.utc(s).utcOffset(EnvConfig.TimeZoneUTC).toDate()
 }
+
+export const toUTC0 = (s: Date | undefined) => {
+  if (!s) return
+
+  return moment.utc(s).subtract(EnvConfig.TimeZoneUTC, 'hours').toDate()
+}

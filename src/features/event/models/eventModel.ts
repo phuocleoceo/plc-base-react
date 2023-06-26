@@ -2,8 +2,8 @@ import { EventDetail, EventInSchedule } from './eventType'
 import { BaseResponse } from '~/shared/types'
 
 export type GetEventInScheduleParams = {
-  month: number
-  year: number
+  start: string
+  end: string
 }
 
 export type GetEventInScheduleResponse = BaseResponse<Array<EventInSchedule>>
