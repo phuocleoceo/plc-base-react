@@ -12,7 +12,8 @@ import {
   LabelWrapper,
   InputValidation,
   DateTimePicker,
-  MultiSelectBox
+  MultiSelectBox,
+  Item
 } from '~/common/components'
 import { LocalStorageHelper, TimeHelper, ValidationHelper } from '~/shared/helpers'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
@@ -121,7 +122,7 @@ export default function EventDetail(props: Props) {
 
   return (
     <>
-      <Modal isLoading={isLoadingEvent || isLoadingProjectMember} {...{ isShowing, onClose }}>
+      <Modal isLoading={isLoadingEvent || isLoadingProjectMember} {...{ isShowing, onClose }} className='max-w-[45rem]'>
         <>
           <div className='flex items-center justify-between text-[16px] text-gray-600 sm:px-3'>
             <div className='mb-3'>
@@ -212,7 +213,70 @@ export default function EventDetail(props: Props) {
                 </LabelWrapper>
               </>
             ) : (
-              <></>
+              <div className='sm:flex md:gap-3 pl-3'>
+                <div className='w-full sm:pr-6 text-c-text max-h-[35rem] overflow-y-auto'>
+                  <div className='mb-4'>
+                    <label htmlFor={event?.description} className='tracking-wide text-base font-bold'>
+                      {t('description')}
+                    </label>
+                    {event?.description && (
+                      <div
+                        className='text-black mt-3 text-90p'
+                        dangerouslySetInnerHTML={{
+                          __html: event?.description as TrustedHTML
+                        }}
+                      ></div>
+                    )}
+                  </div>
+                </div>
+
+                <div className='shrink-0 sm:w-[15rem] max-h-[35rem] overflow-y-auto'>
+                  <div className='mb-2'>
+                    <label
+                      htmlFor={event?.startTime.toString()}
+                      className='font-bold text-sm tracking-wide text-gray-800'
+                    >
+                      {t('start_time')}
+                    </label>
+                    <div className='text-black mt-2'>
+                      {TimeHelper.format(event?.startTime, 'DD/MMM/YY hh:mm A') || 'n/a'}
+                    </div>
+                  </div>
+
+                  <div className='mb-2'>
+                    <label
+                      htmlFor={event?.endTime.toString()}
+                      className='font-bold text-sm tracking-wide text-gray-800'
+                    >
+                      {t('end_time')}
+                    </label>
+                    <div className='text-black mt-2'>
+                      {TimeHelper.format(event?.endTime, 'DD/MMM/YY hh:mm A') || 'n/a'}
+                    </div>
+                  </div>
+
+                  <div className='mb-2'>
+                    <label
+                      htmlFor={event?.attendees.toString()}
+                      className='font-bold text-sm tracking-wide text-gray-800'
+                    >
+                      {t('attendees')}
+                    </label>
+                    {event?.attendees &&
+                      event?.attendees.length > 0 &&
+                      event?.attendees.map((attendee) => (
+                        <Item
+                          key={attendee.id}
+                          size='w-6 h-6'
+                          variant='SQUARE'
+                          icon={attendee.avatar}
+                          text={attendee.name ?? ''}
+                          className='mt-2'
+                        />
+                      ))}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </>
