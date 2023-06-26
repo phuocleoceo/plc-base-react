@@ -46,6 +46,8 @@ export default function PaymentCallback() {
         vnp_SecureHash: queryParams.vnp_SecureHash
       }
 
+      window.history.pushState({}, '', 'payment/callback')
+
       submitPaymentMutation.mutate(paymentData, {
         onSettled: () => setIsHandling(false),
         onSuccess: () => setIsSuccess(true),
