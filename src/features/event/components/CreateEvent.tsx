@@ -1,14 +1,25 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
+import { useContext } from 'react'
 
-import { DateTimePicker, InputValidation, LabelWrapper, Modal, RichTextInput } from '~/common/components'
+import {
+  DateTimePicker,
+  InputValidation,
+  LabelWrapper,
+  RichTextInput,
+  MultiSelectBox,
+  Modal
+} from '~/common/components'
+import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { CreateEventRequest } from '~/features/event/models'
 import { ValidationHelper } from '~/shared/helpers'
 import { EventApi } from '~/features/event/apis'
+import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
+import { SelectItem } from '~/shared/types'
 
 interface Props {
   projectId: number
@@ -31,7 +42,22 @@ export default function CreateEvent(props: Props) {
     formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
+  const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
+
+  const { data: projectMemberData } = useQuery({
+    queryKey: [QueryKey.ProjectMemberSelect, projectId],
+    queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
+    enabled: isAuthenticated,
+    staleTime: 2 * 60 * 1000
+  })
+
+  const projectMembers: SelectItem[] =
+    projectMemberData?.data.data.map((pm) => ({
+      label: pm.name,
+      value: pm.id.toString(),
+      icon: pm.avatar
+    })) || []
 
   const createEventMutation = useMutation({
     mutationFn: (body: CreateEventRequest) => EventApi.createEvent(projectId, body)
@@ -41,7 +67,7 @@ export default function CreateEvent(props: Props) {
     const eventData: CreateEventRequest = {
       ...form,
       description: form.description ?? '',
-      attendeeIds: [1]
+      attendeeIds: form.attendeeIds ?? []
     }
 
     createEventMutation.mutate(eventData, {
@@ -99,6 +125,16 @@ export default function CreateEvent(props: Props) {
 
           <LabelWrapper label={t('end_time')} margin='mt-0'>
             <DateTimePicker control={control} controlField='endTime' required={true} className='w-full' />
+          </LabelWrapper>
+
+          <LabelWrapper label={t('attendees')} margin='mt-0'>
+            <MultiSelectBox
+              control={control}
+              controlField='attendeeIds'
+              selectList={projectMembers}
+              defaultValue={[]}
+              className='w-full'
+            />
           </LabelWrapper>
         </div>
       </>
