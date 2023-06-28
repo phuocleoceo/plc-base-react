@@ -16,3 +16,5 @@ export type GetMemberForSelectResponse = BaseResponse<
 >
 
 export type DeleteProjectMemberResponse = BaseResponse<boolean>
+
+export type LeaveProjectResponse = BaseResponse<boolean>

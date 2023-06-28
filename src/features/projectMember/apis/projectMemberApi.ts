@@ -2,7 +2,8 @@ import {
   GetMemberForProjectParams,
   GetMemberForProjectResponse,
   GetMemberForSelectResponse,
-  DeleteProjectMemberResponse
+  DeleteProjectMemberResponse,
+  LeaveProjectResponse
 } from '~/features/projectMember/models'
 import { HttpHelper } from '~/shared/helpers'
 
@@ -15,6 +16,9 @@ const projectMemberApi = {
   },
   deleteProjectMember(projectId: number, projectMemberId: number) {
     return HttpHelper.delete<DeleteProjectMemberResponse>(`project/${projectId}/member/${projectMemberId}`)
+  },
+  leaveProject(projectId: number) {
+    return HttpHelper.put<LeaveProjectResponse>(`project/${projectId}/member/leave`)
   }
 }
 
