@@ -230,6 +230,7 @@ export default function SprintBar(props: Props) {
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_sprint...')}
             submitLabel={t('delete_sprint')}
+            submitClassName='btn-alert'
             className='max-w-[20rem]'
           />
         </Suspense>
