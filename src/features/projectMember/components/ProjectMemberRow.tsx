@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react'
 
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { ProjectMember } from '~/features/projectMember/models'
+import { LocalStorageHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
@@ -29,6 +30,7 @@ export default function ProjectMemberRow(props: Props) {
   const { isShowing: isShowingMemberRole, toggle: toggleMemberRole } = useToggle()
 
   const queryClient = useQueryClient()
+  const currentUser = LocalStorageHelper.getUserInfo()
 
   const handleClickDeleteProjectMember = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -83,9 +85,11 @@ export default function ProjectMemberRow(props: Props) {
             <Icon width={22} icon='iconoir:agile' className='text-blue-500' />
           </button>
 
-          <button title='delete_project_member' onClick={handleClickDeleteProjectMember} className='btn-icon bg-c-1'>
-            <Icon width={22} icon='bx:trash' className='text-red-500' />
-          </button>
+          {currentUser.id !== projectMember.id && (
+            <button title='delete_project_member' onClick={handleClickDeleteProjectMember} className='btn-icon bg-c-1'>
+              <Icon width={22} icon='bx:trash' className='text-red-500' />
+            </button>
+          )}
         </div>
       </div>
 

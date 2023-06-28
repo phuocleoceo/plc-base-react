@@ -1,14 +1,10 @@
 import { useParams, useLocation } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
-import { useContext } from 'react'
 
 import { Avatar, IconLink, SpinningCircle } from '~/common/components'
-import { ProjectApi } from '~/features/project/apis'
-import { AppContext } from '~/common/contexts'
-import { QueryKey } from '~/shared/constants'
+import { useCurrentProject } from '~/features/project/hooks'
 import { useToggle } from '~/common/hooks'
 
 export default function Menubar() {
@@ -20,16 +16,8 @@ export default function Menubar() {
   const { isShowing, toggle } = useToggle(true)
 
   const { t } = useTranslation()
-  const { isAuthenticated } = useContext(AppContext)
 
-  const { data, isLoading } = useQuery({
-    queryKey: [QueryKey.ProjectDetail, projectId],
-    queryFn: () => ProjectApi.getProjectById(projectId),
-    enabled: isAuthenticated,
-    staleTime: 2 * 60 * 1000
-  })
-
-  const project = data?.data.data
+  const { currentProject, isLoadingProject } = useCurrentProject(projectId)
 
   return (
     <motion.div
@@ -39,7 +27,7 @@ export default function Menubar() {
       className='relative bg-c-2'
     >
       {projectId &&
-        (isLoading ? (
+        (isLoadingProject ? (
           <div className='flex justify-center'>
             <SpinningCircle height={40} width={40} />
           </div>
@@ -48,15 +36,15 @@ export default function Menubar() {
             <div className='flex'>
               <div className='grid h-10 w-10 shrink-0 place-items-center text-lg'>
                 <Avatar
-                  title={project?.name}
-                  src={project?.image}
-                  name={project?.name}
+                  title={currentProject?.name}
+                  src={currentProject?.image}
+                  name={currentProject?.name}
                   className='h-9 w-9 border-[1px] hover:border-green-500'
                 />
               </div>
 
               <div className='ml-2 w-40'>
-                <span className='block truncate text-sm font-medium text-c-5'>{project?.name}</span>
+                <span className='block truncate text-sm font-medium text-c-5'>{currentProject?.name}</span>
                 <span className='text-[13px] text-c-text'>{t('project_planning')}</span>
               </div>
             </div>
@@ -113,7 +101,7 @@ export default function Menubar() {
         title='toggle_project_menubar'
         onClick={toggle}
         className={`border-zinc-text00 group peer absolute -right-[14px] top-8 z-[20] grid h-7 w-7 place-items-center rounded-full border-[1px] bg-c-1 hover:border-secondary hover:bg-secondary ${
-          projectId && project ? '' : 'pointer-events-none'
+          projectId && currentProject ? '' : 'pointer-events-none'
         }`}
       >
         <Icon

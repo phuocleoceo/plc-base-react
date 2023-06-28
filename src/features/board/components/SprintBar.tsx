@@ -39,6 +39,7 @@ export default function SprintBar(props: Props) {
   } = useContext(BoardContext)
 
   const { isShowing: isShowingUpdateSprint, toggle: toggleUpdateSprint } = useToggle()
+  const { isShowing: isShowingDeleteSprint, toggle: toggleDeleteSprint } = useToggle()
   const { isShowing: isShowingStartSprint, toggle: toggleStartSprint } = useToggle()
   const { isShowing: isShowingCompleteSprint, toggle: toggleCompleteSprint } = useToggle()
 
@@ -55,6 +56,21 @@ export default function SprintBar(props: Props) {
         toast.success(t('started_sprint'))
         queryClient.invalidateQueries([QueryKey.AvailableSprint])
         toggleStartSprint()
+      }
+    })
+  }
+
+  const deleteSprintMutation = useMutation({
+    mutationFn: () => SprintApi.deleteSprint(projectId, sprint?.id ?? -1)
+  })
+
+  const handleDeleteSprint = async () => {
+    deleteSprintMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success(t('delete_sprint_success'))
+        queryClient.invalidateQueries([QueryKey.AvailableSprint])
+        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        toggleDeleteSprint()
       }
     })
   }
@@ -152,6 +168,10 @@ export default function SprintBar(props: Props) {
                   onClick: toggleUpdateSprint
                 },
                 {
+                  label: t('delete_sprint'),
+                  onClick: toggleDeleteSprint
+                },
+                {
                   label: t('move_issue_to_backlog'),
                   onClick: toggleMoveIssueSelect
                 }
@@ -195,6 +215,22 @@ export default function SprintBar(props: Props) {
             sprintId={sprint.id}
             isShowing={isShowingUpdateSprint}
             onClose={toggleUpdateSprint}
+          />
+        </Suspense>
+      )}
+
+      {isShowingDeleteSprint && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingDeleteSprint}
+            onClose={toggleDeleteSprint}
+            onSubmit={handleDeleteSprint}
+            isMutating={deleteSprintMutation.isLoading}
+            confirmMessage={`${t('submit_delete_sprint')}: ${sprint.title}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('deleting_sprint...')}
+            submitLabel={t('delete_sprint')}
+            className='max-w-[20rem]'
           />
         </Suspense>
       )}

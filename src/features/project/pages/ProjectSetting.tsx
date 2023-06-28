@@ -10,6 +10,7 @@ import * as _ from 'lodash'
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
 import { UpdateProjectRequest } from '~/features/project/models'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
+import { useCurrentProject } from '~/features/project/hooks'
 import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { MediaApi } from '~/features/media/apis'
@@ -42,14 +43,7 @@ export default function ProjectSetting() {
     formState: { errors, isSubmitting }
   } = useForm<FormData>()
 
-  const { data: projectData, isLoading: projectLoading } = useQuery({
-    queryKey: [QueryKey.ProjectDetail, projectId],
-    queryFn: () => ProjectApi.getProjectById(projectId),
-    enabled: isAuthenticated,
-    staleTime: 2 * 60 * 1000
-  })
-
-  const project = projectData?.data.data
+  const { currentProject, isLoadingProject } = useCurrentProject(projectId)
 
   const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
@@ -73,9 +67,9 @@ export default function ProjectSetting() {
     let imageUrl = ''
     try {
       const imageUploadResponse = await MediaApi.uploadFile(selectedImage)
-      imageUrl = imageUploadResponse?.data.data || project?.image || ''
+      imageUrl = imageUploadResponse?.data.data || currentProject?.image || ''
     } catch {
-      imageUrl = project?.image || ''
+      imageUrl = currentProject?.image || ''
     }
 
     const updateProjectData: UpdateProjectRequest = {
@@ -102,7 +96,7 @@ export default function ProjectSetting() {
     setSelectedImage(image)
   }
 
-  return projectLoading || projectMemberLoading ? (
+  return isLoadingProject || projectMemberLoading ? (
     <div className='mt-10 flex justify-center'>
       <SpinningCircle height={50} width={50} />
     </div>
@@ -113,12 +107,12 @@ export default function ProjectSetting() {
 
         <form onSubmit={handleUpdateProfile} className='flex max-w-[30rem] flex-col gap-4'>
           <div>
-            <ImageUpload originImage={project?.image} onSelectedImage={handleSelectImage} />
+            <ImageUpload originImage={currentProject?.image} onSelectedImage={handleSelectImage} />
           </div>
 
           <InputValidation
             label={t('name')}
-            defaultValue={project?.name}
+            defaultValue={currentProject?.name}
             placeholder={t('enter_project_name...')}
             register={register('name', {
               required: { value: true, message: t('project_name_required') }
@@ -127,7 +121,7 @@ export default function ProjectSetting() {
           />
           <InputValidation
             label={t('key')}
-            defaultValue={project?.key}
+            defaultValue={currentProject?.key}
             placeholder={t('enter_project_key...')}
             register={register('key', {
               required: { value: true, message: t('project_key_required') }
@@ -140,7 +134,7 @@ export default function ProjectSetting() {
               control={control}
               controlField='leaderId'
               selectList={projectMembers}
-              defaultValue={project?.leaderId.toString()}
+              defaultValue={currentProject?.leaderId.toString()}
               className='w-full'
             />
           </LabelWrapper>
@@ -166,7 +160,7 @@ export default function ProjectSetting() {
       {isShowingDeleteProject && (
         <Suspense>
           <DeleteProject
-            project={_.pick(project, ['id', 'name'])}
+            project={_.pick(currentProject, ['id', 'name'])}
             isShowing={isShowingDeleteProject}
             onClose={toggleDeleteProject}
           />
