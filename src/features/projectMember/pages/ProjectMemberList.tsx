@@ -9,7 +9,7 @@ import { GetMemberForProjectParams } from '~/features/projectMember/models'
 import { ProjectMemberRow } from '~/features/projectMember/components'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
-import { ProjectApi } from '~/features/project/apis'
+import { useCurrentProject } from '~/features/project/hooks'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
@@ -24,16 +24,8 @@ export default function ProjectMemberList() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
+  const { currentProject, isLoadingProject } = useCurrentProject(projectId)
   const { isShowing: isShowingLeaveProject, toggle: toggleLeaveProject } = useToggle()
-
-  const { data: projectData, isLoading: isLoadingProject } = useQuery({
-    queryKey: [QueryKey.ProjectDetail, projectId],
-    queryFn: () => ProjectApi.getProjectById(projectId),
-    enabled: isAuthenticated,
-    staleTime: 5 * 60 * 1000
-  })
-
-  const project = projectData?.data.data
 
   const [projectMemberParams, setProjectMemberParams] = useState<GetMemberForProjectParams>({
     pageNumber: 1,
@@ -147,7 +139,7 @@ export default function ProjectMemberList() {
             onClose={toggleLeaveProject}
             onSubmit={handleLeaveProject}
             isMutating={leaveProjectMutation.isLoading}
-            confirmMessage={t(`submit_leave_project`) + `: ${project?.name}`}
+            confirmMessage={t(`submit_leave_project`) + `: ${currentProject?.name}`}
             closeLabel={t('cancle')}
             submittingLabel={t('leaving_project...')}
             submitLabel={t('leave_project')}
