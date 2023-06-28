@@ -343,5 +343,9 @@
   "update_event": "Update event",
   "submit_delete_event": "Submit delete event",
   "deleting_event...": "Deleting event...",
-  "delete_event": "Delete event"
+  "delete_event": "Delete event",
+  "delete_sprint_success": "Delete sprint success",
+  "delete_sprint": "Delete sprint",
+  "deleting_sprint...": "Deleting sprint...",
+  "submit_delete_sprint": "Submit delete sprint"
 }
