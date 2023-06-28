@@ -22,14 +22,14 @@ export default function Menubar() {
   const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data, isLoading } = useQuery({
+  const { data: projectData, isLoading: isLoadingProject } = useQuery({
     queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,
-    staleTime: 2 * 60 * 1000
+    staleTime: 5 * 60 * 1000
   })
 
-  const project = data?.data.data
+  const project = projectData?.data.data
 
   return (
     <motion.div
@@ -39,7 +39,7 @@ export default function Menubar() {
       className='relative bg-c-2'
     >
       {projectId &&
-        (isLoading ? (
+        (isLoadingProject ? (
           <div className='flex justify-center'>
             <SpinningCircle height={40} width={40} />
           </div>

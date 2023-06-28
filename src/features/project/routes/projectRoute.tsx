@@ -1,11 +1,10 @@
-import { Outlet, RouteObject } from 'react-router-dom'
+import { RouteObject } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
 import { RequiredAuthenticatedRoute } from '~/common/routings/guardRoute'
 import { projectInvitationRoute } from '~/features/invitation/routes'
 import { projectMemberRoute } from '~/features/projectMember/routes'
 import { projectBacklogRoute } from '~/features/backlog/routes'
-import { ProjectProvider } from '~/features/project/contexts'
 import { projectBoardRoute } from '~/features/board/routes'
 import { ProjectLayout } from '~/features/project/layouts'
 import { eventRoute } from '~/features/event/routes'
@@ -31,11 +30,6 @@ export const projectRoute: RouteObject[] = [
       },
       {
         path: ':projectId',
-        element: (
-          <ProjectProvider>
-            <Outlet />
-          </ProjectProvider>
-        ),
         children: [
           {
             path: 'setting',

@@ -1,20 +1,39 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { lazy, Suspense, useContext, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
-import { ProjectMemberRow } from '~/features/projectMember/components'
 import { GetMemberForProjectParams } from '~/features/projectMember/models'
+import { ProjectMemberRow } from '~/features/projectMember/components'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { Pagination, SpinningCircle } from '~/common/components'
+import { ProjectApi } from '~/features/project/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
+import { useToggle } from '~/common/hooks'
+
+const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
 export default function ProjectMemberList() {
   const projectId = Number(useParams().projectId)
   const { t } = useTranslation()
+
   const { isAuthenticated } = useContext(AppContext)
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  const { isShowing: isShowingLeaveProject, toggle: toggleLeaveProject } = useToggle()
+
+  const { data: projectData, isLoading: isLoadingProject } = useQuery({
+    queryKey: [QueryKey.ProjectDetail, projectId],
+    queryFn: () => ProjectApi.getProjectById(projectId),
+    enabled: isAuthenticated,
+    staleTime: 5 * 60 * 1000
+  })
+
+  const project = projectData?.data.data
 
   const [projectMemberParams, setProjectMemberParams] = useState<GetMemberForProjectParams>({
     pageNumber: 1,
@@ -37,7 +56,7 @@ export default function ProjectMemberList() {
     })
   }
 
-  const { data: projectData, isLoading: projectLoading } = useQuery({
+  const { data: projectMemberData, isLoading: isLoadingProjectMember } = useQuery({
     queryKey: [QueryKey.ProjectMembers, projectId, projectMemberParams],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, projectMemberParams),
     enabled: isAuthenticated,
@@ -45,10 +64,26 @@ export default function ProjectMemberList() {
     staleTime: 2 * 60 * 1000
   })
 
-  const projectMembers = projectData?.data.data.records
-  const projectMemberCount = projectData?.data.data.totalRecords ?? 0
+  const projectMembers = projectMemberData?.data.data.records
+  const projectMemberCount = projectMemberData?.data.data.totalRecords ?? 0
 
-  if (projectLoading)
+  const leaveProjectMutation = useMutation({
+    mutationFn: () => ProjectMemberApi.leaveProject(projectId)
+  })
+
+  const handleLeaveProject = async () => {
+    leaveProjectMutation.mutate(undefined, {
+      onSuccess: () => {
+        toggleLeaveProject()
+        queryClient.invalidateQueries([QueryKey.Projects])
+        navigate('/')
+        toast.success(t('leave_project_success'))
+      },
+      onError: () => toggleLeaveProject()
+    })
+  }
+
+  if (isLoadingProjectMember || isLoadingProject)
     return (
       <div className='z-10 grid w-full place-items-center bg-c-1 text-xl text-c-text'>
         <div className='flex items-center gap-6'>
@@ -63,6 +98,9 @@ export default function ProjectMemberList() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5 mt-6'>
         <div className='flex min-w-[43rem] justify-between'>
           <h1 className='text-xl font-semibold tracking-wide'>{t('project_members')}</h1>
+          <button onClick={toggleLeaveProject} className='btn-alert'>
+            {t('leave_project')}
+          </button>
         </div>
         <div className='mt-8'>
           <div className='relative'>
@@ -101,6 +139,23 @@ export default function ProjectMemberList() {
           onChangePage={handleChangePage}
         />
       </div>
+
+      {isShowingLeaveProject && (
+        <Suspense>
+          <ConfirmModal
+            isShowing={isShowingLeaveProject}
+            onClose={toggleLeaveProject}
+            onSubmit={handleLeaveProject}
+            isMutating={leaveProjectMutation.isLoading}
+            confirmMessage={t(`submit_leave_project`) + `: ${project?.name}`}
+            closeLabel={t('cancle')}
+            submittingLabel={t('leaving_project...')}
+            submitLabel={t('leave_project')}
+            submitClassName='btn-alert'
+            className='max-w-[25rem]'
+          />
+        </Suspense>
+      )}
     </>
   )
 }
