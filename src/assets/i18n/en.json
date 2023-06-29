@@ -352,5 +352,6 @@
   "submit_leave_project": "Submit leave project",
   "leaving_project...": "Leaving project...",
   "leader_cannot_leave": "Leader cannot leave",
-  "leave_project_success": "Leave project success"
+  "leave_project_success": "Leave project success",
+  "update_permission": "Update permission"
 }
