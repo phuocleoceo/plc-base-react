@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { Icon } from '@iconify/react'
 import { useContext } from 'react'
 
 import { ProjectPermissionApi } from '~/features/admin/features/projectPermission/apis'
@@ -37,8 +38,16 @@ export default function ProjectPermissionModal(props: Props) {
       {...{ isShowing, onClose }}
     >
       <>
-        <div className='mb-3 ml-3'>
-          <span className='text-[22px] font-[600] text-c-text'>{t('update_permission')}</span>
+        <div className='flex items-center justify-between text-[16px] mb-4 ml-3'>
+          <div>
+            <span className='text-[22px] font-[600] text-c-text'>{t('update_permission')}</span>
+          </div>
+
+          <div className='text-black'>
+            <button onClick={onClose} title='Close' className='btn-icon text-lg'>
+              <Icon width={22} icon='akar-icons:cross' />
+            </button>
+          </div>
         </div>
 
         {projectPermissions && projectPermissions.length !== 0 ? (
@@ -57,12 +66,6 @@ export default function ProjectPermissionModal(props: Props) {
         ) : (
           <div className='mt-[30vh] grid place-items-center text-xl'>{t('no_project_roles_found')} 🚀</div>
         )}
-
-        <div className='mt-4 flex justify-end gap-x-3'>
-          <button onClick={onClose} className='btn-gray'>
-            {t('close')}
-          </button>
-        </div>
       </>
     </Modal>
   )
