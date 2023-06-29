@@ -42,7 +42,7 @@ export default function ProjectPermissionRow(props: Props) {
   }
 
   return (
-    <div key={projectPermission.key} className='flex justify-between p-3'>
+    <div key={projectPermission.key} className='flex justify-between p-3 ml-3'>
       <p>
         {projectPermission.key} - {projectPermission.description}
       </p>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useContext } from 'react'
 
 import { ProjectPermissionApi } from '~/features/admin/features/projectPermission/apis'
+import ProjectPermissionRow from './ProjectPermissionRow'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { Modal } from '~/common/components'
@@ -30,7 +31,11 @@ export default function ProjectPermissionModal(props: Props) {
   const projectPermissions = projectPermissionData?.data.data
 
   return (
-    <Modal className='max-w-[23rem]' isLoading={projectPermissionLoading} {...{ isShowing, onClose }}>
+    <Modal
+      className='max-w-[40rem] max-h-[45rem] overflow-y-auto'
+      isLoading={projectPermissionLoading}
+      {...{ isShowing, onClose }}
+    >
       <>
         <div className='mb-3 ml-3'>
           <span className='text-[22px] font-[600] text-c-text'>{t('update_permission')}</span>
@@ -38,9 +43,12 @@ export default function ProjectPermissionModal(props: Props) {
 
         {projectPermissions && projectPermissions.length !== 0 ? (
           <div className='mt-1 ml-3'>
-            {projectPermissions.map((projectPermission, idx) => (
+            {projectPermissions.map((projectPermissionGroup, idx) => (
               <div key={idx}>
-                <div>{projectPermission.module}</div>
+                <div>{projectPermissionGroup.module}</div>
+                {projectPermissionGroup.children.map((projectPermission) => (
+                  <ProjectPermissionRow key={projectPermission.key} {...{ projectRoleId, projectPermission }} />
+                ))}
               </div>
             ))}
           </div>
