@@ -24,5 +24,6 @@ export const QueryKey = {
   EventSchedule: 'event_schedule',
   EventDetail: 'event_detail',
   ConfigSettings: 'config_settings',
-  ConfigSettingDetail: 'config_setting_detail,'
+  ConfigSettingDetail: 'config_setting_detail',
+  ProjectPermissions: 'project_permissions'
 } as const

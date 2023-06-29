@@ -9,6 +9,7 @@ export type LoginResponse = BaseResponse<{
   id: number
   email: string
   roleId: number
+  roleName: string
   accessToken: string
   accessTokenExpiredAt: Date
   refreshToken: string

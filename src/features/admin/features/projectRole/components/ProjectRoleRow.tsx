@@ -9,6 +9,9 @@ import { ProjectRole } from '~/features/admin/features/projectRole/models'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
+const ProjectPermissionModal = lazy(
+  () => import('~/features/admin/features/projectPermission/components/ProjectPermissionModal')
+)
 const UpdateProjectRole = lazy(() => import('~/features/admin/features/projectRole/components/UpdateProjectRole'))
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
@@ -22,6 +25,7 @@ export default function ProjectRoleRow(props: Props) {
 
   const { isShowing: isShowingUpdateProjectRole, toggle: toggleUpdateProjectRole } = useToggle()
   const { isShowing: isShowingDeleteProjectRole, toggle: toggleDeleteProjectRole } = useToggle()
+  const { isShowing: isShowingUpdatePermission, toggle: toggleUpdatePermission } = useToggle()
 
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -58,6 +62,10 @@ export default function ProjectRoleRow(props: Props) {
             <button title='delete_project_role' onClick={toggleDeleteProjectRole} className='btn-icon bg-c-1'>
               <Icon width={22} icon='bx:trash' className='text-red-500' />
             </button>
+
+            <button title='edit_member_role' onClick={toggleUpdatePermission} className='btn-icon bg-c-1'>
+              <Icon width={22} icon='iconoir:agile' className='text-blue-500' />
+            </button>
           </div>
         </div>
       </div>
@@ -85,6 +93,16 @@ export default function ProjectRoleRow(props: Props) {
             submitLabel={t('delete_project_role')}
             submitClassName='btn-alert'
             className='max-w-[20rem]'
+          />
+        </Suspense>
+      )}
+
+      {isShowingUpdatePermission && (
+        <Suspense>
+          <ProjectPermissionModal
+            projectRoleId={projectRole.id}
+            isShowing={isShowingUpdatePermission}
+            onClose={toggleUpdatePermission}
           />
         </Suspense>
       )}
