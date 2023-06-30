@@ -39,7 +39,8 @@ export enum ProjectMemberPermission {
 export enum ProjectStatusPermission {
   Create = 'ProjectStatus.Create',
   Update = 'ProjectStatus.Update',
-  Delete = 'ProjectStatus.Delete'
+  Delete = 'ProjectStatus.Delete',
+  UpdateForBoard = 'ProjectStatus.UpdateForBoard'
 }
 
 export enum SprintPermission {

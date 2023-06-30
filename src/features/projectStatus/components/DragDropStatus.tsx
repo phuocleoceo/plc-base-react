@@ -11,7 +11,6 @@ import { useProjectPermission } from '~/features/project/hooks'
 import { DragDropIssue } from '~/features/issue/components'
 import { ProjectStatusPermission } from '~/shared/enums'
 import { IssueInBoard } from '~/features/issue/models'
-import { LocalStorageHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
@@ -30,7 +29,6 @@ export default function DragDropStatus(props: Props) {
 
   const { t } = useTranslation()
   const { hasPermission } = useProjectPermission(projectId)
-  const currentUser = LocalStorageHelper.getUserInfo()
   const queryClient = useQueryClient()
 
   const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useToggle()
@@ -92,7 +90,7 @@ export default function DragDropStatus(props: Props) {
         className='w-[clamp(16rem,18rem,20rem)]'
         index={idx}
         draggableId={`projectStatus-${projectStatus.id}`}
-        isDragDisabled={isDragDisabled}
+        isDragDisabled={isDragDisabled || !hasPermission(ProjectStatusPermission.UpdateForBoard)}
       >
         <div className='relative mr-3 bg-c-2 p-3 text-c-5 shadow-list'>
           <div className='mb-4 flex items-center justify-between text-[15px]'>
@@ -155,11 +153,7 @@ export default function DragDropStatus(props: Props) {
             droppableId={`projectStatus-${projectStatus.id}`}
           >
             {issues?.map((issue, idx) => (
-              <DragDropIssue
-                key={issue.id}
-                isDragDisabled={isDragDisabled || issue.assigneeId !== currentUser.id}
-                {...{ idx, issue, projectId }}
-              />
+              <DragDropIssue key={issue.id} isDragDisabled={isDragDisabled} {...{ idx, issue, projectId }} />
             ))}
           </DroppableWrapper>
         </div>
