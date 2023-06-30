@@ -205,7 +205,11 @@ export default function ProjectBacklog() {
                 direction='vertical'
               >
                 {issuesBacklog.map((issue, idx) => (
-                  <IssueBacklog key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
+                  <IssueBacklog
+                    key={issue.id}
+                    isDragDisabled={!hasPermission(IssuePermission.UpdateForBacklog) || isDragDisabled}
+                    {...{ idx, issue, projectId }}
+                  />
                 ))}
               </DroppableWrapper>
             </DragDropContext>

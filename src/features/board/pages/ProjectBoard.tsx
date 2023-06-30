@@ -11,7 +11,7 @@ import { DragDropStatus } from '~/features/projectStatus/components'
 import { FilterBar, SprintBar } from '~/features/board/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
 import { useProjectPermission } from '~/features/project/hooks'
-import { ProjectStatusPermission, SprintPermission } from '~/shared/enums'
+import { IssuePermission, ProjectStatusPermission, SprintPermission } from '~/shared/enums'
 import { DroppableWrapper } from '~/common/components'
 import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
@@ -351,7 +351,7 @@ export default function ProjectBoard() {
                     projectId={projectId}
                     projectStatus={projectStatus}
                     issues={getIssuesByStatusId(projectStatus.id)}
-                    isDragDisabled={isDragDisabled}
+                    isDragDisabled={!hasPermission(IssuePermission.UpdateForBoard) || isDragDisabled}
                   />
                 ))}
               </DroppableWrapper>

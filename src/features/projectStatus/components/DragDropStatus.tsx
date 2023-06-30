@@ -11,6 +11,7 @@ import { useProjectPermission } from '~/features/project/hooks'
 import { DragDropIssue } from '~/features/issue/components'
 import { ProjectStatusPermission } from '~/shared/enums'
 import { IssueInBoard } from '~/features/issue/models'
+import { LocalStorageHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
@@ -29,6 +30,7 @@ export default function DragDropStatus(props: Props) {
 
   const { t } = useTranslation()
   const { hasPermission } = useProjectPermission(projectId)
+  const currentUser = LocalStorageHelper.getUserInfo()
   const queryClient = useQueryClient()
 
   const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useToggle()
@@ -153,7 +155,11 @@ export default function DragDropStatus(props: Props) {
             droppableId={`projectStatus-${projectStatus.id}`}
           >
             {issues?.map((issue, idx) => (
-              <DragDropIssue key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
+              <DragDropIssue
+                key={issue.id}
+                isDragDisabled={isDragDisabled || issue.assigneeId !== currentUser.id}
+                {...{ idx, issue, projectId }}
+              />
             ))}
           </DroppableWrapper>
         </div>
