@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 
+import { useCurrentProject, useProjectPermission } from '~/features/project/hooks'
 import { Avatar, IconLink, SpinningCircle } from '~/common/components'
-import { useCurrentProject } from '~/features/project/hooks'
 import { useToggle } from '~/common/hooks'
 
 export default function Menubar() {
@@ -12,6 +12,9 @@ export default function Menubar() {
 
   // host/project/:projectId/currentTab
   const currentTab = useLocation().pathname.split('/')[3]
+
+  // const { permissions } = useProjectPermission(projectId)
+  // console.log(permissions)
 
   const { isShowing, toggle } = useToggle(true)
 
