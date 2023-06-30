@@ -7,7 +7,7 @@ interface Props {
   options?: Array<{
     label: string
     onClick?: () => void
-  }>
+  } | null>
 }
 
 export default function DropDownMenu(props: Props) {
@@ -46,19 +46,22 @@ export default function DropDownMenu(props: Props) {
           <ul>
             {options &&
               options.length > 0 &&
-              options.map((option, idx) => (
-                <li key={idx}>
-                  <div
-                    onClick={() => handleClickOption(option.onClick)}
-                    onKeyDown={() => handleClickOption(option.onClick)}
-                    role='button'
-                    tabIndex={0}
-                    className='block px-4 py-2 hover:bg-gray-200'
-                  >
-                    {option.label}
-                  </div>
-                </li>
-              ))}
+              options.map(
+                (option, idx) =>
+                  option && (
+                    <li key={idx}>
+                      <div
+                        onClick={() => handleClickOption(option.onClick)}
+                        onKeyDown={() => handleClickOption(option.onClick)}
+                        role='button'
+                        tabIndex={0}
+                        className='block px-4 py-2 hover:bg-gray-200'
+                      >
+                        {option.label}
+                      </div>
+                    </li>
+                  )
+              )}
           </ul>
         </div>
       )}

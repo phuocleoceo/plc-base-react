@@ -8,16 +8,17 @@ import { AxiosError } from 'axios'
 import * as _ from 'lodash'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
-import { UpdateProjectRequest } from '~/features/project/models'
+import { useCurrentProject, useProjectPermission } from '~/features/project/hooks'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
-import { useCurrentProject } from '~/features/project/hooks'
+import { UpdateProjectRequest } from '~/features/project/models'
 import { ProjectApi } from '~/features/project/apis'
 import { ValidationHelper } from '~/shared/helpers'
+import { ProjectPermission } from '~/shared/enums'
 import { MediaApi } from '~/features/media/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { useToggle } from '~/common/hooks'
 import { SelectItem } from '~/shared/types'
+import { useToggle } from '~/common/hooks'
 
 const DeleteProject = lazy(() => import('~/features/project/components/DeleteProject'))
 
@@ -28,6 +29,8 @@ export default function ProjectSetting() {
 
   const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const [selectedImage, setSelectedImage] = useState<File>()
   const { isShowing: isShowingDeleteProject, toggle: toggleDeleteProject } = useToggle()
@@ -140,19 +143,23 @@ export default function ProjectSetting() {
           </LabelWrapper>
 
           <div className='mt-2 flex justify-around'>
-            <button type='submit' className='btn w-2/5'>
-              {isSubmitting ? t('saving_changes...') : t('save_changes')}
-            </button>
+            {hasPermission(ProjectPermission.Update) && (
+              <button type='submit' className='btn w-2/5'>
+                {isSubmitting ? t('saving_changes...') : t('save_changes')}
+              </button>
+            )}
 
-            <div
-              onClick={toggleDeleteProject}
-              onKeyDown={toggleDeleteProject}
-              className='btn-alert w-2/5 text-center cursor-pointer'
-              role='button'
-              tabIndex={0}
-            >
-              {t('delete_project')}
-            </div>
+            {hasPermission(ProjectPermission.Delete) && (
+              <div
+                onClick={toggleDeleteProject}
+                onKeyDown={toggleDeleteProject}
+                className='btn-alert w-2/5 text-center cursor-pointer'
+                role='button'
+                tabIndex={0}
+              >
+                {t('delete_project')}
+              </div>
+            )}
           </div>
         </form>
       </div>

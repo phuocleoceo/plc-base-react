@@ -4,8 +4,10 @@ import { lazy, Suspense } from 'react'
 import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
+import { MemberRolePermission, ProjectMemberPermission } from '~/shared/enums'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { ProjectMember } from '~/features/projectMember/models'
+import { useProjectPermission } from '~/features/project/hooks'
 import { LocalStorageHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
@@ -24,6 +26,8 @@ interface Props {
 export default function ProjectMemberRow(props: Props) {
   const { idx, projectId, projectMember } = props
   const { t } = useTranslation()
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const { isShowing: isShowingMemberDetail, toggle: toggleMemberDetail } = useToggle()
   const { isShowing: isShowingDeleteMember, toggle: toggleDeleteMember } = useToggle()
@@ -81,11 +85,13 @@ export default function ProjectMemberRow(props: Props) {
         <div className='w-64'>{projectMember.email}</div>
         <div className='w-64'>{getMemberRoles()}</div>
         <div className='flex-grow flex'>
-          <button title='edit_member_role' onClick={handleClickMemberRole} className='btn-icon bg-c-1'>
-            <Icon width={22} icon='iconoir:agile' className='text-blue-500' />
-          </button>
+          {hasPermission(MemberRolePermission.GetAll) && (
+            <button title='edit_member_role' onClick={handleClickMemberRole} className='btn-icon bg-c-1'>
+              <Icon width={22} icon='iconoir:agile' className='text-blue-500' />
+            </button>
+          )}
 
-          {currentUser.id !== projectMember.id && (
+          {hasPermission(ProjectMemberPermission.Delete) && currentUser.id !== projectMember.id && (
             <button title='delete_project_member' onClick={handleClickDeleteProjectMember} className='btn-icon bg-c-1'>
               <Icon width={22} icon='bx:trash' className='text-red-500' />
             </button>

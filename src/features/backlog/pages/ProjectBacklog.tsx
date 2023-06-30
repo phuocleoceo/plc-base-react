@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { GetIssuesInBacklogParams, MoveIssueToSprintRequest, UpdateBacklogIssueRequest } from '~/features/issue/models'
+import { useProjectPermission } from '~/features/project/hooks'
 import { BacklogContext } from '~/features/backlog/contexts'
 import { IssueBacklog } from '~/features/issue/components'
 import { FilterBar } from '~/features/board/components'
 import { DroppableWrapper } from '~/common/components'
 import { IssueApi } from '~/features/issue/apis'
+import { IssuePermission } from '~/shared/enums'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
@@ -22,6 +24,7 @@ export default function ProjectBacklog() {
   const projectId = Number(useParams().projectId)
 
   const { t } = useTranslation()
+  const { hasPermission } = useProjectPermission(projectId)
   const { isAuthenticated } = useContext(AppContext)
 
   const {
@@ -176,14 +179,18 @@ export default function ProjectBacklog() {
                 </button>
               </>
             ) : (
-              <button onClick={toggleMoveIssueSelect} className='btn-gray mr-3'>
-                {t('move_issue_to_sprint')}
-              </button>
+              hasPermission(IssuePermission.MoveToSprint) && (
+                <button onClick={toggleMoveIssueSelect} className='btn-gray mr-3'>
+                  {t('move_issue_to_sprint')}
+                </button>
+              )
             )}
 
-            <button onClick={toggleCreateIssue} className='btn'>
-              {t('create_issue')}
-            </button>
+            {hasPermission(IssuePermission.Create) && (
+              <button onClick={toggleCreateIssue} className='btn'>
+                {t('create_issue')}
+              </button>
+            )}
           </div>
         </div>
         <FilterBar maxMemberDisplay={4} {...{ projectId, setIsDragDisabled, setIssueParams, issueParams }} />
@@ -198,7 +205,11 @@ export default function ProjectBacklog() {
                 direction='vertical'
               >
                 {issuesBacklog.map((issue, idx) => (
-                  <IssueBacklog key={issue.id} {...{ idx, issue, projectId, isDragDisabled }} />
+                  <IssueBacklog
+                    key={issue.id}
+                    isDragDisabled={!hasPermission(IssuePermission.UpdateForBacklog) || isDragDisabled}
+                    {...{ idx, issue, projectId }}
+                  />
                 ))}
               </DroppableWrapper>
             </DragDropContext>

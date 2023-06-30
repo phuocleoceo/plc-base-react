@@ -6,7 +6,8 @@ import {
   CreateProjectResponse,
   UpdateProjectRequest,
   UpdateProjectResponse,
-  DeleteProjectResponse
+  DeleteProjectResponse,
+  GetUserPermissionInProjectResponse
 } from '~/features/project/models'
 import { HttpHelper } from '~/shared/helpers'
 
@@ -25,6 +26,9 @@ const projectApi = {
   },
   deleteProject(projectId: number) {
     return HttpHelper.delete<DeleteProjectResponse>(`project/${projectId}`)
+  },
+  getUserPermissionInProject(projectId: number) {
+    return HttpHelper.get<GetUserPermissionInProjectResponse>(`project/${projectId}/permission`)
   }
 }
 

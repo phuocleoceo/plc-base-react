@@ -7,9 +7,11 @@ import { Icon } from '@iconify/react'
 
 import { GetIssuesInBoardParams, UpdateBoardIssueRequest } from '~/features/issue/models'
 import { UpdateProjectStatusRequest } from '~/features/projectStatus/models'
+import { ProjectStatusPermission, SprintPermission } from '~/shared/enums'
 import { DragDropStatus } from '~/features/projectStatus/components'
 import { FilterBar, SprintBar } from '~/features/board/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
+import { useProjectPermission } from '~/features/project/hooks'
 import { DroppableWrapper } from '~/common/components'
 import { SprintApi } from '~/features/sprint/apis'
 import { IssueApi } from '~/features/issue/apis'
@@ -27,6 +29,8 @@ export default function ProjectBoard() {
 
   const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const [isDragDisabled, setIsDragDisabled] = useState(false)
 
@@ -302,9 +306,11 @@ export default function ProjectBoard() {
             <div className='p-4 text-center'>
               <img className='mx-auto' width='50%' height='auto' src={SprintIMG} alt='sprint' />
               <h1 className='text-xl'>{t('there_are_no_available_sprints')}</h1>
-              <button onClick={toggleCreateSprint} className='btn-gray mt-4'>
-                {t('create_sprint')}
-              </button>
+              {hasPermission(SprintPermission.Create) && (
+                <button onClick={toggleCreateSprint} className='btn-gray mt-4'>
+                  {t('create_sprint')}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -350,12 +356,14 @@ export default function ProjectBoard() {
                 ))}
               </DroppableWrapper>
 
-              <button
-                className='flex items-center gap-5 rounded-md bg-c-2 py-3 px-5 mr-3 text-c-5 hover:bg-c-6 active:bg-blue-100'
-                onClick={toggleCreateStatus}
-              >
-                <Icon icon='ant-design:plus-outlined' /> {t('create_project_status')}
-              </button>
+              {hasPermission(ProjectStatusPermission.Create) && (
+                <button
+                  className='flex items-center gap-5 rounded-md bg-c-2 py-3 px-5 mr-3 text-c-5 hover:bg-c-6 active:bg-blue-100'
+                  onClick={toggleCreateStatus}
+                >
+                  <Icon icon='ant-design:plus-outlined' /> {t('create_project_status')}
+                </button>
+              )}
             </DragDropContext>
           </div>
         )}

@@ -1,9 +1,11 @@
 import { lazy, Suspense, useContext } from 'react'
 
 import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
+import { IssueHelper, LocalStorageHelper } from '~/shared/helpers'
+import { useProjectPermission } from '~/features/project/hooks'
 import { BoardContext } from '~/features/board/contexts'
 import { IssueInBoard } from '~/features/issue/models'
-import { IssueHelper } from '~/shared/helpers'
+import { IssuePermission } from '~/shared/enums'
 import { useToggle } from '~/common/hooks'
 
 const IssueDetail = lazy(() => import('~/features/issue/components/IssueDetail'))
@@ -17,6 +19,8 @@ type Props = {
 
 export default function DragDropIssue(props: Props) {
   const { idx, projectId, isDragDisabled, issue } = props
+  const currentUser = LocalStorageHelper.getUserInfo()
+  const { hasPermission } = useProjectPermission(projectId)
 
   const { isShowingMoveIssueSelect, selectedIssues, setSelectedIssues } = useContext(BoardContext)
 
@@ -33,7 +37,9 @@ export default function DragDropIssue(props: Props) {
         className='hover:bg-c-4 mb-2 w-full rounded-sm bg-c-1 p-2 shadow-issue'
         index={idx}
         draggableId={`issue-${issue.id}`}
-        isDragDisabled={isDragDisabled}
+        isDragDisabled={
+          isDragDisabled || issue.assigneeId !== currentUser.id || !hasPermission(IssuePermission.UpdateForBoard)
+        }
       >
         <div
           onClick={
@@ -41,7 +47,11 @@ export default function DragDropIssue(props: Props) {
               ? () => {
                   return
                 }
-              : toggleIssueDetail
+              : hasPermission(IssuePermission.GetOne)
+              ? toggleIssueDetail
+              : () => {
+                  return
+                }
           }
           onKeyDown={toggleIssueDetail}
           tabIndex={issue.id}

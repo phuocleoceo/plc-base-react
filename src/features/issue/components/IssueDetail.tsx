@@ -10,8 +10,10 @@ import { Modal, Item, RichTextInput, LabelWrapper, SelectBox, InputValidation } 
 import { IssueHelper, LocalStorageHelper, TimeHelper, ValidationHelper } from '~/shared/helpers'
 import { QueryKey, IssueType, IssuePriority } from '~/shared/constants'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
+import { useProjectPermission } from '~/features/project/hooks'
 import { UpdateIssueRequest } from '~/features/issue/models'
 import { IssueApi } from '~/features/issue/apis'
+import { IssuePermission } from '~/shared/enums'
 import { AppContext } from '~/common/contexts'
 import { SelectItem } from '~/shared/types'
 import { useToggle } from '~/common/hooks'
@@ -33,6 +35,8 @@ type FormData = Pick<
 
 export default function IssueDetail(props: Props) {
   const { projectId, issueId, isShowing, onClose } = props
+
+  const { hasPermission } = useProjectPermission(projectId)
   const { t } = useTranslation()
 
   const {
@@ -142,13 +146,17 @@ export default function IssueDetail(props: Props) {
                   </>
                 ) : (
                   <>
-                    <button onClick={toggleUpdateIssue} title='update' className='btn-icon text-xl mr-2'>
-                      <Icon width={24} icon='ic:baseline-edit' className='text-blue-500' />
-                    </button>
+                    {hasPermission(IssuePermission.Update) && (
+                      <button onClick={toggleUpdateIssue} title='update' className='btn-icon text-xl mr-2'>
+                        <Icon width={24} icon='ic:baseline-edit' className='text-blue-500' />
+                      </button>
+                    )}
 
-                    <button onClick={toggleDeleteIssue} title='delete' className='btn-icon text-xl mr-2'>
-                      <Icon width={24} icon='bx:trash' className='text-red-500' />
-                    </button>
+                    {hasPermission(IssuePermission.Delete) && (
+                      <button onClick={toggleDeleteIssue} title='delete' className='btn-icon text-xl mr-2'>
+                        <Icon width={24} icon='bx:trash' className='text-red-500' />
+                      </button>
+                    )}
                   </>
                 ))}
               <button onClick={onClose} title='Close' className='btn-icon text-lg'>

@@ -16,6 +16,7 @@ const CreateProject = lazy(() => import('~/features/project/components/CreatePro
 export default function ProjectList() {
   const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
+
   const { isShowing: isShowingCreateProject, toggle: toggleCreateProject } = useToggle()
 
   const [projectParams, setProjectParams] = useState<GetProjectsParams>({

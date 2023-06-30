@@ -3,8 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 
+import {
+  EventPermission,
+  InvitationPermission,
+  IssuePermission,
+  ProjectMemberPermission,
+  ProjectPermission
+} from '~/shared/enums'
+import { useCurrentProject, useProjectPermission } from '~/features/project/hooks'
 import { Avatar, IconLink, SpinningCircle } from '~/common/components'
-import { useCurrentProject } from '~/features/project/hooks'
 import { useToggle } from '~/common/hooks'
 
 export default function Menubar() {
@@ -12,6 +19,8 @@ export default function Menubar() {
 
   // host/project/:projectId/currentTab
   const currentTab = useLocation().pathname.split('/')[3]
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const { isShowing, toggle } = useToggle(true)
 
@@ -50,49 +59,65 @@ export default function Menubar() {
             </div>
 
             <div className='mt-5 mb-2'>
-              <IconLink
-                to={`/project/${projectId}/board`}
-                icon='bi:kanban'
-                text={t('kanban_board')}
-                isActive={currentTab === 'board'}
-              />
-              <IconLink
-                to={`/project/${projectId}/backlog`}
-                icon='fluent-mdl2:backlog-list'
-                text={t('backlog')}
-                rotate={180}
-                isActive={currentTab === 'backlog'}
-              />
-              <IconLink
-                to={`/project/${projectId}/event`}
-                icon='ic:outline-event-note'
-                text={t('event')}
-                isActive={currentTab === 'event'}
-                iconSize={24}
-              />
-              <IconLink
-                to={`/project/${projectId}/member`}
-                icon='mdi:people'
-                text={t('member')}
-                isActive={currentTab === 'member'}
-              />
-              <IconLink
-                to={`/project/${projectId}/invitation`}
-                icon='cib:telegram-plane'
-                text={t('invitation')}
-                isActive={currentTab === 'invitation'}
-              />
+              {hasPermission(IssuePermission.GetForBoard) && (
+                <IconLink
+                  to={`/project/${projectId}/board`}
+                  icon='bi:kanban'
+                  text={t('kanban_board')}
+                  isActive={currentTab === 'board'}
+                />
+              )}
+
+              {hasPermission(IssuePermission.GetForBacklog) && (
+                <IconLink
+                  to={`/project/${projectId}/backlog`}
+                  icon='fluent-mdl2:backlog-list'
+                  text={t('backlog')}
+                  rotate={180}
+                  isActive={currentTab === 'backlog'}
+                />
+              )}
+
+              {hasPermission(EventPermission.GetAll) && (
+                <IconLink
+                  to={`/project/${projectId}/event`}
+                  icon='ic:outline-event-note'
+                  text={t('event')}
+                  isActive={currentTab === 'event'}
+                  iconSize={24}
+                />
+              )}
+
+              {hasPermission(ProjectMemberPermission.GetAll) && (
+                <IconLink
+                  to={`/project/${projectId}/member`}
+                  icon='mdi:people'
+                  text={t('member')}
+                  isActive={currentTab === 'member'}
+                />
+              )}
+
+              {hasPermission(InvitationPermission.GetForProject) && (
+                <IconLink
+                  to={`/project/${projectId}/invitation`}
+                  icon='cib:telegram-plane'
+                  text={t('invitation')}
+                  isActive={currentTab === 'invitation'}
+                />
+              )}
             </div>
 
             <hr className='border-t-[.5px] border-gray-400' />
 
             <div className='mt-2'>
-              <IconLink
-                to={`/project/${projectId}/setting`}
-                icon='clarity:settings-solid'
-                text={t('project_setting')}
-                isActive={currentTab === 'setting'}
-              />
+              {hasPermission(ProjectPermission.GetOne) && (
+                <IconLink
+                  to={`/project/${projectId}/setting`}
+                  icon='clarity:settings-solid'
+                  text={t('project_setting')}
+                  isActive={currentTab === 'setting'}
+                />
+              )}
             </div>
           </div>
         ))}

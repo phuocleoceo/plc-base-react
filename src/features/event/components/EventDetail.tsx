@@ -17,8 +17,10 @@ import {
 } from '~/common/components'
 import { LocalStorageHelper, TimeHelper, ValidationHelper } from '~/shared/helpers'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
+import { useProjectPermission } from '~/features/project/hooks'
 import { UpdateEventRequest } from '~/features/event/models'
 import { EventApi } from '~/features/event/apis'
+import { EventPermission } from '~/shared/enums'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { SelectItem } from '~/shared/types'
@@ -38,6 +40,8 @@ type FormData = Pick<UpdateEventRequest, 'title' | 'description' | 'startTime' |
 export default function EventDetail(props: Props) {
   const { projectId, eventId, isShowing, onClose } = props
   const { t } = useTranslation()
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const {
     control,
@@ -145,13 +149,17 @@ export default function EventDetail(props: Props) {
                   </>
                 ) : (
                   <>
-                    <button onClick={toggleUpdateEvent} title='update' className='btn-icon text-xl mr-2'>
-                      <Icon width={22} icon='ic:baseline-edit' className='text-blue-500' />
-                    </button>
+                    {hasPermission(EventPermission.Update) && (
+                      <button onClick={toggleUpdateEvent} title='update' className='btn-icon text-xl mr-2'>
+                        <Icon width={22} icon='ic:baseline-edit' className='text-blue-500' />
+                      </button>
+                    )}
 
-                    <button onClick={toggleDeleteEvent} title='delete' className='btn-icon text-xl mr-2'>
-                      <Icon width={22} icon='bx:trash' className='text-red-500' />
-                    </button>
+                    {hasPermission(EventPermission.Delete) && (
+                      <button onClick={toggleDeleteEvent} title='delete' className='btn-icon text-xl mr-2'>
+                        <Icon width={22} icon='bx:trash' className='text-red-500' />
+                      </button>
+                    )}
                   </>
                 ))}
               <button onClick={onClose} title='Close' className='btn-icon text-lg'>
