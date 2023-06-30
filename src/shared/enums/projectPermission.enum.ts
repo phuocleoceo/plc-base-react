@@ -37,15 +37,12 @@ export enum ProjectMemberPermission {
 }
 
 export enum ProjectStatusPermission {
-  GetAll = 'ProjectStatus.GetAll',
   Create = 'ProjectStatus.Create',
   Update = 'ProjectStatus.Update',
   Delete = 'ProjectStatus.Delete'
 }
 
 export enum SprintPermission {
-  GetAvailable = 'Sprint.GetAvailable',
-  GetOne = 'Sprint.GetOne',
   Create = 'Sprint.Create',
   Update = 'Sprint.Update',
   Delete = 'Sprint.Delete',

@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
 import { CreateMemberRoleRequest, DeleteMemberRoleParams } from '~/features/memberRole/models'
 import { ProjectRole } from '~/features/admin/features/projectRole/models'
+import { useProjectPermission } from '~/features/project/hooks'
 import { MemberRoleApi } from '~/features/memberRole/apis'
+import { MemberRolePermission } from '~/shared/enums'
 import { SwitchToggle } from '~/common/components'
 import { QueryKey } from '~/shared/constants'
 
@@ -13,8 +16,10 @@ interface Props {
 }
 
 export default function MemberRoleModal(props: Props) {
+  const projectId = Number(useParams().projectId)
   const { projectMemberId, projectRole, isMemberGranted } = props
 
+  const { hasPermission } = useProjectPermission(projectId)
   const queryClient = useQueryClient()
 
   const createMemberRoleMutation = useMutation({
@@ -52,7 +57,9 @@ export default function MemberRoleModal(props: Props) {
       <p>
         {projectRole.name} - {projectRole.description}
       </p>
-      <SwitchToggle defaultValue={isMemberGranted} onClick={handleToggle} />
+      {hasPermission(MemberRolePermission.Create) && hasPermission(MemberRolePermission.Delete) && (
+        <SwitchToggle defaultValue={isMemberGranted} onClick={handleToggle} />
+      )}
     </div>
   )
 }

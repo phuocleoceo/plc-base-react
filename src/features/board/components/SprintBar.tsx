@@ -6,6 +6,8 @@ import { toast } from 'react-toastify'
 import { Icon } from '@iconify/react'
 
 import { IssueGroupedInBoard, MoveIssueToBacklogRequest } from '~/features/issue/models'
+import { IssuePermission, SprintPermission } from '~/shared/enums'
+import { useProjectPermission } from '~/features/project/hooks'
 import { BoardContext } from '~/features/board/contexts'
 import { SprintApi } from '~/features/sprint/apis'
 import { DropDownMenu } from '~/common/components'
@@ -28,6 +30,8 @@ interface Props {
 
 export default function SprintBar(props: Props) {
   const { completedStatusId, issues, projectId, sprint } = props
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const {
     selectedIssues,
@@ -151,32 +155,44 @@ export default function SprintBar(props: Props) {
             {sprint.toDate && <span className='text-sm mr-3'>{getSprintDeadline()}</span>}
 
             {!sprint.completedAt &&
-              (sprint.startedAt ? (
-                <button onClick={toggleCompleteSprint} className='btn-gray mr-2'>
-                  {t('complete_sprint')}
-                </button>
-              ) : (
-                <button onClick={toggleStartSprint} className='btn-gray mr-2'>
-                  {t('start_sprint')}
-                </button>
-              ))}
+              (sprint.startedAt
+                ? hasPermission(SprintPermission.Complete) && (
+                    <button onClick={toggleCompleteSprint} className='btn-gray mr-2'>
+                      {t('complete_sprint')}
+                    </button>
+                  )
+                : hasPermission(SprintPermission.Start) && (
+                    <button onClick={toggleStartSprint} className='btn-gray mr-2'>
+                      {t('start_sprint')}
+                    </button>
+                  ))}
 
-            <DropDownMenu
-              options={[
-                {
-                  label: t('edit_sprint'),
-                  onClick: toggleUpdateSprint
-                },
-                {
-                  label: t('delete_sprint'),
-                  onClick: toggleDeleteSprint
-                },
-                {
-                  label: t('move_issue_to_backlog'),
-                  onClick: toggleMoveIssueSelect
-                }
-              ]}
-            />
+            {(hasPermission(SprintPermission.Update) ||
+              hasPermission(SprintPermission.Delete) ||
+              hasPermission(IssuePermission.MoveToBacklog)) && (
+              <DropDownMenu
+                options={[
+                  hasPermission(SprintPermission.Update)
+                    ? {
+                        label: t('edit_sprint'),
+                        onClick: toggleUpdateSprint
+                      }
+                    : null,
+                  hasPermission(SprintPermission.Delete)
+                    ? {
+                        label: t('delete_sprint'),
+                        onClick: toggleDeleteSprint
+                      }
+                    : null,
+                  hasPermission(IssuePermission.MoveToBacklog)
+                    ? {
+                        label: t('move_issue_to_backlog'),
+                        onClick: toggleMoveIssueSelect
+                      }
+                    : null
+                ]}
+              />
+            )}
           </div>
         )}
 

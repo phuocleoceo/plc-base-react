@@ -7,7 +7,9 @@ import { Icon } from '@iconify/react'
 import { ProjectStatus, UpdateProjectStatusRequest } from '~/features/projectStatus/models'
 import { DraggableWrapper, DroppableWrapper } from '~/common/components'
 import { ProjectStatusApi } from '~/features/projectStatus/apis'
+import { useProjectPermission } from '~/features/project/hooks'
 import { DragDropIssue } from '~/features/issue/components'
+import { ProjectStatusPermission } from '~/shared/enums'
 import { IssueInBoard } from '~/features/issue/models'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
@@ -26,6 +28,7 @@ export default function DragDropStatus(props: Props) {
   const { idx, projectId, issues, isDragDisabled, projectStatus } = props
 
   const { t } = useTranslation()
+  const { hasPermission } = useProjectPermission(projectId)
   const queryClient = useQueryClient()
 
   const { isShowing: isShowingUpdateStatus, toggle: toggleUpdateStatus } = useToggle()
@@ -93,7 +96,7 @@ export default function DragDropStatus(props: Props) {
           <div className='mb-4 flex items-center justify-between text-[15px]'>
             <div className='item-center flex'>
               <div className='relative'>
-                {isShowingUpdateStatus ? (
+                {isShowingUpdateStatus && hasPermission(ProjectStatusPermission.Update) ? (
                   <input
                     value={statusData.name}
                     name='name'
@@ -109,13 +112,17 @@ export default function DragDropStatus(props: Props) {
 
               {isShowingUpdateStatus ? (
                 <>
-                  <button onClick={handleUpdateProjectStatus} title='save' className='btn-icon hover:bg-c-3 ml-2'>
-                    <Icon icon='charm:tick' className='text-green-500' />
-                  </button>
+                  {hasPermission(ProjectStatusPermission.Update) && (
+                    <button onClick={handleUpdateProjectStatus} title='save' className='btn-icon hover:bg-c-3 ml-2'>
+                      <Icon icon='charm:tick' className='text-green-500' />
+                    </button>
+                  )}
 
-                  <button onClick={toggleDeleteStatus} title='delete' className='btn-icon hover:bg-c-3'>
-                    <Icon icon='bx:trash' className='text-red-500' />
-                  </button>
+                  {hasPermission(ProjectStatusPermission.Delete) && (
+                    <button onClick={toggleDeleteStatus} title='delete' className='btn-icon hover:bg-c-3'>
+                      <Icon icon='bx:trash' className='text-red-500' />
+                    </button>
+                  )}
                 </>
               ) : (
                 <>
@@ -131,9 +138,11 @@ export default function DragDropStatus(props: Props) {
                   <Icon icon='ion:close-sharp' className='text-blue-500' />
                 </button>
               ) : (
-                <button onClick={toggleUpdateStatus} title='edit' className='btn-icon hover:bg-c-3'>
-                  <Icon icon='akar-icons:edit' />
-                </button>
+                (hasPermission(ProjectStatusPermission.Update) || hasPermission(ProjectStatusPermission.Delete)) && (
+                  <button onClick={toggleUpdateStatus} title='edit' className='btn-icon hover:bg-c-3'>
+                    <Icon icon='akar-icons:edit' />
+                  </button>
+                )
               )}
             </div>
           </div>

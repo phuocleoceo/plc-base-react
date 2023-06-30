@@ -1,8 +1,10 @@
 import { lazy, Suspense, useContext } from 'react'
 
 import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
+import { useProjectPermission } from '~/features/project/hooks'
 import { BoardContext } from '~/features/board/contexts'
 import { IssueInBoard } from '~/features/issue/models'
+import { IssuePermission } from '~/shared/enums'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
 
@@ -17,6 +19,7 @@ type Props = {
 
 export default function DragDropIssue(props: Props) {
   const { idx, projectId, isDragDisabled, issue } = props
+  const { hasPermission } = useProjectPermission(projectId)
 
   const { isShowingMoveIssueSelect, selectedIssues, setSelectedIssues } = useContext(BoardContext)
 
@@ -41,7 +44,11 @@ export default function DragDropIssue(props: Props) {
               ? () => {
                   return
                 }
-              : toggleIssueDetail
+              : hasPermission(IssuePermission.GetOne)
+              ? toggleIssueDetail
+              : () => {
+                  return
+                }
           }
           onKeyDown={toggleIssueDetail}
           tabIndex={issue.id}

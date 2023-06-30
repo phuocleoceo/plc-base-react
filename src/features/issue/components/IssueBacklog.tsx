@@ -1,10 +1,12 @@
 import { lazy, Suspense, useContext } from 'react'
 
 import { Avatar, CheckBoxButton, DraggableWrapper } from '~/common/components'
+import { useProjectPermission } from '~/features/project/hooks'
 import { BacklogContext } from '~/features/backlog/contexts'
 import { IssueInBacklog } from '~/features/issue/models'
 import { IssueHelper } from '~/shared/helpers'
 import { useToggle } from '~/common/hooks'
+import { IssuePermission } from '~/shared/enums'
 
 const IssueDetail = lazy(() => import('~/features/issue/components/IssueDetail'))
 
@@ -17,6 +19,7 @@ type Props = {
 
 export default function IssueBacklog(props: Props) {
   const { idx, projectId, issue, isDragDisabled } = props
+  const { hasPermission } = useProjectPermission(projectId)
 
   const { selectedIssues, setSelectedIssues, isShowingMoveIssueSelect } = useContext(BacklogContext)
 
@@ -42,7 +45,11 @@ export default function IssueBacklog(props: Props) {
               ? () => {
                   return
                 }
-              : toggleIssueDetail
+              : hasPermission(IssuePermission.GetOne)
+              ? toggleIssueDetail
+              : () => {
+                  return
+                }
           }
           onKeyDown={toggleIssueDetail}
           tabIndex={issue.id}
