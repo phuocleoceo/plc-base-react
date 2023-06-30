@@ -18,7 +18,8 @@ export default function useProjectPermission(projectId: number) {
   const permissions = permissionData?.data.data
 
   const hasPermission = (key: string) => {
-    return permissions?.has(key)
+    if (!permissions) return false
+    return permissions.includes(key)
   }
 
   return {
