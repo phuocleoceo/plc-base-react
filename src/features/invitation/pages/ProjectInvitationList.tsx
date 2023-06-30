@@ -7,7 +7,9 @@ import { Icon } from '@iconify/react'
 import { GetInvitationForProjectParams } from '~/features/invitation/models'
 import { ProjectInvitationRow } from '~/features/invitation/components'
 import { Pagination, SpinningCircle } from '~/common/components'
+import { useProjectPermission } from '~/features/project/hooks'
 import { InvitationApi } from '~/features/invitation/apis'
+import { InvitationPermission } from '~/shared/enums'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
@@ -18,6 +20,8 @@ export default function ProjectInvitationList() {
   const projectId = Number(useParams().projectId)
 
   const { t } = useTranslation()
+  const { hasPermission } = useProjectPermission(projectId)
+
   const { isShowing: isShowingCreateInvitation, toggle: toggleCreateInvitation } = useToggle()
 
   const { isAuthenticated } = useContext(AppContext)
@@ -69,9 +73,11 @@ export default function ProjectInvitationList() {
       <div className='z-10 h-screen min-h-fit grow overflow-auto bg-c-1 px-10 text-c-5 mt-6'>
         <div className='flex min-w-[43rem] justify-between'>
           <h1 className='text-xl font-semibold tracking-wide'>{t('invitations')}</h1>
-          <button onClick={toggleCreateInvitation} className='btn'>
-            {t('create_invitation')}
-          </button>
+          {hasPermission(InvitationPermission.Create) && (
+            <button onClick={toggleCreateInvitation} className='btn'>
+              {t('create_invitation')}
+            </button>
+          )}
         </div>
         <div className='mt-8'>
           <div className='relative'>

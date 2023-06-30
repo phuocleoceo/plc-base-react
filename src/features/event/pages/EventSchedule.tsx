@@ -9,7 +9,9 @@ import FullCalendar from '@fullcalendar/react'
 import { useParams } from 'react-router-dom'
 
 import { GetEventInScheduleParams } from '~/features/event/models'
+import { useProjectPermission } from '~/features/project/hooks'
 import { SpinningCircle } from '~/common/components'
+import { EventPermission } from '~/shared/enums'
 import { EventApi } from '~/features/event/apis'
 import { AppContext } from '~/common/contexts'
 import { TimeHelper } from '~/shared/helpers'
@@ -23,6 +25,8 @@ export default function EventSchedule() {
   const projectId = Number(useParams().projectId)
   const { isAuthenticated } = useContext(AppContext)
   const { t } = useTranslation()
+
+  const { hasPermission } = useProjectPermission(projectId)
 
   const { isShowing: isShowingEventDetail, toggle: toggleEventDetail } = useToggle()
   const { isShowing: isShowingCreateEvent, toggle: toggleCreateEvent } = useToggle()
@@ -50,9 +54,11 @@ export default function EventSchedule() {
     })) ?? []
 
   const handleClickEvent = (event: EventClickArg) => {
-    const eventId = parseInt(event.event.id)
-    setSelectedEventId(eventId)
-    toggleEventDetail()
+    if (hasPermission(EventPermission.GetOne)) {
+      const eventId = parseInt(event.event.id)
+      setSelectedEventId(eventId)
+      toggleEventDetail()
+    }
   }
 
   const handleDates = (rangeInfo: DatesSetArg) => {
@@ -78,12 +84,16 @@ export default function EventSchedule() {
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView={'timeGridWeek'}
-          customButtons={{
-            createEventButton: {
-              text: t('create_event'),
-              click: () => toggleCreateEvent()
-            }
-          }}
+          customButtons={
+            hasPermission(EventPermission.Create)
+              ? {
+                  createEventButton: {
+                    text: t('create_event'),
+                    click: () => hasPermission(EventPermission.Create) && toggleCreateEvent()
+                  }
+                }
+              : {}
+          }
           headerToolbar={{
             start: 'today prev,next',
             center: 'title',

@@ -5,7 +5,9 @@ import { Icon } from '@iconify/react'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ProjectInvitation } from '~/features/invitation/models'
+import { useProjectPermission } from '~/features/project/hooks'
 import { InvitationApi } from '~/features/invitation/apis'
+import { InvitationPermission } from '~/shared/enums'
 import { QueryKey } from '~/shared/constants'
 import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
@@ -26,6 +28,8 @@ export default function ProjectInvitationRow(props: Props) {
   const { isShowing: isShowingDeleteInvitation, toggle: toggleDeleteInvitation } = useToggle()
 
   const { t } = useTranslation()
+  const { hasPermission } = useProjectPermission(projectId)
+
   const queryClient = useQueryClient()
 
   const handleClickDeleteProjectInvitation = (event: React.MouseEvent) => {
@@ -74,13 +78,15 @@ export default function ProjectInvitationRow(props: Props) {
         {!invitation.declinedAt && !invitation.acceptedAt && <div className='w-64'>{t('pending')}</div>}
 
         <div className='flex-grow flex'>
-          <button
-            title='delete_project_member'
-            onClick={handleClickDeleteProjectInvitation}
-            className='btn-icon absolute ml-2 bg-c-1'
-          >
-            <Icon width={22} icon='bx:trash' className='text-red-500' />
-          </button>
+          {hasPermission(InvitationPermission.Delete) && (
+            <button
+              title='delete_project_member'
+              onClick={handleClickDeleteProjectInvitation}
+              className='btn-icon absolute ml-2 bg-c-1'
+            >
+              <Icon width={22} icon='bx:trash' className='text-red-500' />
+            </button>
+          )}
         </div>
       </div>
 
