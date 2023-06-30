@@ -9,6 +9,8 @@ export type GetProjectsResponse = PagedResponse<Project>
 
 export type GetProjectResponse = BaseResponse<Project>
 
+export type GetUserPermissionInProjectResponse = BaseResponse<Set<string>>
+
 export type CreateProjectRequest = {
   name: string
   image: string
