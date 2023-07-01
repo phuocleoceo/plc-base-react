@@ -18,6 +18,15 @@ export const getRefreshToken = (): string => {
   return localStorage.getItem(LocalStorageKey.RefreshToken) || ''
 }
 
+export const setUserRole = (role: string) => {
+  localStorage.setItem(LocalStorageKey.Role, role)
+}
+
+export const getUserRole = (): string => {
+  const result = localStorage.getItem(LocalStorageKey.Role)
+  return result || ''
+}
+
 export const setUserInfo = (userInfor: { id: number; email: string; roleId: number }) => {
   localStorage.setItem(LocalStorageKey.UserInformation, JSON.stringify(userInfor))
 }

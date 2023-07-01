@@ -40,10 +40,12 @@ export default function Login() {
         setIsAuthenticated(true)
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt, ...userInfo } = data.data.data
+        const { accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt, roleName, ...userInfo } =
+          data.data.data
         LocalStorageHelper.setAccessToken(accessToken)
         LocalStorageHelper.setRefreshToken(refreshToken)
         LocalStorageHelper.setUserInfo(userInfo)
+        LocalStorageHelper.setUserRole(roleName)
 
         // Use navigate('/') => bug not reload user
         window.location.href = '/'

@@ -8,6 +8,8 @@ interface AppContextInterface {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   isShowingProfile: boolean
   toggleProfile: () => void
+  role: string
+  setRole: React.Dispatch<React.SetStateAction<string>>
   reset: () => void
 }
 
@@ -16,6 +18,8 @@ const initialAppContext: AppContextInterface = {
   setIsAuthenticated: () => null,
   isShowingProfile: false,
   toggleProfile: () => null,
+  role: LocalStorageHelper.getUserRole(),
+  setRole: () => null,
   reset: () => null
 }
 
@@ -23,6 +27,7 @@ export const AppContext = createContext<AppContextInterface>(initialAppContext)
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
+  const [role, setRole] = useState<string>(initialAppContext.role)
   const { isShowing: isShowingProfile, toggle: toggleProfile } = useToggle()
 
   const reset = () => {
@@ -36,6 +41,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated,
         isShowingProfile,
         toggleProfile,
+        role,
+        setRole,
         reset
       }}
     >

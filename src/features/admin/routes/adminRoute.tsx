@@ -1,7 +1,7 @@
 import { Navigate, RouteObject } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 
-import { RequiredAuthenticatedRoute } from '~/common/routings/guardRoute'
+import { RequiredAdminRoute } from '~/common/routings/guardRoute'
 import { AdminLayout } from '~/features/admin/layouts'
 
 const UserAccountList = lazy(() => import('~/features/admin/features/user/pages/UserAccountList'))
@@ -11,7 +11,7 @@ const ProjectRoleList = lazy(() => import('~/features/admin/features/projectRole
 export const adminRoute: RouteObject[] = [
   {
     path: 'admin',
-    element: <RequiredAuthenticatedRoute />,
+    element: <RequiredAdminRoute />,
     children: [
       {
         path: '',
