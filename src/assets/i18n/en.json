@@ -353,5 +353,10 @@
   "leaving_project...": "Leaving project...",
   "leader_cannot_leave": "Leader cannot leave",
   "leave_project_success": "Leave project success",
-  "update_permission": "Update permission"
+  "update_permission": "Update permission",
+  "must_have_at_least_one_status": "Must have at least one status",
+  "payment_fail": "Payment fail",
+  "invalid_payment_secure_hash": "Invalid payment secure hash",
+  "payment_already_handled": "Payment has already handled",
+  "project_permission_not_found": "Project permission is not found"
 }

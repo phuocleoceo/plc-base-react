@@ -79,6 +79,7 @@ export default function DragDropStatus(props: Props) {
       onSuccess: () => {
         toast.success(t('delete_status_success'))
         queryClient.invalidateQueries([QueryKey.ProjectStatuses])
+        queryClient.invalidateQueries([QueryKey.IssueInBoard])
         toggleDeleteStatus()
       }
     })

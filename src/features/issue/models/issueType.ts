@@ -4,6 +4,7 @@ export type IssueInBoard = {
   storyPoint: number
   priority: string
   type: string
+  reporterId: number
   assigneeId: number
   assigneeName: string
   assigneeAvatar: string

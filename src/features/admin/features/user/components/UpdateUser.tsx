@@ -22,7 +22,7 @@ interface Props {
 
 type FormData = Pick<UpdateUserAccountRequest, 'roleId' | 'isActived'>
 
-export default function IssueDetail(props: Props) {
+export default function UpdateUser(props: Props) {
   const { userId, isShowing, onClose } = props
 
   const { t } = useTranslation()
