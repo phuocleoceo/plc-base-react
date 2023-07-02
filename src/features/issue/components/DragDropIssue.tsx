@@ -38,7 +38,9 @@ export default function DragDropIssue(props: Props) {
         index={idx}
         draggableId={`issue-${issue.id}`}
         isDragDisabled={
-          isDragDisabled || issue.assigneeId !== currentUser.id || !hasPermission(IssuePermission.UpdateForBoard)
+          isDragDisabled ||
+          !hasPermission(IssuePermission.UpdateForBoard) ||
+          (issue.assigneeId !== currentUser.id && issue.reporterId !== currentUser.id)
         }
       >
         <div
