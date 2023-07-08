@@ -42,6 +42,7 @@ export default function ProjectInvitationRow(props: Props) {
       onSuccess: () => {
         toast.success(t('accept_invitation_success'))
         queryClient.invalidateQueries([QueryKey.UserInvitations])
+        queryClient.invalidateQueries([QueryKey.Projects])
         toggleAcceptInvitation()
       }
     })
@@ -61,6 +62,7 @@ export default function ProjectInvitationRow(props: Props) {
       onSuccess: () => {
         toast.success(t('decline_invitation_success'))
         queryClient.invalidateQueries([QueryKey.UserInvitations])
+        queryClient.invalidateQueries([QueryKey.Projects])
         toggleDeclineInvitation()
       }
     })

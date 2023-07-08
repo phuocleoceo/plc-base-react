@@ -78,7 +78,7 @@ export default function ProjectInvitationRow(props: Props) {
         {!invitation.declinedAt && !invitation.acceptedAt && <div className='w-64'>{t('pending')}</div>}
 
         <div className='flex-grow flex'>
-          {hasPermission(InvitationPermission.Delete) && (
+          {hasPermission(InvitationPermission.Delete) && !invitation.declinedAt && !invitation.acceptedAt && (
             <button
               title='delete_project_member'
               onClick={handleClickDeleteProjectInvitation}

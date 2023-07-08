@@ -84,6 +84,7 @@ export default function ProjectSetting() {
       onSuccess: () => {
         toast.success(t('update_project_success'))
         queryClient.invalidateQueries([QueryKey.ProjectDetail, projectId])
+        queryClient.invalidateQueries([QueryKey.Projects])
         reset()
       },
       onError: (error) => {
