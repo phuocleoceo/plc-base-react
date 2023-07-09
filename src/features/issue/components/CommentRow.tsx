@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { lazy, Suspense } from 'react'
+import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { LocalStorageHelper, TimeHelper, ValidationHelper } from '~/shared/helpers'
 import { IssueComment, UpdateIssueCommentRequest } from '~/features/issue/models'
+import { Avatar, RichTextInput } from '~/common/components'
 import { IssueCommentApi } from '~/features/issue/apis'
 import { QueryKey } from '~/shared/constants'
-import { Avatar } from '~/common/components'
 import { useToggle } from '~/common/hooks'
-import { useTranslation } from 'react-i18next'
 
 const ConfirmModal = lazy(() => import('~/common/components/ConfirmModal'))
 
@@ -34,7 +34,7 @@ export default function CommentRow(props: Props) {
   const isCurrentUserComment = currentUser.id === comment.userId
 
   const {
-    register,
+    control,
     setError,
     handleSubmit,
     formState: { isSubmitting }
@@ -97,15 +97,14 @@ export default function CommentRow(props: Props) {
           </div>
 
           {isShowingUpdateComment ? (
-            <input
-              placeholder='your_comment...'
-              className='max-w-[80%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
-            bg-slate-100 hover:border-gray-400 border-transparent'
-              defaultValue={comment.content}
-              {...register('content')}
-            />
+            <RichTextInput control={control} controlField='content' defaultValue={comment.content} />
           ) : (
-            <span className='block text-gray-800'>{comment.content}</span>
+            <span
+              className='text-gray-800 block'
+              dangerouslySetInnerHTML={{
+                __html: comment.content as TrustedHTML
+              }}
+            ></span>
           )}
 
           {isCurrentUserComment &&

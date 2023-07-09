@@ -2,16 +2,17 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { memo, useContext } from 'react'
+import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 
 import { CreateIssueCommentRequest } from '~/features/issue/models'
+import { Avatar, RichTextInput } from '~/common/components'
 import { IssueCommentApi } from '~/features/issue/apis'
 import { ProfileApi } from '~/features/profile/apis'
 import { ValidationHelper } from '~/shared/helpers'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
-import { Avatar } from '~/common/components'
-import { toast } from 'react-toastify'
+import { useToggle } from '~/common/hooks'
 
 interface Props {
   issueId: number
@@ -26,6 +27,8 @@ function CreateComment(props: Props) {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
+  const { isShowing: isShowingCreateComment, toggle: toggleCreateComment } = useToggle()
+
   const { data } = useQuery({
     queryKey: [QueryKey.PersonalProfile],
     queryFn: () => ProfileApi.getPersonalProfile(),
@@ -37,7 +40,7 @@ function CreateComment(props: Props) {
 
   const {
     reset,
-    register,
+    control,
     setError,
     handleSubmit,
     formState: { isSubmitting }
@@ -64,6 +67,7 @@ function CreateComment(props: Props) {
     createCommentMutation.mutate(commentData, {
       onSuccess: () => {
         queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
+        toggleCreateComment()
         reset()
       },
       onError: (error) => {
@@ -79,17 +83,30 @@ function CreateComment(props: Props) {
     <>
       <div className='relative flex items-start gap-3 my-4'>
         <Avatar src={user?.avatar} name={user?.displayName} />
-        <input
-          placeholder={t('add_your_comment...')}
-          className='max-w-[83.5%] block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
-          bg-slate-100 hover:border-gray-400 border-transparent'
-          {...register('content')}
-        />
-        <div className='flex justify-end gap-1'>
-          <button onClick={handleCreateProject} className='btn'>
-            {createCommentMutation.isLoading || isSubmitting ? t('adding...') : t('add')}
-          </button>
-          {/* <button className='btn-crystal hover:bg-slate-200'>cancel</button> */}
+        {isShowingCreateComment ? (
+          <div className='max-w-[80%]'>
+            <RichTextInput control={control} controlField='content' />
+          </div>
+        ) : (
+          <input
+            onClick={toggleCreateComment}
+            placeholder={t('add_your_comment...')}
+            className='block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
+            bg-slate-100 hover:border-gray-400 border-transparent'
+          />
+        )}
+        <div className='flex flex-col items-start gap-1'>
+          {isShowingCreateComment && (
+            <>
+              <button onClick={handleCreateProject} className='btn w-[4.5rem]'>
+                {createCommentMutation.isLoading || isSubmitting ? t('adding...') : t('add')}
+              </button>
+
+              <button onClick={toggleCreateComment} className='btn-alert w-[4.5rem]'>
+                {t('cancle')}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>
