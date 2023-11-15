@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  plc-base-react:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - VITE_ENVIRONMENT=LOCAL
+      - VITE_PLC_LOCAL_URL=http://34.87.103.162:7133
+    ports:
+      - "3000:80"
