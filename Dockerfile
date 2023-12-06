@@ -1,7 +1,7 @@
 FROM node:18-alpine as builder
 
 WORKDIR /app
-COPY . /app
+COPY . .
 
 RUN npm install
 RUN npm run build
@@ -18,7 +18,7 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 
 # Copy production build into nginx
-COPY --from=builder /app/dist ./
+COPY --from=builder /app/dist .
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
