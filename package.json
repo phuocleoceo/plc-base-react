@@ -20,6 +20,7 @@
     "@fullcalendar/interaction": "^6.1.8",
     "@fullcalendar/react": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
+    "@greatsumini/react-facebook-login": "^3.3.3",
     "@hello-pangea/dnd": "^16.2.0",
     "@react-oauth/google": "^0.12.1",
     "@tanstack/react-query": "^4.29.1",
