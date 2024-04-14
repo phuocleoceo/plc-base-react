@@ -358,5 +358,7 @@
   "payment_fail": "Payment fail",
   "invalid_payment_secure_hash": "Invalid payment secure hash",
   "payment_already_handled": "Payment has already handled",
-  "project_permission_not_found": "Project permission is not found"
+  "project_permission_not_found": "Project permission is not found",
+  "login_facebook": "Login with Facebook",
+  "login_google": "Login with Google"
 }
