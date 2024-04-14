@@ -1,4 +1,6 @@
 export { default as Login } from './Login'
 export { default as Register } from './Register'
+export { default as GoogleLogin } from './GoogleLogin'
 export { default as ConfirmEmail } from './ConfirmEmail'
+export { default as FacebookLogin } from './FacebookLogin'
 export { default as ForgotPassword } from './ForgotPassword'

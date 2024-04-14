@@ -1,8 +1,8 @@
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { FieldError, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Icon } from '@iconify/react'
 import { AxiosError } from 'axios'
 import { useContext } from 'react'
 
@@ -12,6 +12,10 @@ import { LoginRequest } from '~/features/auth/models'
 import { EmailValidation } from '~/shared/constants'
 import { AuthAPI } from '~/features/auth/apis'
 import { AppContext } from '~/common/contexts'
+import { LibraryConfig } from '~/configs'
+
+import FacebookLogin from './FacebookLogin'
+import GoogleLogin from './GoogleLogin'
 
 type FormData = Pick<LoginRequest, 'email' | 'password'>
 
@@ -102,17 +106,17 @@ export default function Login() {
           <button type='submit' className='btn mt-4 w-full bg-[#321898] py-2'>
             {isSubmitting ? t('logging_in') : t('login')}
           </button>
-
-          <button className='btn mt-4 w-full bg-[#3b5998] py-2 flex justify-center items-center'>
-            <Icon icon='logos:facebook' className='text-white mr-2' />
-            {t('login_facebook')}
-          </button>
-
-          <button className='btn mt-4 w-full bg-[#dd4b39] py-2 flex justify-center items-center'>
-            <Icon icon='logos:google-icon' className='text-white mr-2' />
-            {t('login_google')}
-          </button>
         </form>
+
+        <div className='mt-2 w-full'>
+          <FacebookLogin />
+        </div>
+
+        <div className='mt-2 w-full'>
+          <GoogleOAuthProvider clientId={LibraryConfig.GoogleClientId}>
+            <GoogleLogin />
+          </GoogleOAuthProvider>
+        </div>
 
         <div className='flex items-center'>
           <hr className='grow border-t-[.5px] border-gray-400' />
