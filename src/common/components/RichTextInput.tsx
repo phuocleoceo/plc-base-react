@@ -3,8 +3,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { TranslateHelper } from '~/shared/helpers'
-import { MediaApi } from '~/features/media/apis'
+import { TranslateHelper, UploadHelper } from '~/shared/helpers'
 
 interface Prop {
   control?: any
@@ -20,10 +19,8 @@ export default function RichTextInput(props: Prop) {
       upload: () => {
         return loader.file.then(async (file: File) => {
           try {
-            const imageUploadResponse = await MediaApi.uploadFile(file)
-            const imageUrl = imageUploadResponse?.data.data || ''
             return {
-              default: imageUrl
+              default: (await UploadHelper.upload(file)) || ''
             }
           } catch {
             toast.error(TranslateHelper.translate('upload_file_fail'))

@@ -9,15 +9,15 @@ import * as _ from 'lodash'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
 import { useCurrentProject, useProjectPermission } from '~/features/project/hooks'
+import { ValidationHelper, UploadHelper } from '~/shared/helpers'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateProjectRequest } from '~/features/project/models'
-import { useToggle, useFileUpload } from '~/common/hooks'
 import { ProjectApi } from '~/features/project/apis'
-import { ValidationHelper } from '~/shared/helpers'
 import { ProjectPermission } from '~/shared/enums'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { SelectItem } from '~/shared/types'
+import { useToggle } from '~/common/hooks'
 
 const DeleteProject = lazy(() => import('~/features/project/components/DeleteProject'))
 
@@ -27,7 +27,6 @@ export default function ProjectSetting() {
   const projectId = Number(useParams().projectId)
 
   const { t } = useTranslation()
-  const { uploadByServer } = useFileUpload()
   const { isAuthenticated } = useContext(AppContext)
 
   const { hasPermission } = useProjectPermission(projectId)
@@ -69,8 +68,7 @@ export default function ProjectSetting() {
   const handleUpdateProfile = handleSubmit(async (form: FormData) => {
     let imageUrl = ''
     try {
-      const imageUploadResponse = await uploadByServer(selectedImage)
-      imageUrl = imageUploadResponse || currentProject?.image || ''
+      imageUrl = (await UploadHelper.upload(selectedImage)) || currentProject?.image || ''
     } catch {
       imageUrl = currentProject?.image || ''
     }
