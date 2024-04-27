@@ -7,10 +7,9 @@ import { AxiosError } from 'axios'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox } from '~/common/components'
 import { UserProfileType, UpdateProfileRequest } from '~/features/profile/models'
+import { ValidationHelper, UploadHelper } from '~/shared/helpers'
 import { AddressApi } from '~/features/address/apis'
 import { ProfileApi } from '~/features/profile/apis'
-import { ValidationHelper } from '~/shared/helpers'
-import { MediaApi } from '~/features/media/apis'
 import { QueryKey } from '~/shared/constants'
 import { SelectItem } from '~/shared/types'
 import { ProfileTab } from '~/shared/enums'
@@ -45,8 +44,7 @@ export default function UpdateProfile(props: Props) {
   const handleUpdateProfile = handleSubmit(async (form: FormData) => {
     let imageUrl = ''
     try {
-      const imageUploadResponse = await MediaApi.uploadFile(selectedImage)
-      imageUrl = imageUploadResponse?.data.data || user?.avatar || ''
+      imageUrl = (await UploadHelper.upload(selectedImage)) || user?.avatar || ''
     } catch {
       imageUrl = user?.avatar || ''
     }

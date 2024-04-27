@@ -7,10 +7,9 @@ import { useState } from 'react'
 
 import { ConfigSettingApi } from '~/features/admin/features/configSetting/apis'
 import { InputValidation, Modal, ImageUpload } from '~/common/components'
+import { ValidationHelper, UploadHelper } from '~/shared/helpers'
 import { CreateProjectRequest } from '~/features/project/models'
 import { ProjectApi } from '~/features/project/apis'
-import { ValidationHelper } from '~/shared/helpers'
-import { MediaApi } from '~/features/media/apis'
 import { QueryKey } from '~/shared/constants'
 
 interface Props {
@@ -57,8 +56,7 @@ export default function CreateProject(props: Props) {
   const handleCreateProject = handleSubmit(async (form: FormData) => {
     let imageUrl = ''
     try {
-      const imageUploadResponse = await MediaApi.uploadFile(selectedImage)
-      imageUrl = imageUploadResponse?.data.data || ''
+      imageUrl = (await UploadHelper.upload(selectedImage)) || ''
     } catch {
       imageUrl = ''
     }

@@ -9,12 +9,11 @@ import * as _ from 'lodash'
 
 import { ImageUpload, InputValidation, LabelWrapper, SelectBox, SpinningCircle } from '~/common/components'
 import { useCurrentProject, useProjectPermission } from '~/features/project/hooks'
+import { ValidationHelper, UploadHelper } from '~/shared/helpers'
 import { ProjectMemberApi } from '~/features/projectMember/apis'
 import { UpdateProjectRequest } from '~/features/project/models'
 import { ProjectApi } from '~/features/project/apis'
-import { ValidationHelper } from '~/shared/helpers'
 import { ProjectPermission } from '~/shared/enums'
-import { MediaApi } from '~/features/media/apis'
 import { AppContext } from '~/common/contexts'
 import { QueryKey } from '~/shared/constants'
 import { SelectItem } from '~/shared/types'
@@ -69,8 +68,7 @@ export default function ProjectSetting() {
   const handleUpdateProfile = handleSubmit(async (form: FormData) => {
     let imageUrl = ''
     try {
-      const imageUploadResponse = await MediaApi.uploadFile(selectedImage)
-      imageUrl = imageUploadResponse?.data.data || currentProject?.image || ''
+      imageUrl = (await UploadHelper.upload(selectedImage)) || currentProject?.image || ''
     } catch {
       imageUrl = currentProject?.image || ''
     }
