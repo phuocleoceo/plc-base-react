@@ -3,7 +3,7 @@ import { S3PresignedUrlRequest } from '~/features/media/models'
 import { MediaApi } from '~/features/media/apis'
 
 export async function upload(file: File | undefined, prefix?: string) {
-  return await uploadByServer(file, prefix)
+  return await uploadByPresignedUrl(file, prefix)
 }
 
 async function uploadByServer(file: File | undefined, prefix?: string) {
@@ -13,9 +13,8 @@ async function uploadByServer(file: File | undefined, prefix?: string) {
 
 async function uploadByPresignedUrl(file: File | undefined, prefix?: string) {
   const presignedUrlRequest: S3PresignedUrlRequest = {
-    fileName: file?.name,
-    contentType: file?.type,
-    prefix: prefix
+    filePath: prefix ? prefix.trim() + '/' + file?.name : file?.name,
+    contentType: file?.type
   }
 
   const presignedUrlResponse = (await MediaApi.getPresignedUploadUrl(presignedUrlRequest))?.data.data
