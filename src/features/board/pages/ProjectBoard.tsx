@@ -42,7 +42,7 @@ export default function ProjectBoard() {
   // Sprint
   const { data: sprintData, isLoading: isLoadingSprint } = useQuery({
     queryKey: [QueryKey.AvailableSprint, projectId],
-    queryFn: () => SprintApi.getAvailableSprin(projectId),
+    queryFn: () => SprintApi.getAvailableSprint(projectId),
     enabled: isAuthenticated,
     keepPreviousData: true,
     staleTime: 1 * 60 * 1000

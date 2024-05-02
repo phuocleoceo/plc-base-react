@@ -13,7 +13,7 @@ import {
 import { HttpHelper } from '~/shared/helpers'
 
 const sprintApi = {
-  getAvailableSprin(projectId: number) {
+  getAvailableSprint(projectId: number) {
     return HttpHelper.get<GetAvailableSprintResponse>(`project/${projectId}/sprint`)
   },
   getSprintById(projectId: number, sprintId: number) {

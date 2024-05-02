@@ -8,12 +8,12 @@ import { Icon } from '@iconify/react'
 import { IssueGroupedInBoard, MoveIssueToBacklogRequest } from '~/features/issue/models'
 import { IssuePermission, SprintPermission } from '~/shared/enums'
 import { useProjectPermission } from '~/features/project/hooks'
+import { TimeHelper, TranslateHelper } from '~/shared/helpers'
 import { BoardContext } from '~/features/board/contexts'
 import { SprintApi } from '~/features/sprint/apis'
 import { DropDownMenu } from '~/common/components'
 import { Sprint } from '~/features/sprint/models'
 import { IssueApi } from '~/features/issue/apis'
-import { TimeHelper } from '~/shared/helpers'
 import { QueryKey } from '~/shared/constants'
 import { useToggle } from '~/common/hooks'
 
@@ -123,7 +123,7 @@ export default function SprintBar(props: Props) {
     <>
       <div className='flex min-w-[43rem] justify-between'>
         <div>
-          <h1 className='mb-2 text-xl font-semibold text-c-text'>{sprint?.title}</h1>
+          <h1 className='mb-2 text-xl font-semibold text-c-text'>{TranslateHelper.translate(sprint?.title)}</h1>
           <h1 className='mb-4 text-sm text-gray-600'>{sprint?.goal}</h1>
         </div>
 
