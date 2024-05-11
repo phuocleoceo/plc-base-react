@@ -10,12 +10,20 @@ export const getAccessToken = (): string => {
   return localStorage.getItem(LocalStorageKey.AccessToken) || ''
 }
 
+export const removeAccessToken = () => {
+  localStorage.removeItem(LocalStorageKey.AccessToken)
+}
+
 export const setRefreshToken = (refreshToken: string) => {
   localStorage.setItem(LocalStorageKey.RefreshToken, refreshToken)
 }
 
 export const getRefreshToken = (): string => {
   return localStorage.getItem(LocalStorageKey.RefreshToken) || ''
+}
+
+export const removeRefreshToken = () => {
+  localStorage.removeItem(LocalStorageKey.RefreshToken)
 }
 
 export const setUserRole = (role: string) => {

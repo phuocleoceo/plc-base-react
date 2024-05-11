@@ -47,9 +47,7 @@ class Http {
       },
       (error: AxiosError) => {
         this.showErrorMessage(error)
-        this.handleUnauthorizedResponse(error)
-
-        return Promise.reject(error)
+        return this.handleErrorResponse(error)
       }
     )
   }
@@ -64,37 +62,49 @@ class Http {
     const untoastedCode = [HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden, HttpStatusCode.UnprocessableEntity]
     const errorCode = error.response?.status as number
 
-    if (!untoastedCode.includes(errorCode)) {
-      const data: BaseResponse<null> = error.response?.data as BaseResponse<null>
-      toast.error(TranslateHelper.translate(data?.message))
+    if (untoastedCode.includes(errorCode)) return
+
+    const data: BaseResponse<null> = error.response?.data as BaseResponse<null>
+    toast.error(TranslateHelper.translate(data?.message))
+  }
+
+  private handleErrorResponse(error: AxiosError) {
+    if (TypeCheckHelper.isAxiosUnauthorizedError<BaseResponse<null>>(error)) {
+      return this.handleUnauthorizedResponse(error)
     }
+
+    return Promise.reject(error)
   }
 
   private handleUnauthorizedResponse(error: AxiosError) {
-    if (TypeCheckHelper.isAxiosUnauthorizedError<BaseResponse<null>>(error)) {
-      const config: AxiosRequestConfig<any> = error.response?.config || {}
-      const { url } = config
-      if (url !== 'auth/refresh-token') {
-        this.refreshTokenRequest = this.refreshTokenRequest
-          ? this.refreshTokenRequest
-          : this.handleRefreshToken().finally(() => {
-              // Keep refresh token request for other concurrent request
-              setTimeout(() => {
-                this.refreshTokenRequest = null
-              }, 10000)
-            })
-        // Recall error request
-        return this.refreshTokenRequest.then((accessToken) => {
-          return this.instance({
-            ...config,
-            headers: { ...config.headers, authorization: accessToken }
-          })
-        })
-      }
-      LocalStorageHelper.clear()
-      this.accessToken = ''
-      this.refreshToken = ''
+    const config: AxiosRequestConfig<any> = error.response?.config || {}
+    const { url } = config
+
+    if (url === 'auth/refresh-token') {
+      this.clearToken()
+      return
     }
+
+    // Keep refresh token request for other concurrent request
+    this.refreshTokenRequest = this.refreshTokenRequest
+      ? this.refreshTokenRequest
+      : this.handleRefreshToken().finally(() => {
+          setTimeout(() => {
+            this.refreshTokenRequest = null
+          }, 10000)
+        })
+
+    // Recall error request
+    return this.refreshTokenRequest
+      .then((accessToken) => {
+        return this.instance({
+          ...config,
+          headers: { ...config.headers, authorization: accessToken }
+        })
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
   }
 
   private async handleRefreshToken() {
@@ -103,16 +113,25 @@ class Http {
         accessToken: this.accessToken,
         refreshToken: this.refreshToken
       })
-      const { accessToken } = res.data.data
+
+      const { accessToken, refreshToken } = res.data.data
       LocalStorageHelper.setAccessToken(accessToken)
+      LocalStorageHelper.setRefreshToken(refreshToken)
       this.accessToken = accessToken
+      this.refreshToken = refreshToken
+
       return accessToken
     } catch (error) {
-      LocalStorageHelper.clear()
-      this.accessToken = ''
-      this.refreshToken = ''
+      this.clearToken()
       throw error
     }
+  }
+
+  private clearToken() {
+    LocalStorageHelper.removeAccessToken()
+    LocalStorageHelper.removeRefreshToken()
+    this.accessToken = ''
+    this.refreshToken = ''
   }
 }
 
