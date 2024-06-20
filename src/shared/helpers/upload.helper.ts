@@ -13,7 +13,8 @@ async function uploadByServer(file: File | undefined, prefix?: string) {
 
 async function uploadByPresignedUrl(file: File | undefined, prefix?: string) {
   const presignedUrlRequest: S3PresignedUrlRequest = {
-    filePath: prefix ? prefix.trim() + '/' + file?.name : file?.name,
+    prefix,
+    fileName: file?.name,
     contentType: file?.type
   }
 

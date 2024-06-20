@@ -3,7 +3,8 @@ import { BaseResponse } from '~/shared/types'
 export type FileUploadResponse = BaseResponse<string>
 
 export type S3PresignedUrlRequest = {
-  filePath?: string
+  prefix?: string
+  fileName?: string
   contentType?: string
 }
 

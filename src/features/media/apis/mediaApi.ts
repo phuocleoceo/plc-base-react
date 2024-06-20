@@ -18,7 +18,7 @@ const mediaApi = {
     })
   },
   getPresignedUploadUrl(request: S3PresignedUrlRequest) {
-    if (!request || !request.filePath || !request.contentType) return
+    if (!request || !request.fileName || !request.contentType) return
 
     return HttpHelper.post<S3PresignedUrlResponse>('presigned-upload-url', request)
   },
