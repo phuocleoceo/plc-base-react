@@ -31,8 +31,7 @@ export const setUserRole = (role: string) => {
 }
 
 export const getUserRole = (): string => {
-  const result = localStorage.getItem(LocalStorageKey.Role)
-  return result || ''
+  return localStorage.getItem(LocalStorageKey.Role) || ''
 }
 
 export const setUserInfo = (userInfor: { id: number; email: string; roleId: number }) => {
@@ -44,10 +43,19 @@ export const getUserInfo = (): { id: number; email: string; roleId: number } => 
   return result ? JSON.parse(result) : null
 }
 
+export const setLanguage = (language: string) => {
+  localStorage.setItem(LocalStorageKey.Language, language)
+}
+
+export const getLanguage = (): string => {
+  return localStorage.getItem(LocalStorageKey.Language) || 'en'
+}
+
 export const clear = () => {
   localStorage.removeItem(LocalStorageKey.AccessToken)
   localStorage.removeItem(LocalStorageKey.RefreshToken)
   localStorage.removeItem(LocalStorageKey.UserInformation)
+  localStorage.removeItem(LocalStorageKey.Role)
 
   const clearLSEvent = new Event(EventConstant.ClearLocalStorage)
   LocalStorageEventTarget.dispatchEvent(clearLSEvent)
