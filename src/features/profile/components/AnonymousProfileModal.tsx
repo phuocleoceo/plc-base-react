@@ -16,7 +16,7 @@ export default function AnonymousProfileModal(props: Props) {
 
   const { t } = useTranslation()
 
-  const { data, isLoading } = useQuery({
+  const { data, isPending: isLoading } = useQuery({
     queryKey: [QueryKey.AnonymousProfile, userId],
     queryFn: () => ProfileApi.getAnonymousProfile(userId),
     staleTime: 2 * 60 * 1000

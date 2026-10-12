@@ -73,7 +73,7 @@ export default function CreateEvent(props: Props) {
     createEventMutation.mutate(eventData, {
       onSuccess: () => {
         toast.success(t('create_event_success'))
-        queryClient.invalidateQueries([QueryKey.EventSchedule])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.EventSchedule] })
         reset()
         onClose()
       },
@@ -89,7 +89,7 @@ export default function CreateEvent(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateEvent}
-      isMutating={createEventMutation.isLoading || isSubmitting}
+      isMutating={createEventMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('creating_event...')}
       submitLabel={t('create_event')}

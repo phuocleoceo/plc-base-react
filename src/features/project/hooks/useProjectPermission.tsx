@@ -8,7 +8,7 @@ import { QueryKey } from '~/shared/constants'
 export default function useProjectPermission(projectId: number) {
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data: permissionData, isLoading: isLoadingPermission } = useQuery({
+  const { data: permissionData, isPending: isLoadingPermission } = useQuery({
     queryKey: [QueryKey.UserPermissionInProject, projectId],
     queryFn: () => ProjectApi.getUserPermissionInProject(projectId),
     enabled: isAuthenticated,

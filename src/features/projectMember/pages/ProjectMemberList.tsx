@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useContext, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -48,11 +48,11 @@ export default function ProjectMemberList() {
     })
   }
 
-  const { data: projectMemberData, isLoading: isLoadingProjectMember } = useQuery({
+  const { data: projectMemberData, isPending: isLoadingProjectMember } = useQuery({
     queryKey: [QueryKey.ProjectMembers, projectId, projectMemberParams],
     queryFn: () => ProjectMemberApi.getMemberForProject(projectId, projectMemberParams),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 2 * 60 * 1000
   })
 
@@ -67,7 +67,7 @@ export default function ProjectMemberList() {
     leaveProjectMutation.mutate(undefined, {
       onSuccess: () => {
         toggleLeaveProject()
-        queryClient.invalidateQueries([QueryKey.Projects])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Projects] })
         navigate('/')
         toast.success(t('leave_project_success'))
       },
@@ -97,7 +97,7 @@ export default function ProjectMemberList() {
         <div className='mt-8'>
           <div className='relative'>
             <input
-              className='w-52 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-52 rounded-xs border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-hidden focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={projectMemberParams.searchValue}
@@ -112,7 +112,7 @@ export default function ProjectMemberList() {
             <div className='w-60'>{t('name')}</div>
             <div className='w-64'>{t('email')}</div>
             <div className='w-64'>{t('role')}</div>
-            <div className='flex-grow'>{t('action')}</div>
+            <div className='grow'>{t('action')}</div>
           </div>
           {projectMembers && projectMembers.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>
@@ -138,7 +138,7 @@ export default function ProjectMemberList() {
             isShowing={isShowingLeaveProject}
             onClose={toggleLeaveProject}
             onSubmit={handleLeaveProject}
-            isMutating={leaveProjectMutation.isLoading}
+            isMutating={leaveProjectMutation.isPending}
             confirmMessage={t(`submit_leave_project`) + `: ${currentProject?.name}`}
             closeLabel={t('cancle')}
             submittingLabel={t('leaving_project...')}

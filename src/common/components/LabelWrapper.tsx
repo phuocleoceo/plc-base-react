@@ -1,7 +1,7 @@
 type Props = {
   label: string
   labelClass?: string
-  children: JSX.Element
+  children: React.JSX.Element
   margin?: string
 }
 

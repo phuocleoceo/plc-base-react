@@ -45,7 +45,7 @@ export default function CreateProjectInvitation(props: Props) {
     createInvitationMutation.mutate(invitationData, {
       onSuccess: () => {
         toast.success(t('create_invitation_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectInvitations] })
         reset()
         onClose()
       },
@@ -61,7 +61,7 @@ export default function CreateProjectInvitation(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateProjectInvitation}
-      isMutating={createInvitationMutation.isLoading || isSubmitting}
+      isMutating={createInvitationMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('sending...')}
       submitLabel={t('send')}

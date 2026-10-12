@@ -8,7 +8,7 @@ import { QueryKey } from '~/shared/constants'
 export default function useCurrentProject(projectId: number) {
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data: projectData, isLoading: isLoadingProject } = useQuery({
+  const { data: projectData, isPending: isLoadingProject } = useQuery({
     queryKey: [QueryKey.ProjectDetail, projectId],
     queryFn: () => ProjectApi.getProjectById(projectId),
     enabled: isAuthenticated,

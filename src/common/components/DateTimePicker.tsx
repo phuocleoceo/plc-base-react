@@ -1,5 +1,5 @@
 import { Controller } from 'react-hook-form'
-import DatePicker from 'react-datepicker'
+import { DatePicker } from 'react-datepicker'
 import { useState } from 'react'
 
 import { TranslateHelper } from '~/shared/helpers'
@@ -33,13 +33,13 @@ export default function DateTimePicker(props: Props) {
               showIcon={false}
               showTimeSelect={true}
               dateFormat='dd/MMMM/yy hh:mm a'
-              className={`block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
+              className={`block w-full rounded-xs border-2 px-3 py-1 text-sm outline-hidden duration-200 focus:border-chakra-blue
                      bg-slate-100 hover:border-gray-400 ${className}`}
               readOnly={readonly}
               selected={startDate}
-              onChange={(date: Date) => {
+              onChange={(date: Date | null) => {
                 setStartDate(date)
-                onChange(date.toISOString())
+                if (date) onChange(date.toISOString())
               }}
             />
             {error && <span className='text-[13px] text-red-400'>{error.message}</span>}

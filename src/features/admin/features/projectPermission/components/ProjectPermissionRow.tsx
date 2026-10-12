@@ -31,13 +31,13 @@ export default function ProjectPermissionRow(props: Props) {
       }
 
       createProjectPermissionMutation.mutate(data, {
-        onSuccess: () => queryClient.invalidateQueries([QueryKey.ProjectPermissions])
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectPermissions] })
       })
       return
     }
 
     deleteProjectPermissionMutation.mutate(undefined, {
-      onSuccess: () => queryClient.invalidateQueries([QueryKey.ProjectPermissions])
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectPermissions] })
     })
   }
 

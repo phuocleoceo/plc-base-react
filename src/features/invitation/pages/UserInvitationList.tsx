@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useContext, useState } from 'react'
 import { Icon } from '@iconify/react'
@@ -35,11 +35,11 @@ export default function UserInvitationList() {
     })
   }
 
-  const { data: invitationData, isLoading: invitationLoading } = useQuery({
+  const { data: invitationData, isPending: invitationLoading } = useQuery({
     queryKey: [QueryKey.UserInvitations, invitationParams],
     queryFn: () => InvitationApi.getInvitationForUser(invitationParams),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 2 * 60 * 1000
   })
 
@@ -65,7 +65,7 @@ export default function UserInvitationList() {
         <div className='mt-8'>
           <div className='relative'>
             <input
-              className='w-44 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-44 rounded-xs border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-hidden focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={invitationParams.searchValue}
@@ -80,7 +80,7 @@ export default function UserInvitationList() {
             <div className='w-60'>{t('sender')}</div>
             <div className='w-72'>{t('email')}</div>
             <div className='w-72'>{t('project')}</div>
-            <div className='flex-grow'>{t('action')}</div>
+            <div className='grow'>{t('action')}</div>
           </div>
           {invitations && invitations.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>

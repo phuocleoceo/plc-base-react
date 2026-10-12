@@ -1,11 +1,15 @@
-import { DatesSetArg, EventClickArg, EventSourceInput } from '@fullcalendar/core'
+import '@fullcalendar/react/skeleton.css'
+import '@fullcalendar/react/themes/classic/theme.css'
+import '@fullcalendar/react/themes/classic/palette.css'
+
+import FullCalendar, { DatesSetInfo, EventClickInfo, EventSourceInput } from '@fullcalendar/react'
+import classicThemePlugin from '@fullcalendar/react/themes/classic'
+import interactionPlugin from '@fullcalendar/react/interaction'
+import timeGridPlugin from '@fullcalendar/react/timegrid'
+import dayGridPlugin from '@fullcalendar/react/daygrid'
 import { lazy, Suspense, useContext, useState } from 'react'
-import interactionPlugin from '@fullcalendar/interaction'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import FullCalendar from '@fullcalendar/react'
 import { useParams } from 'react-router-dom'
 
 import { GetEventInScheduleParams } from '~/features/event/models'
@@ -37,10 +41,10 @@ export default function EventSchedule() {
     end: ''
   })
 
-  const { data: eventData, isLoading: isLoadingEvent } = useQuery({
+  const { data: eventData, isPending: isLoadingEvent } = useQuery({
     queryKey: [QueryKey.EventSchedule, eventParams],
     queryFn: () => EventApi.getEventInSchedule(projectId, eventParams),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
@@ -53,7 +57,7 @@ export default function EventSchedule() {
       id: event.id.toString()
     })) ?? []
 
-  const handleClickEvent = (event: EventClickArg) => {
+  const handleClickEvent = (event: EventClickInfo) => {
     if (hasPermission(EventPermission.GetOne)) {
       const eventId = parseInt(event.event.id)
       setSelectedEventId(eventId)
@@ -61,7 +65,7 @@ export default function EventSchedule() {
     }
   }
 
-  const handleDates = (rangeInfo: DatesSetArg) => {
+  const handleDates = (rangeInfo: DatesSetInfo) => {
     setEventParams({
       start: rangeInfo.start?.toISOString() ?? new Date().toISOString(),
       end: rangeInfo.end?.toISOString() ?? new Date().toISOString()
@@ -82,9 +86,9 @@ export default function EventSchedule() {
     <>
       <div className='p-4'>
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, classicThemePlugin]}
           initialView={'timeGridWeek'}
-          customButtons={
+          buttons={
             hasPermission(EventPermission.Create)
               ? {
                   createEventButton: {

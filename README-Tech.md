@@ -1,6 +1,6 @@
 # JiPLC – Tài Liệu Kỹ Thuật (Technical Documentation)
 
-> **JiPLC** (viết tắt của *Jira – PLC*) là ứng dụng quản lý dự án dạng SPA (Single Page Application) được phát triển bằng **React 18 + TypeScript + Vite + TailwindCSS**, mô phỏng (clone) các tính năng cốt lõi của **Jira** và **Trello**. Ứng dụng phục vụ cho các team / công ty nhỏ muốn tự vận hành công cụ quản lý dự án theo mô hình **Scrum** (Backlog → Sprint → Board → Complete Sprint) thay cho việc trả phí Jira/Trello.
+> **JiPLC** (viết tắt của *Jira – PLC*) là ứng dụng quản lý dự án dạng SPA (Single Page Application) được phát triển bằng **React 19 + TypeScript + Vite + TailwindCSS**, mô phỏng (clone) các tính năng cốt lõi của **Jira** và **Trello**. Ứng dụng phục vụ cho các team / công ty nhỏ muốn tự vận hành công cụ quản lý dự án theo mô hình **Scrum** (Backlog → Sprint → Board → Complete Sprint) thay cho việc trả phí Jira/Trello.
 >
 > Tài liệu này tập trung **mô tả chi tiết về mặt công nghệ và kỹ thuật** của phía Frontend (repo `plc-base-react`). Phía Backend (`PLCBaseApi`) được tham chiếu qua URL được cấu hình bằng biến môi trường.
 
@@ -47,10 +47,10 @@ Kiến trúc tổng quát:
 ┌──────────────────────────────────────────────────────────────┐
 │                       Browser (User)                          │
 │ ┌──────────────────────────────────────────────────────────┐ │
-│ │  React 18 SPA  (Vite bundled, SWC transpiled)            │ │
+│ │  React 19 SPA  (Vite bundled, Oxc transpiled)            │ │
 │ │  ┌─────────┐  ┌──────────────┐  ┌────────────────────┐   │ │
 │ │  │ Routing │  │ React Query  │  │  Context API       │   │ │
-│ │  │ (v6)    │  │ (server      │  │  (auth, board,     │   │ │
+│ │  │ (v7)    │  │ (server      │  │  (auth, board,     │   │ │
 │ │  │ lazy +  │  │  state cache)│  │   backlog…)        │   │ │
 │ │  │ guards  │  │              │  │                    │   │ │
 │ │  └─────────┘  └──────────────┘  └────────────────────┘   │ │
@@ -89,19 +89,19 @@ Các trục nghiệp vụ chính:
 
 | Hạng mục          | Công nghệ                        | Phiên bản | Vai trò                                                  |
 | ----------------- | -------------------------------- | --------- | -------------------------------------------------------- |
-| UI Library        | `react`, `react-dom`             | ^18.2.0   | Component-based UI, Concurrent rendering, `StrictMode`   |
-| Ngôn ngữ          | `typescript`                     | ^4.9.3    | Strict typing toàn dự án (`"strict": true` ở tsconfig)   |
-| Build tool        | `vite`                           | ^4.2.0    | Dev server siêu nhanh, HMR, ESM-native, bundle prod      |
-| Transpiler        | `@vitejs/plugin-react-swc`       | ^3.0.0    | Dùng **SWC** (Rust) thay Babel để tăng tốc transpile     |
-| CSS framework     | `tailwindcss`                    | ^3.3.1    | Utility-first CSS, JIT compile                           |
-| CSS preprocessor  | `postcss`, `autoprefixer`        | -         | PostCSS pipeline cho Tailwind                            |
+| UI Library        | `react`, `react-dom`             | ^19.3.0   | Component-based UI, Concurrent rendering, `StrictMode`   |
+| Ngôn ngữ          | `typescript`                     | ^6.0.3    | Strict typing toàn dự án (`"strict": true` ở tsconfig)   |
+| Build tool        | `vite`                           | ^8.3.4    | Dev server siêu nhanh, HMR, ESM-native, bundle prod      |
+| Transpiler        | `@vitejs/plugin-react`       | ^6.1.2    | Dùng **Oxc** của Vite 8 để transpile và React Fast Refresh     |
+| CSS framework     | `tailwindcss`                     | ^4.3.3    | Utility-first CSS, cấu hình CSS-first (`@theme`)         |
+| CSS pipeline      | `@tailwindcss/vite`              | ^4.3.3    | Plugin Vite của Tailwind (thay PostCSS + autoprefixer)   |
 
 ### 2.2. Routing & State
 
 | Thư viện                              | Vai trò                                                                |
 | ------------------------------------- | ---------------------------------------------------------------------- |
-| `react-router-dom` ^6.10              | Routing v6 (object-based, `useRoutes`, `Outlet`, nested route)         |
-| `@tanstack/react-query` ^4.29         | Server-state management, cache, mutation, invalidation                 |
+| `react-router-dom` ^7.18.4              | Routing v7 (object-based, `useRoutes`, `Outlet`, nested route)         |
+| `@tanstack/react-query` ^5.104.2         | Server-state management, cache, mutation, invalidation                 |
 | `@tanstack/react-query-devtools`      | Bộ debug query (chỉ bật ở dev)                                         |
 | React Context API (built-in)          | Quản trị client-state cục bộ (`AppContext`, `BoardContext`, …)         |
 
@@ -109,7 +109,7 @@ Các trục nghiệp vụ chính:
 
 | Thư viện           | Vai trò                                                       |
 | ------------------ | ------------------------------------------------------------- |
-| `axios` ^1.3.5     | HTTP client, request/response interceptor, error normalization|
+| `axios` ^1.20.0     | HTTP client, request/response interceptor, error normalization|
 | `query-string`     | Serialize query params (mảng, object…) thân thiện C# Web API  |
 | `react-hook-form`  | Quản lý form, validate, register, control, FieldError         |
 
@@ -117,10 +117,10 @@ Các trục nghiệp vụ chính:
 
 | Thư viện                                              | Vai trò                                                |
 | ----------------------------------------------------- | ------------------------------------------------------ |
-| `@hello-pangea/dnd` ^16.2.0                           | Drag-and-drop (fork actively-maintained của `react-beautiful-dnd`) |
-| `@ckeditor/ckeditor5-build-classic` + `ckeditor5-react` | Rich-text editor (mô tả issue, comment)              |
-| `@fullcalendar/*` ^6.1.8                              | Calendar (dayGrid, timeGrid, interaction)              |
-| `framer-motion` ^10                                   | Animation declarative (modal, sidebar, scale)          |
+| `@hello-pangea/dnd` ^18.0.1                           | Drag-and-drop (fork actively-maintained của `react-beautiful-dnd`) |
+| `ckeditor5` 43.3.1 + `@ckeditor/ckeditor5-react` ^9.5.0 | Rich-text editor (mô tả issue, comment)              |
+| `@fullcalendar/react` ^7.1.1                              | Calendar (dayGrid, timeGrid, interaction)              |
+| `motion` ^13.5.1 (`motion/react`)                                   | Animation declarative (modal, sidebar, scale)          |
 | `react-toastify`                                      | Toast notification toàn cục                            |
 | `react-tooltip`                                       | Tooltip                                                |
 | `react-paginate`                                      | Pagination control                                     |
@@ -142,8 +142,8 @@ Các trục nghiệp vụ chính:
 
 ### 3.1. Yêu cầu
 
-- **Node.js** ≥ 18 (Dockerfile dùng `node:18-alpine`).
-- **npm** ≥ 9 (hoặc `pnpm`/`yarn` tương đương).
+- **Node.js** 24 LTS (`.nvmrc`, `engines.node` và Dockerfile dùng cùng dòng Node 24).
+- **npm** ≥ 11 (hoặc `pnpm`/`yarn` tương đương).
 
 ### 3.2. Scripts (`package.json`)
 
@@ -159,7 +159,8 @@ Các trục nghiệp vụ chính:
 
 ### 3.3. Dev server config (`vite.config.ts`)
 
-- Plugin: `@vitejs/plugin-react-swc` (transpile bằng SWC).
+- Plugin: `@vitejs/plugin-react` (transpile bằng Oxc của Vite 8) và `@tailwindcss/vite` (CSS pipeline).
+- Dùng `@vitejs/plugin-react` theo khuyến nghị Vite cho dự án không có SWC plugin riêng; không cần SWC native binding hay override compiler.
 - Cổng dev: **3000**.
 - `css.devSourcemap: true` để debug Tailwind generated class.
 - Alias: `~` → `./src` (đồng bộ với `paths` trong `tsconfig.json`).
@@ -219,7 +220,7 @@ plc-base-react/
 ├── public/                       # static assets được serve trực tiếp
 ├── index.html                    # entry HTML (có #root, #portal)
 ├── vite.config.ts                # cấu hình Vite + alias `~`
-├── tailwind.config.js            # tokens / theme Tailwind
+├── eslint.config.js              # ESLint flat config
 ├── tsconfig.json                 # paths `~/*` → `src/*`
 ├── Dockerfile                    # build multi-stage: node-alpine → nginx
 ├── docker-compose.yml            # local container compose
@@ -398,11 +399,11 @@ const queryClient = new QueryClient({
 ### 8.3. Convention sử dụng useQuery
 
 ```ts
-const { data: sprintData, isLoading } = useQuery({
+const { data: sprintData, isPending: isLoading } = useQuery({
   queryKey: [QueryKey.AvailableSprint, projectId],   // key theo constant
   queryFn: () => SprintApi.getAvailableSprint(projectId),
   enabled: isAuthenticated,                          // chỉ gọi khi đã login
-  keepPreviousData: true,                            // mượt khi đổi filter/page
+  placeholderData: keepPreviousData,                            // mượt khi đổi filter/page
   staleTime: 1 * 60 * 1000                           // 1 phút
 })
 ```
@@ -423,7 +424,7 @@ const updateBoardIssueMutation = useMutation({
 })
 
 updateBoardIssueMutation.mutate(payload, {
-  onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBoard])
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
 })
 ```
 
@@ -789,6 +790,10 @@ Component dùng chung: `src/common/components/RichTextInput.tsx`.
   )}/>
 ```
 
+Dùng cách cài đặt modular (`ckeditor5`) thay predefined build đã ngừng bảo trì. Giữ cố định **43.3.1** theo yêu cầu chưa chuyển sang cấu hình `licenseKey` của v44+. React wrapper v9 hỗ trợ React 19; plugin và toolbar giữ như Classic build cũ.
+
+`lodash-es` (dependency của CKEditor 43 bị pin 4.17.21) được override sang cùng dòng đã vá với `lodash`. `npm audit` vẫn có cảnh báo CKEditor HTML Support ([GHSA-jrqm-vmqc-gm93](https://github.com/advisories/GHSA-jrqm-vmqc-gm93)); component không bật `GeneralHtmlSupport`. Bản vá chính thức yêu cầu CKEditor ≥47.6, ngoài phạm vi giữ trước v44.
+
 ### 14.1. Custom Upload Adapter
 
 CKEditor không tự upload ảnh, dự án viết adapter dùng helper `UploadHelper.upload` (xem mục 16):
@@ -820,9 +825,9 @@ Editor là component không-controlled tự nhiên, dùng `<Controller>` của R
 
 ```tsx
 <FullCalendar
-  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, classicThemePlugin]}
   initialView="timeGridWeek"
-  customButtons={hasPermission(EventPermission.Create) ? {
+  buttons={hasPermission(EventPermission.Create) ? {
     createEventButton: { text: t('create_event'), click: toggleCreateEvent }
   } : {}}
   headerToolbar={{
@@ -921,13 +926,12 @@ i18n.changeLanguage('vi')
 
 ## 18. TailwindCSS & Design System
 
-### 18.1. Cấu hình (`tailwind.config.js`)
+### 18.1. Cấu hình (`src/index.css` và `vite.config.ts`)
 
-- Content scan: `./index.html`, `./src/**/*.{js,ts,jsx,tsx}`.
-- Mở rộng `theme.extend`:
-  - `colors`: mapping sang **CSS variables** (`var(--primary)`, `var(--c-1)`, …).
-  - `boxShadow`: `issue`, `list` (matching style của Jira).
-  - `borderWidth: { 2.5: '2.5px' }`, `fontSize: { '90p', '80p' }`.
+- Plugin `@tailwindcss/vite` xử lý CSS; Tailwind v4 tự phát hiện source.
+- Khai báo màu bằng `@theme inline` để resolve CSS variables trong scope `.plc-theme`; shadow `--shadow-issue` / `--shadow-list` và font size `--text-90p` / `--text-80p` dùng `@theme` trong `src/index.css`.
+- Border 2.5px dùng utility `border-[2.5px]`.
+- Giữ mặc định border, placeholder, cursor và focus ring của Tailwind v3 bằng CSS tương thích.
 
 ### 18.2. Theme bằng CSS Variables (`src/index.css`)
 
@@ -972,8 +976,8 @@ Define ở `@layer components`:
 | `keepPreviousData`                | Khi đổi filter/page, giữ data cũ → UI mượt                                     |
 | `staleTime`                       | Giảm số lần refetch không cần thiết                                            |
 | `paramsSerializer` query-string   | Giảm payload param vs `URLSearchParams` (hỗ trợ array tốt)                     |
-| `framer-motion` chỉ ở chỗ cần     | Hạn chế animation runtime cost                                                 |
-| Concurrent rendering (React 18)   | `createRoot` + `<StrictMode>`                                                  |
+| `motion/react` chỉ ở chỗ cần     | Hạn chế animation runtime cost                                                 |
+| Concurrent rendering (React 19)   | `createRoot` + `<StrictMode>`                                                  |
 | Vite SWC                          | Build time nhanh hơn Babel 10–20×                                              |
 
 ---
@@ -1015,10 +1019,10 @@ Chạy với pattern: `"src/**/(*.tsx|*.ts|*.css|*.scss)"`.
 ### 21.1. Dockerfile (multi-stage)
 
 ```dockerfile
-FROM node:18-alpine as builder
+FROM node:24-alpine as builder
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 FROM nginx:1.25
@@ -1030,7 +1034,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-- Stage 1: build dist bằng Node 18 alpine.
+- Stage 1: build dist bằng Node 24 alpine.
 - Stage 2: serve bằng **Nginx 1.25**, config nằm ở `.nginx/nginx.conf` (cần thiết để rewrite SPA route → `index.html`, gzip, cache static).
 
 ### 21.2. `docker-compose.yml`
@@ -1165,7 +1169,7 @@ updateBoardIssueMutation.mutate({ projectStatusId, projectStatusIndex })
    │
    │  ── HttpHelper.put `project/{id}/board/issue/{issueId}` (Bearer JWT)
    │
-   ├── 200 OK → queryClient.invalidateQueries([QueryKey.IssueInBoard])
+   ├── 200 OK → queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
    │             → useQuery refetch → UI sync
    │
    └── 401 → interceptor refresh token → retry → success/fail

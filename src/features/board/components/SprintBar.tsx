@@ -58,7 +58,7 @@ export default function SprintBar(props: Props) {
     startSprintMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('started_sprint'))
-        queryClient.invalidateQueries([QueryKey.AvailableSprint])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.AvailableSprint] })
         toggleStartSprint()
       }
     })
@@ -72,8 +72,8 @@ export default function SprintBar(props: Props) {
     deleteSprintMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_sprint_success'))
-        queryClient.invalidateQueries([QueryKey.AvailableSprint])
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.AvailableSprint] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
         toggleDeleteSprint()
       }
     })
@@ -96,8 +96,8 @@ export default function SprintBar(props: Props) {
     moveIssueToBacklogMutation.mutate(issues, {
       onSuccess: () => {
         toast.success(t('move_issue_to_backlog_success'))
-        queryClient.invalidateQueries([QueryKey.IssueInBoard])
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
         setSelectedIssues([])
         toggleMoveIssueModal()
         toggleMoveIssueSelect()
@@ -241,7 +241,7 @@ export default function SprintBar(props: Props) {
             isShowing={isShowingDeleteSprint}
             onClose={toggleDeleteSprint}
             onSubmit={handleDeleteSprint}
-            isMutating={deleteSprintMutation.isLoading}
+            isMutating={deleteSprintMutation.isPending}
             confirmMessage={`${t('submit_delete_sprint')}: ${sprint.title}`}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_sprint...')}
@@ -258,7 +258,7 @@ export default function SprintBar(props: Props) {
             isShowing={isShowingStartSprint}
             onClose={toggleStartSprint}
             onSubmit={handleStartSprint}
-            isMutating={startSprintMutation.isLoading}
+            isMutating={startSprintMutation.isPending}
             confirmMessage={t('submit_start_sprint')}
             closeLabel={t('cancle')}
             submittingLabel={t('starting_sprint...')}
@@ -274,7 +274,7 @@ export default function SprintBar(props: Props) {
             isShowing={isShowingMoveIssueModal}
             onClose={toggleMoveIssueModal}
             onSubmit={handleMoveIssueToBacklog}
-            isMutating={moveIssueToBacklogMutation.isLoading}
+            isMutating={moveIssueToBacklogMutation.isPending}
             confirmMessage={t('submit_move_issue_to_backlog')}
             closeLabel={t('cancle')}
             submittingLabel={t('moving...')}

@@ -1,5 +1,5 @@
 import { Suspense, lazy, useContext, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 
@@ -39,10 +39,10 @@ export default function ProjectRoleList() {
     })
   }
 
-  const { data: projectRoleData, isLoading: isLoadingProjectRole } = useQuery({
+  const { data: projectRoleData, isPending: isLoadingProjectRole } = useQuery({
     queryKey: [QueryKey.ProjectRoles, projectRoleParams],
     queryFn: () => ProjectRoleApi.getProjectRoles(projectRoleParams),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 5 * 60 * 1000
   })
@@ -73,7 +73,7 @@ export default function ProjectRoleList() {
         <div className='mt-3'>
           <div className='relative'>
             <input
-              className='w-48 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-48 rounded-xs border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-hidden focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={projectRoleParams.searchValue}
@@ -87,7 +87,7 @@ export default function ProjectRoleList() {
             <div className='w-32'></div>
             <div className='w-56'>{t('name')}</div>
             <div className='w-64'>{t('description')}</div>
-            <div className='flex-grow'>{t('action')}</div>
+            <div className='grow'>{t('action')}</div>
           </div>
           {projectRoles && projectRoles.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>

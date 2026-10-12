@@ -64,7 +64,7 @@ export default function DragDropStatus(props: Props) {
     updateProjectStatusMutation.mutate(projectStatusData, {
       onSuccess: () => {
         toast.success(t('update_status_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectStatuses])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectStatuses] })
         toggleUpdateStatus()
       }
     })
@@ -78,8 +78,8 @@ export default function DragDropStatus(props: Props) {
     deleteProjectStatusMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_status_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectStatuses])
-        queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectStatuses] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
         toggleDeleteStatus()
       }
     })
@@ -102,7 +102,7 @@ export default function DragDropStatus(props: Props) {
                     value={statusData.name}
                     name='name'
                     onChange={handleChangeStatusData}
-                    className='w-36 border-[1.5px] pl-2 text-[15px] outline-none focus:border-chakra-blue'
+                    className='w-36 border-[1.5px] pl-2 text-[15px] outline-hidden focus:border-chakra-blue'
                     // eslint-disable-next-line jsx-a11y/no-autofocus
                     autoFocus
                   />
@@ -166,7 +166,7 @@ export default function DragDropStatus(props: Props) {
             isShowing={isShowingDeleteStatus}
             onClose={toggleDeleteStatus}
             onSubmit={handleDeleteProjectStatus}
-            isMutating={deleteProjectStatusMutation.isLoading}
+            isMutating={deleteProjectStatusMutation.isPending}
             confirmMessage={t(`submit_delete_status`) + `: ${projectStatus.name}`}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_status...')}

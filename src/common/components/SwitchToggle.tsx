@@ -17,9 +17,10 @@ export default function SwitchToggle(props: Prop) {
 
   const ToggleButton = (onChange: any) => (
     <div className='flex'>
-      <label className={`inline-flex relative items-center cursor-pointer ${className}`}>
-        <input type='checkbox' className='sr-only peer' checked={enabled} readOnly />
+      <div className={`inline-flex relative items-center cursor-pointer ${className}`}>
+        <input type='checkbox' aria-label='Enable' className='sr-only peer' checked={enabled} readOnly />
         <div
+          aria-label='Toggle'
           onClick={() => {
             setEnabled(!enabled)
             if (onChange) onChange(!enabled)
@@ -32,13 +33,13 @@ export default function SwitchToggle(props: Prop) {
           role='button'
           className={`w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-green-300 
                         peer-checked:after:translate-x-full peer-checked:after:border-white 
-                        after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
+                        after:content-[''] after:absolute after:top-0.5 after:left-0.5 
                         after:bg-white after:border-gray-300 after:border after:rounded-full 
                         after:h-5 after:w-5 after:transition-all ${
                           readonly ? 'pointer-events-none peer-checked:bg-green-150' : 'peer-checked:bg-green-600'
                         }`}
         ></div>
-      </label>
+      </div>
     </div>
   )
 

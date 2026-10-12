@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useContext } from 'react'
 
@@ -12,10 +12,10 @@ export default function ConfigSettingList() {
   const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data: configSettingData, isLoading: isLoadingConfigSetting } = useQuery({
+  const { data: configSettingData, isPending: isLoadingConfigSetting } = useQuery({
     queryKey: [QueryKey.ConfigSettings],
     queryFn: () => ConfigSettingApi.getConfigSettings(),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 5 * 60 * 1000
   })
@@ -45,7 +45,7 @@ export default function ConfigSettingList() {
             <div className='w-56'>{t('key')}</div>
             <div className='w-60'>{t('description')}</div>
             <div className='w-40'>{t('value')}</div>
-            <div className='flex-grow'>{t('action')}</div>
+            <div className='grow'>{t('action')}</div>
           </div>
           {configSettings && configSettings.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>

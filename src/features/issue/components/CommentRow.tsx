@@ -61,7 +61,7 @@ export default function CommentRow(props: Props) {
 
     updateCommentMutation.mutate(commentData, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueComment, issueId] })
         toggleUpdateComment()
       },
       onError: (error) => {
@@ -80,7 +80,7 @@ export default function CommentRow(props: Props) {
   const handleDeleteComment = async () => {
     deleteCommentMutation.mutate(undefined, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueComment, issueId] })
         toggleDeleteComment()
       }
     })
@@ -114,7 +114,7 @@ export default function CommentRow(props: Props) {
                   onClick={handleUpdateComment}
                   className='text-sm tracking-wide text-gray-700 hover:underline mr-2'
                 >
-                  {updateCommentMutation.isLoading || isSubmitting ? t('saving...') : t('save')}
+                  {updateCommentMutation.isPending || isSubmitting ? t('saving...') : t('save')}
                 </button>
 
                 <button onClick={toggleUpdateComment} className='text-sm tracking-wide text-gray-700 hover:underline'>
@@ -144,7 +144,7 @@ export default function CommentRow(props: Props) {
             isShowing={isShowingDeleteComment}
             onClose={toggleDeleteComment}
             onSubmit={handleDeleteComment}
-            isMutating={deleteCommentMutation.isLoading}
+            isMutating={deleteCommentMutation.isPending}
             confirmMessage={t('submit_delete_comment')}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_comment...')}

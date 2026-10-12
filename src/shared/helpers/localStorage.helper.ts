@@ -41,7 +41,8 @@ export const setUserInfo = (userInfor: { id: number; email: string; roleId: numb
 
 export const getUserInfo = (): { id: number; email: string; roleId: number } => {
   const result = localStorage.getItem(LocalStorageKey.UserInformation)
-  return result ? JSON.parse(result) : null
+  const userInfo = result ? JSON.parse(result) : null
+  return userInfo
 }
 
 export const clear = () => {

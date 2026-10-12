@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 import { useContext } from 'react'
@@ -21,11 +21,11 @@ export default function ProjectPermissionModal(props: Props) {
   const { t } = useTranslation()
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data: projectPermissionData, isLoading: projectPermissionLoading } = useQuery({
+  const { data: projectPermissionData, isPending: projectPermissionLoading } = useQuery({
     queryKey: [QueryKey.ProjectPermissions, projectRoleId],
     queryFn: () => ProjectPermissionApi.getProjectPermission(projectRoleId),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
 
@@ -53,7 +53,7 @@ export default function ProjectPermissionModal(props: Props) {
         {projectPermissions && projectPermissions.length !== 0 ? (
           <div className='mt-1 ml-3'>
             {projectPermissions.map((projectPermissionGroup, idx) => (
-              <div key={idx} className='border border-gray-300 rounded mb-4'>
+              <div key={idx} className='border border-gray-300 rounded-sm mb-4'>
                 <div className='text-center text-xl font-bold border-b border-gray-300 p-1'>
                   {projectPermissionGroup.module}
                 </div>

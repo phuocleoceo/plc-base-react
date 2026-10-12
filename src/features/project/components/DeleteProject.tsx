@@ -34,7 +34,7 @@ export default function DeleteProject(props: Props) {
     deleteProjectMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_project_success'))
-        queryClient.invalidateQueries([QueryKey.Projects])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Projects] })
         onClose()
         navigate('/')
       }
@@ -48,7 +48,7 @@ export default function DeleteProject(props: Props) {
   return (
     <Modal
       onSubmit={handleDeleteProject}
-      isMutating={deleteProjectMutation.isLoading}
+      isMutating={deleteProjectMutation.isPending}
       closeLabel={t('cancle')}
       submittingLabel={t('deleting_project...')}
       submitLabel={t('delete_project')}
@@ -64,7 +64,7 @@ export default function DeleteProject(props: Props) {
           value={typeContent}
           onChange={handleChangeTypeContent}
           id={project.name}
-          className='mt-5 block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none 
+          className='mt-5 block w-full rounded-xs border-2 px-3 py-1 text-sm outline-hidden
                       duration-200 focus:border-chakra-blue bg-slate-100 hover:border-gray-400'
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus

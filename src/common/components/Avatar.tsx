@@ -4,7 +4,7 @@ interface Props {
   title?: string
   className?: string
   onClick?: () => void
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   style?: {}
 }
 
@@ -15,7 +15,7 @@ export default function Avatar(props: Props) {
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div
       className={`relative grid shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-green-600 ${
-        className ?? 'h-8 w-8 border-[1px]'
+        className ?? 'h-8 w-8 border'
       }`}
       title={title ?? name}
       {...{ style, onClick }}

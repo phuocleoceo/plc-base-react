@@ -28,7 +28,7 @@ export default function ConfigSettingRow(props: Props) {
         <div className='w-56'>{configSetting.key}</div>
         <div className='w-60'>{configSetting.description}</div>
         <div className='w-40'>{configSetting.value}</div>
-        <div className='w-56 flex-grow'>
+        <div className='w-56 grow'>
           <div className='flex'>
             <button title='update_project_role' onClick={toggleUpdateConfigSetting} className='btn-icon bg-c-1'>
               <Icon width={22} icon='ic:baseline-edit' className='text-blue-500' />

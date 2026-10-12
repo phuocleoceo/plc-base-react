@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useContext } from 'react'
 
@@ -22,21 +22,21 @@ export default function MemberRoleModal(props: Props) {
   const queryClient = useQueryClient()
   const { isAuthenticated } = useContext(AppContext)
 
-  const { data: projectRoleData, isLoading: projectRoleLoading } = useQuery({
+  const { data: projectRoleData, isPending: projectRoleLoading } = useQuery({
     queryKey: [QueryKey.AllProjectRoles],
     queryFn: () => ProjectRoleApi.getAllProjectRoles(),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
 
   const projectRoles = projectRoleData?.data.data
 
-  const { data: memberRoleData, isLoading: memberRoleLoading } = useQuery({
+  const { data: memberRoleData, isPending: memberRoleLoading } = useQuery({
     queryKey: [QueryKey.MemberRoles, projectMemberId],
     queryFn: () => MemberRoleApi.getMemberRoles(projectMemberId),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 2 * 60 * 1000
   })
 
@@ -44,7 +44,7 @@ export default function MemberRoleModal(props: Props) {
 
   const handleClose = () => {
     onClose()
-    queryClient.invalidateQueries([QueryKey.ProjectMembers])
+    queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectMembers] })
   }
 
   return (

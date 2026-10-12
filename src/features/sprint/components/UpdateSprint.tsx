@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -37,10 +37,10 @@ export default function UpdateSprint(props: Props) {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
-  const { data: sprintData, isLoading: isLoadingSprint } = useQuery({
+  const { data: sprintData, isPending: isLoadingSprint } = useQuery({
     queryKey: [QueryKey.SprintDetail, sprintId],
     queryFn: () => SprintApi.getSprintById(projectId, sprintId),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
@@ -59,8 +59,8 @@ export default function UpdateSprint(props: Props) {
     updateSprintMutation.mutate(sprintData, {
       onSuccess: () => {
         toast.success(t('update_sprint_success'))
-        queryClient.invalidateQueries([QueryKey.AvailableSprint])
-        queryClient.invalidateQueries([QueryKey.SprintDetail, sprintId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.AvailableSprint] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.SprintDetail, sprintId] })
         reset()
         onClose()
       },
@@ -77,7 +77,7 @@ export default function UpdateSprint(props: Props) {
     <Modal
       isLoading={isLoadingSprint}
       onSubmit={handleUpdateSprint}
-      isMutating={updateSprintMutation.isLoading || isSubmitting}
+      isMutating={updateSprintMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('updating_sprint...')}
       submitLabel={t('update_sprint')}
@@ -85,7 +85,7 @@ export default function UpdateSprint(props: Props) {
     >
       <>
         <div className='mb-3'>
-          <span className='text-[22px] font-[600] text-c-text'>{t('update_sprint')}</span>
+          <span className='text-[22px] font-semibold text-c-text'>{t('update_sprint')}</span>
         </div>
 
         <div className='flex flex-col gap-4'>

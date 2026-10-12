@@ -45,7 +45,7 @@ export default function ProjectInvitationRow(props: Props) {
     deleteProjectinvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_project_invitation_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectInvitations])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectInvitations] })
         toggleDeleteInvitation()
       }
     })
@@ -77,7 +77,7 @@ export default function ProjectInvitationRow(props: Props) {
         {invitation.declinedAt && <div className='w-64'>{t('declined')}</div>}
         {!invitation.declinedAt && !invitation.acceptedAt && <div className='w-64'>{t('pending')}</div>}
 
-        <div className='flex-grow flex'>
+        <div className='grow flex'>
           {hasPermission(InvitationPermission.Delete) && !invitation.declinedAt && !invitation.acceptedAt && (
             <button
               title='delete_project_member'
@@ -96,7 +96,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingDeleteInvitation}
             onClose={toggleDeleteInvitation}
             onSubmit={handleDeleteProjectInvitation}
-            isMutating={deleteProjectinvitationMutation.isLoading}
+            isMutating={deleteProjectinvitationMutation.isPending}
             confirmMessage={t(`submit_delete_project_invitation`) + `: ${invitation.recipientEmail}`}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_project_invitation...')}

@@ -1,10 +1,10 @@
 import { createPortal } from 'react-dom'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import SpinningCircle from './SpinningCircle'
 
 interface Props {
   isShowing: boolean
-  children: JSX.Element
+  children: React.JSX.Element
   className?: string
   onClose: () => void
   onSubmit?: () => Promise<void>
@@ -41,7 +41,7 @@ export default function Modal(props: Props) {
     </div>
   ) : (
     <motion.div
-      className={`my-8 w-[90%] rounded-[4px] bg-white p-6 ${className ?? 'max-w-[31rem]'}`}
+      className={`my-8 w-[90%] rounded-sm bg-white p-6 ${className ?? 'max-w-124'}`}
       initial={{ scale: 0.9 }}
       animate={{ scale: 1 }}
       onClick={(e) => e.stopPropagation()}

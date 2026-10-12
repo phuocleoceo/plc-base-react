@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -35,10 +35,10 @@ export default function UpdateConfigSetting(props: Props) {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
-  const { data: configSettingData, isLoading: isLoadingConfigSetting } = useQuery({
+  const { data: configSettingData, isPending: isLoadingConfigSetting } = useQuery({
     queryKey: [QueryKey.ConfigSettingDetail, configSettingKey],
     queryFn: () => ConfigSettingApi.getConfigSettingDetail(configSettingKey),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
@@ -57,8 +57,8 @@ export default function UpdateConfigSetting(props: Props) {
     updateConfigSettingMutation.mutate(configSettingData, {
       onSuccess: () => {
         toast.success(t('update_config_setting_success'))
-        queryClient.invalidateQueries([QueryKey.ConfigSettings])
-        queryClient.invalidateQueries([QueryKey.ConfigSettingDetail, configSettingKey])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ConfigSettings] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ConfigSettingDetail, configSettingKey] })
         reset()
         onClose()
       },
@@ -75,7 +75,7 @@ export default function UpdateConfigSetting(props: Props) {
     <Modal
       isLoading={isLoadingConfigSetting}
       onSubmit={handleUpdateConfigSetting}
-      isMutating={updateConfigSettingMutation.isLoading || isSubmitting}
+      isMutating={updateConfigSettingMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('updating_config_setting...')}
       submitLabel={t('update_config_setting')}

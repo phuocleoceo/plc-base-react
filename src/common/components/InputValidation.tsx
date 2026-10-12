@@ -25,10 +25,10 @@ export default function InputValidation(props: Props) {
       <input
         id={label}
         defaultValue={defaultValue ?? ''}
-        className={`mt-2 block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
+        className={`mt-2 block w-full rounded-xs border-2 px-3 py-1 text-sm outline-hidden duration-200 focus:border-chakra-blue
           bg-slate-100 hover:border-gray-400 ${inputClass ?? ' border-transparent'} ${
-          readOnly ? 'pointer-events-none' : ''
-        }`}
+            readOnly ? 'pointer-events-none' : ''
+          }`}
         {...{ placeholder, readOnly, autoFocus, type }}
         {...register}
       />

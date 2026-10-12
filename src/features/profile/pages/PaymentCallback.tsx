@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import { SubmitPaymentRequest } from '~/features/profile/models'
@@ -12,25 +12,21 @@ import StarIMG from '~/assets/img/star.png'
 import SadIMG from '~/assets/img/sad.png'
 
 export default function PaymentCallback() {
-  // Avoid call api 2 times
-  const [isMounted, setIsMounted] = useState<boolean>(false)
+  // Submit only once, including when Strict Mode re-runs the effect.
+  const hasSubmitted = useRef(false)
   const [isHandling, setIsHandling] = useState<boolean>(true)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
   const queryParams = useQueryParams()
   const { t } = useTranslation()
 
-  const submitPaymentMutation = useMutation({
+  const { mutate: submitPayment } = useMutation({
     mutationFn: (body: SubmitPaymentRequest) => PaymentApi.submitPayment(body)
   })
 
   useEffect(() => {
-    setIsMounted(true)
-    return () => setIsMounted(false)
-  }, [])
-
-  useEffect(() => {
-    if (isMounted) {
+    if (!hasSubmitted.current) {
+      hasSubmitted.current = true
       const paymentData: SubmitPaymentRequest = {
         vnp_Amount: parseFloat(queryParams.vnp_Amount),
         vnp_BankCode: queryParams.vnp_BankCode,
@@ -48,14 +44,13 @@ export default function PaymentCallback() {
 
       window.history.pushState({}, '', 'payment/callback')
 
-      submitPaymentMutation.mutate(paymentData, {
+      submitPayment(paymentData, {
         onSettled: () => setIsHandling(false),
         onSuccess: () => setIsSuccess(true),
         onError: () => setIsSuccess(false)
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted])
+  }, [queryParams, submitPayment])
 
   return (
     <div className='mb-12 w-96 max-w-[24rem]'>

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -25,18 +25,18 @@ export default function CreateProject(props: Props) {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
 
-  const { data: freeProjectData, isLoading: isLoadingFreeProject } = useQuery({
+  const { data: freeProjectData, isPending: isLoadingFreeProject } = useQuery({
     queryKey: [QueryKey.ConfigSettingDetail, 'free_project'],
     queryFn: () => ConfigSettingApi.getConfigSettingDetail('free_project'),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
   const freeProject = freeProjectData?.data.data
 
-  const { data: projectPriceData, isLoading: isLoadingProjectPrice } = useQuery({
+  const { data: projectPriceData, isPending: isLoadingProjectPrice } = useQuery({
     queryKey: [QueryKey.ConfigSettingDetail, 'project_price'],
     queryFn: () => ConfigSettingApi.getConfigSettingDetail('project_price'),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
   const projectPrice = projectPriceData?.data.data
@@ -69,8 +69,8 @@ export default function CreateProject(props: Props) {
     createProjectMutation.mutate(projectData, {
       onSuccess: () => {
         toast.success(t('create_project_success'))
-        queryClient.invalidateQueries([QueryKey.Projects])
-        queryClient.invalidateQueries([QueryKey.PersonalProfile])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Projects] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.PersonalProfile] })
         reset()
         onClose()
       },
@@ -91,7 +91,7 @@ export default function CreateProject(props: Props) {
     <Modal
       isLoading={isLoadingFreeProject || isLoadingProjectPrice}
       onSubmit={handleCreateProject}
-      isMutating={createProjectMutation.isLoading || isSubmitting}
+      isMutating={createProjectMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('creating...')}
       submitLabel={t('create')}

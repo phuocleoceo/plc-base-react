@@ -1,5 +1,5 @@
 import { useContext, useState, lazy, Suspense } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@iconify/react'
 
@@ -39,10 +39,10 @@ export default function ProjectList() {
     })
   }
 
-  const { data: projectData, isLoading: isLoadingProject } = useQuery({
+  const { data: projectData, isPending: isLoadingProject } = useQuery({
     queryKey: [QueryKey.Projects, projectParams],
     queryFn: () => ProjectApi.getProjects(projectParams),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
@@ -72,7 +72,7 @@ export default function ProjectList() {
         <div className='mt-8'>
           <div className='relative'>
             <input
-              className='w-44 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-44 rounded-xs border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-hidden focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={projectParams.searchValue}
@@ -87,7 +87,7 @@ export default function ProjectList() {
             <div className='w-40'>{t('image')}</div>
             <div className='w-40'>{t('key')}</div>
             <div className='w-80'>{t('name')}</div>
-            <div className='flex-grow'>{t('leader')}</div>
+            <div className='grow'>{t('leader')}</div>
           </div>
           {projects && projects.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>

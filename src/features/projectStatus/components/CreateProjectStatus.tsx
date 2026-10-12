@@ -44,7 +44,7 @@ export default function CreateProjectStatus(props: Props) {
     createProjectStatusMutation.mutate(projectStatusData, {
       onSuccess: () => {
         toast.success(t('create_status_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectStatuses])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectStatuses] })
         reset()
         onClose()
       },
@@ -60,7 +60,7 @@ export default function CreateProjectStatus(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateProjectStatus}
-      isMutating={createProjectStatusMutation.isLoading || isSubmitting}
+      isMutating={createProjectStatusMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('creating...')}
       submitLabel={t('create')}

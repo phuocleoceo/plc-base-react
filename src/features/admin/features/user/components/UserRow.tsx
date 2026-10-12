@@ -48,7 +48,7 @@ export default function UserRow(props: Props) {
 
         <div className='w-32'>{user.identityNumber}</div>
 
-        <div className='w-56 flex-grow'>{getFullAddress()}</div>
+        <div className='w-56 grow'>{getFullAddress()}</div>
       </div>
 
       {isShowingUpdateUser && (

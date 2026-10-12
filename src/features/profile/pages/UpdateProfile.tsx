@@ -57,7 +57,7 @@ export default function UpdateProfile(props: Props) {
     updateProfileMutation.mutate(profileData, {
       onSuccess: () => {
         toast.success(t('update_profile_success'))
-        queryClient.invalidateQueries([QueryKey.PersonalProfile])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.PersonalProfile] })
         reset()
         onChangeTab(ProfileTab.ProfileDetail)
       },
@@ -135,7 +135,7 @@ export default function UpdateProfile(props: Props) {
         <ImageUpload originImage={user?.avatar} onSelectedImage={handleSelectImage} />
       </div>
 
-      <div className='mt-5 ml-2 flex w-[16.5rem] flex-col gap-4'>
+      <div className='mt-5 ml-2 flex w-66 flex-col gap-4'>
         <InputValidation
           label={t('display_name')}
           defaultValue={user?.displayName}

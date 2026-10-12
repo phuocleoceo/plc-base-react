@@ -45,7 +45,7 @@ export default function CreateSprint(props: Props) {
     createSprintMutation.mutate(sprintData, {
       onSuccess: () => {
         toast.success(t('create_sprint_success'))
-        queryClient.invalidateQueries([QueryKey.AvailableSprint])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.AvailableSprint] })
         reset()
         onClose()
       },
@@ -61,7 +61,7 @@ export default function CreateSprint(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateSprint}
-      isMutating={createSprintMutation.isLoading || isSubmitting}
+      isMutating={createSprintMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('creating_sprint...')}
       submitLabel={t('create_sprint')}
@@ -69,7 +69,7 @@ export default function CreateSprint(props: Props) {
     >
       <>
         <div className='mb-3'>
-          <span className='text-[22px] font-[600] text-c-text'>{t('create_sprint')}</span>
+          <span className='text-[22px] font-semibold text-c-text'>{t('create_sprint')}</span>
         </div>
 
         <div className='flex flex-col gap-4'>

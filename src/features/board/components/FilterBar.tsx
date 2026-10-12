@@ -28,7 +28,7 @@ export default function FilterBar(props: Props) {
   const [searchValue, setSearchValue] = useState<string>()
   const [selectedMember, setSelectedMember] = useState<number>()
 
-  const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
+  const { data: projectMemberData, isPending: projectMemberLoading } = useQuery({
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
@@ -72,7 +72,7 @@ export default function FilterBar(props: Props) {
           value={searchValue}
           onChange={handleChangeSearchValue}
           placeholder={t('search_issues')}
-          className='w-44 rounded-sm border-[1.5px] bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+          className='w-44 rounded-xs border-[1.5px] bg-transparent py-[5px] pl-9 pr-2 text-sm outline-hidden focus:border-chakra-blue'
         />
         <Icon width={20} icon='ant-design:search-outlined' className='absolute top-[6px] left-2 w-[19px]' />
       </div>
@@ -90,7 +90,7 @@ export default function FilterBar(props: Props) {
               style={{ zIndex: projectMembers.length - idx }}
               onClick={() => handleSelectMember(id)}
               className={`-ml-2 h-10 w-10 border-2 duration-300 hover:-translate-y-2 ${
-                id === selectedMember ? 'border-blue-500 border-2.5' : ''
+                id === selectedMember ? 'border-blue-500 border-[2.5px]' : ''
               }`}
             />
           ))}

@@ -43,7 +43,7 @@ export default function CreateProjectRole(props: Props) {
     createProjectRoleMutation.mutate(projectRoleData, {
       onSuccess: () => {
         toast.success(t('create_project_role_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectRoles])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectRoles] })
         reset()
         onClose()
       },
@@ -59,7 +59,7 @@ export default function CreateProjectRole(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateProjectRole}
-      isMutating={createProjectRoleMutation.isLoading || isSubmitting}
+      isMutating={createProjectRoleMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('creating_project_role...')}
       submitLabel={t('create_project_role')}

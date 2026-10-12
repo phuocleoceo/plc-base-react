@@ -72,7 +72,7 @@ export default function CreateIssue(props: Props) {
     createIssueMutation.mutate(issueData, {
       onSuccess: () => {
         toast.success(t('create_issue_success'))
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
         reset()
         onClose()
       },
@@ -88,7 +88,7 @@ export default function CreateIssue(props: Props) {
   return (
     <Modal
       onSubmit={handleCreateIssue}
-      isMutating={createIssueMutation.isLoading || isSubmitting}
+      isMutating={createIssueMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('creating_issue...')}
       submitLabel={t('create_issue')}
