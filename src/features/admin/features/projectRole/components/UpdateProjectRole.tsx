@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -35,10 +35,10 @@ export default function UpdateProjectRole(props: Props) {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
-  const { data: projectRoleData, isLoading: isLoadingProjectRole } = useQuery({
+  const { data: projectRoleData, isPending: isLoadingProjectRole } = useQuery({
     queryKey: [QueryKey.ProjectRole, projectRoleId],
     queryFn: () => ProjectRoleApi.getProjectRole(projectRoleId),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
@@ -57,8 +57,8 @@ export default function UpdateProjectRole(props: Props) {
     updateProjectRoleMutation.mutate(projectRoleData, {
       onSuccess: () => {
         toast.success(t('update_project_role_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectRoles])
-        queryClient.invalidateQueries([QueryKey.ProjectRole, projectRoleId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectRoles] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectRole, projectRoleId] })
         reset()
         onClose()
       },
@@ -75,7 +75,7 @@ export default function UpdateProjectRole(props: Props) {
     <Modal
       isLoading={isLoadingProjectRole}
       onSubmit={handleUpdateProjectRole}
-      isMutating={updateProjectRoleMutation.isLoading || isSubmitting}
+      isMutating={updateProjectRoleMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('updating_project_role...')}
       submitLabel={t('update_project_role')}

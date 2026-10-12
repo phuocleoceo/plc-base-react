@@ -1,5 +1,5 @@
 import { useContext, useState, lazy, Suspense } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
@@ -47,11 +47,11 @@ export default function ProjectInvitationList() {
     })
   }
 
-  const { data: invitationData, isLoading: invitationLoading } = useQuery({
+  const { data: invitationData, isPending: invitationLoading } = useQuery({
     queryKey: [QueryKey.ProjectInvitations, projectId, invitationParams],
     queryFn: () => InvitationApi.getInvitationForProject(projectId, invitationParams),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 2 * 60 * 1000
   })
 
@@ -82,7 +82,7 @@ export default function ProjectInvitationList() {
         <div className='mt-8'>
           <div className='relative'>
             <input
-              className='w-44 rounded-sm border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-none focus:border-chakra-blue'
+              className='w-44 rounded-xs border-2 bg-transparent py-[5px] pl-9 pr-2 text-sm outline-hidden focus:border-chakra-blue'
               name='searchValue'
               onChange={handleChangeParams}
               value={invitationParams.searchValue}
@@ -97,7 +97,7 @@ export default function ProjectInvitationList() {
             <div className='w-60'>{t('recipient')}</div>
             <div className='w-72'>{t('email')}</div>
             <div className='w-64'>{t('status')}</div>
-            <div className='flex-grow'>{t('action')}</div>
+            <div className='grow'>{t('action')}</div>
           </div>
           {invitations && invitations.length !== 0 ? (
             <div className='mt-1 border-t-2 border-c-3'>

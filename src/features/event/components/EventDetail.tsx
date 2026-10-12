@@ -59,7 +59,7 @@ export default function EventDetail(props: Props) {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
-  const { data: projectMemberData, isLoading: isLoadingProjectMember } = useQuery({
+  const { data: projectMemberData, isPending: isLoadingProjectMember } = useQuery({
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
@@ -73,7 +73,7 @@ export default function EventDetail(props: Props) {
       icon: pm.avatar
     })) || []
 
-  const { data: eventData, isLoading: isLoadingEvent } = useQuery({
+  const { data: eventData, isPending: isLoadingEvent } = useQuery({
     queryKey: [QueryKey.EventDetail, projectId, eventId],
     queryFn: () => EventApi.getEventDetail(projectId, eventId),
     enabled: isAuthenticated,
@@ -96,8 +96,8 @@ export default function EventDetail(props: Props) {
     updateEventMutation.mutate(eventData, {
       onSuccess: () => {
         toast.success(t('update_event_success'))
-        queryClient.invalidateQueries([QueryKey.EventSchedule])
-        queryClient.invalidateQueries([QueryKey.EventDetail, projectId, eventId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.EventSchedule] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.EventDetail, projectId, eventId] })
         toggleUpdateEvent()
       },
       onError: (error) => {
@@ -117,7 +117,7 @@ export default function EventDetail(props: Props) {
     deleteEventMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_event_success'))
-        queryClient.invalidateQueries([QueryKey.EventSchedule])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.EventSchedule] })
         toggleDeleteEvent()
         onClose()
       }
@@ -296,7 +296,7 @@ export default function EventDetail(props: Props) {
             isShowing={isShowingDeleteEvent}
             onClose={toggleDeleteEvent}
             onSubmit={handleDeleteEvent}
-            isMutating={deleteEventMutation.isLoading}
+            isMutating={deleteEventMutation.isPending}
             confirmMessage={`${t('submit_delete_event')} ${event?.title}`}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_event...')}

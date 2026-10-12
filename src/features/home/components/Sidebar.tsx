@@ -2,7 +2,7 @@ import { Suspense, lazy, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 import { LocalStorageHelper } from '~/shared/helpers'
 import { Avatar, IconBtn } from '~/common/components'
@@ -17,12 +17,14 @@ const Profile = lazy(() => import('~/features/profile/pages/Profile'))
 
 export default function Sidebar() {
   const { i18n } = useTranslation()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const currentLanguage = locales[i18n.language as keyof typeof locales]
 
   const navigate = useNavigate()
 
   const { isAuthenticated, setIsAuthenticated, isShowingProfile, toggleProfile } = useContext(AppContext)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const changeLanguage = (lng: 'en' | 'vi') => {
     i18n.changeLanguage(lng)
   }
@@ -69,7 +71,7 @@ export default function Sidebar() {
                 src={user.avatar}
                 name={user.displayName}
                 onClick={toggleProfile}
-                className='h-9 w-9 border-[1px] hover:border-green-500'
+                className='h-9 w-9 border hover:border-green-500'
               />
               <IconBtn onClick={handleGetInvitation} icon='iconoir:telegram' title='invitations' />
               <IconBtn onClick={handleLogOut} icon='charm:sign-out' title='log_out' />
@@ -82,7 +84,7 @@ export default function Sidebar() {
           <Profile user={user} />
         </Suspense>
       </motion.div>
-      <div className='absolute top-0 right-0 h-full w-[2px] bg-c-3 peer-hover:bg-secondary' />
+      <div className='absolute top-0 right-0 h-full w-0.5 bg-c-3 peer-hover:bg-secondary' />
     </div>
   )
 }

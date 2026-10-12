@@ -16,13 +16,14 @@ export default function CheckBoxButton(props: Props) {
   }
 
   return (
-    <label className='flex items-center'>
+    <div className='flex items-center'>
       <input
         type='checkbox'
+        aria-label='Select item'
         className='form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'
         checked={isChecked}
         onChange={handleCheckboxChange}
       />
-    </label>
+    </div>
   )
 }

@@ -55,7 +55,7 @@ export default function IssueDetail(props: Props) {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
 
-  const { data: projectMemberData, isLoading: isLoadingProjectMember } = useQuery({
+  const { data: projectMemberData, isPending: isLoadingProjectMember } = useQuery({
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
@@ -69,7 +69,7 @@ export default function IssueDetail(props: Props) {
       icon: pm.avatar
     })) || []
 
-  const { data: issueData, isLoading: isLoadingIssue } = useQuery({
+  const { data: issueData, isPending: isLoadingIssue } = useQuery({
     queryKey: [QueryKey.IssueDetail, projectId, issueId],
     queryFn: () => IssueApi.getIssueDetail(projectId, issueId),
     enabled: isAuthenticated,
@@ -92,9 +92,9 @@ export default function IssueDetail(props: Props) {
     updateIssueMutation.mutate(issueData, {
       onSuccess: () => {
         toast.success(t('update_issue_success'))
-        queryClient.invalidateQueries([QueryKey.IssueDetail, projectId, issueId])
-        queryClient.invalidateQueries([QueryKey.IssueInBoard])
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueDetail, projectId, issueId] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
         toggleUpdateIssue()
       },
       onError: (error) => {
@@ -114,8 +114,8 @@ export default function IssueDetail(props: Props) {
     deleteIssueMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_issue_success'))
-        queryClient.invalidateQueries([QueryKey.IssueInBoard])
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
         toggleDeleteIssue()
       }
     })
@@ -380,7 +380,7 @@ export default function IssueDetail(props: Props) {
             isShowing={isShowingDeleteIssue}
             onClose={toggleDeleteIssue}
             onSubmit={handleDeleteIssue}
-            isMutating={deleteIssueMutation.isLoading}
+            isMutating={deleteIssueMutation.isPending}
             confirmMessage={t('submit_delete_issue')}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_issue...')}

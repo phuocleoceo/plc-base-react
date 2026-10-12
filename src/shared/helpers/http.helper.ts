@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
+import { AxiosError, AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig, create } from 'axios'
 import { toast } from 'react-toastify'
 import queryString from 'query-string'
 
@@ -21,7 +21,7 @@ class Http {
     this.refreshToken = LocalStorageHelper.getRefreshToken()
     this.refreshTokenRequest = null
 
-    this.instance = axios.create({
+    this.instance = create({
       baseURL: AppConfig.PLCBaseApi,
       timeout: EnvConfig.HttpTimeout,
       headers: {

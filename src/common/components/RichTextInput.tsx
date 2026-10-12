@@ -1,4 +1,34 @@
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import 'ckeditor5/ckeditor5.css'
+
+import {
+  Autoformat,
+  BlockQuote,
+  Bold,
+  CKBox,
+  CKFinder,
+  CKFinderUploadAdapter,
+  ClassicEditor,
+  CloudServices,
+  EasyImage,
+  Essentials,
+  Heading,
+  Image,
+  ImageCaption,
+  ImageStyle,
+  ImageToolbar,
+  ImageUpload,
+  Indent,
+  Italic,
+  Link,
+  List,
+  MediaEmbed,
+  Paragraph,
+  PasteFromOffice,
+  PictureEditing,
+  Table,
+  TableToolbar,
+  TextTransformation
+} from 'ckeditor5'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -51,6 +81,71 @@ export default function RichTextInput(props: Prop) {
             onChange(editor.getData())
           }}
           config={{
+            // Keep the plugins and toolbar from the former Classic predefined build.
+            plugins: [
+              Autoformat,
+              BlockQuote,
+              Bold,
+              CKBox,
+              CKFinder,
+              CKFinderUploadAdapter,
+              CloudServices,
+              EasyImage,
+              Essentials,
+              Heading,
+              Image,
+              ImageCaption,
+              ImageStyle,
+              ImageToolbar,
+              ImageUpload,
+              Indent,
+              Italic,
+              Link,
+              List,
+              MediaEmbed,
+              Paragraph,
+              PasteFromOffice,
+              PictureEditing,
+              Table,
+              TableToolbar,
+              TextTransformation
+            ],
+            toolbar: {
+              items: [
+                'undo',
+                'redo',
+                '|',
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                '|',
+                'link',
+                'uploadImage',
+                'insertTable',
+                'blockQuote',
+                'mediaEmbed',
+                '|',
+                'bulletedList',
+                'numberedList',
+                'outdent',
+                'indent'
+              ]
+            },
+            image: {
+              toolbar: [
+                'imageStyle:inline',
+                'imageStyle:block',
+                'imageStyle:side',
+                '|',
+                'toggleImageCaption',
+                'imageTextAlternative'
+              ]
+            },
+            table: {
+              contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            },
+            language: 'en',
             extraPlugins: [uploadPlugin],
             mediaEmbed: {
               previewsInData: true

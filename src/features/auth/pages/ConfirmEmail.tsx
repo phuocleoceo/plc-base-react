@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ConfirmEmailRequest } from '~/features/auth/models'
@@ -12,26 +12,22 @@ import StarIMG from '~/assets/img/star.png'
 import SadIMG from '~/assets/img/sad.png'
 
 export default function ConfirmEmail() {
-  // Avoid call api 2 times
-  const [isMounted, setIsMounted] = useState<boolean>(false)
+  // Submit only once, including when Strict Mode re-runs the effect.
+  const hasSubmitted = useRef(false)
   const [isVerifying, setIsVerifying] = useState<boolean>(true)
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false)
 
   const queryParams = useQueryParams()
   const { t } = useTranslation()
 
-  const confirmEmailMutation = useMutation({
+  const { mutate: confirmEmail } = useMutation({
     mutationFn: (body: ConfirmEmailRequest) => AuthAPI.confirmEmail(body)
   })
 
   useEffect(() => {
-    setIsMounted(true)
-    return () => setIsMounted(false)
-  }, [])
-
-  useEffect(() => {
-    if (isMounted) {
-      confirmEmailMutation.mutate(
+    if (!hasSubmitted.current) {
+      hasSubmitted.current = true
+      confirmEmail(
         { userId: parseInt(queryParams.userId), code: queryParams.code },
         {
           onSettled: () => setIsVerifying(false),
@@ -40,8 +36,7 @@ export default function ConfirmEmail() {
         }
       )
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted])
+  }, [queryParams, confirmEmail])
 
   return (
     <div className='mb-12 w-96 max-w-[24rem]'>

@@ -38,7 +38,7 @@ export default function ProjectRoleRow(props: Props) {
     deleteProjectRoleMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_project_role_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectRoles])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectRoles] })
         toggleDeleteProjectRole()
       }
     })
@@ -53,7 +53,7 @@ export default function ProjectRoleRow(props: Props) {
         <div className='w-32 text-center'>{idx + 1}</div>
         <div className='w-56'>{projectRole.name}</div>
         <div className='w-64'>{projectRole.description}</div>
-        <div className='flex-grow flex'>
+        <div className='grow flex'>
           <div className='flex'>
             <button title='update_project_role' onClick={toggleUpdateProjectRole} className='btn-icon bg-c-1'>
               <Icon width={22} icon='ic:baseline-edit' className='text-blue-500' />
@@ -86,7 +86,7 @@ export default function ProjectRoleRow(props: Props) {
             isShowing={isShowingDeleteProjectRole}
             onClose={toggleDeleteProjectRole}
             onSubmit={handleDeleteProjectRole}
-            isMutating={deleteProjectRoleMutation.isLoading}
+            isMutating={deleteProjectRoleMutation.isPending}
             confirmMessage={t('submit_delete_project_role') + `: ${projectRole.name}`}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_project_role...')}

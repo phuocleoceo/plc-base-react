@@ -1,6 +1,52 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Resolve theme aliases where .plc-theme defines the underlying variables. */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-chakra-blue: #0061cc;
+  --color-c-text: var(--c-text);
+  --color-c-1: var(--c-1);
+  --color-c-2: var(--c-2);
+  --color-c-3: var(--c-3);
+  --color-c-4: var(--c-4);
+  --color-c-5: var(--c-5);
+  --color-c-6: var(--c-6);
+  --color-c-7: var(--c-7);
+  --color-green-150: #c6f6d5;
+}
+
+@theme {
+  --shadow-issue: 0 1px 2px 0 #091e4240;
+  --shadow-list: 0 0 2px 0 #091e4230;
+
+  --text-90p: 90%;
+  --text-80p: 80%;
+
+  --default-ring-width: 3px;
+  --default-ring-color: var(--color-blue-500);
+}
+
+/* Tailwind v4 changed a few Preflight defaults. These rules keep the v3 look. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+}
 
 @layer base {
   html {
@@ -41,9 +87,9 @@
     @apply rounded-[3px] p-1 hover:bg-c-2;
   }
   .bg-jira-gradient {
-    @apply bg-gradient-to-r from-[#151642] to-[#321898];
+    @apply bg-linear-to-r from-[#151642] to-[#321898];
   }
   .btn-toggle {
-    @apply relative h-[19px] cursor-pointer appearance-none rounded-full bg-slate-300 after:absolute after:top-[1.5px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:duration-150 after:content-[""] checked:bg-blue-500 checked:after:translate-x-[12px];
+    @apply relative h-4.75 cursor-pointer appearance-none rounded-full bg-slate-300 after:absolute after:top-[1.5px] after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:duration-150 after:content-[""] checked:bg-blue-500 checked:after:translate-x-3;
   }
 }

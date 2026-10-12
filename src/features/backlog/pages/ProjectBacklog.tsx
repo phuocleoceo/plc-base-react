@@ -1,5 +1,5 @@
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useContext, lazy, Suspense, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -51,7 +51,7 @@ export default function ProjectBacklog() {
     queryKey: [QueryKey.IssueInBacklog, projectId, issueParams],
     queryFn: () => IssueApi.getIssuesInBacklog(projectId, issueParams),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1 * 60 * 1000
   })
 
@@ -80,8 +80,8 @@ export default function ProjectBacklog() {
     moveIssueToSprintMutation.mutate(issues, {
       onSuccess: () => {
         toast.success(t('move_issue_to_sprint_success'))
-        queryClient.invalidateQueries([QueryKey.IssueInBacklog])
-        queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
         setSelectedIssues([])
         toggleMoveIssueModal()
         toggleMoveIssueSelect()
@@ -152,7 +152,7 @@ export default function ProjectBacklog() {
         }
       },
       {
-        onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBacklog])
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBacklog] })
       }
     )
   }
@@ -229,7 +229,7 @@ export default function ProjectBacklog() {
             isShowing={isShowingMoveIssueModal}
             onClose={toggleMoveIssueModal}
             onSubmit={handleMoveIssueToSprint}
-            isMutating={moveIssueToSprintMutation.isLoading}
+            isMutating={moveIssueToSprintMutation.isPending}
             confirmMessage={t('submit_move_issue_to_sprint')}
             closeLabel={t('cancle')}
             submittingLabel={t('moving...')}

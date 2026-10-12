@@ -1,5 +1,5 @@
 import { memo, useContext, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { GetIssueCommentsParams } from '~/features/issue/models'
@@ -33,11 +33,11 @@ function IssueComment(props: Props) {
     })
   }
 
-  const { data: commentData, isLoading: isLoadingComment } = useQuery({
+  const { data: commentData, isPending: isLoadingComment } = useQuery({
     queryKey: [QueryKey.IssueComment, issueId, commentParams],
     queryFn: () => IssueCommentApi.getCommentsForIssue(issueId, commentParams),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 2 * 60 * 1000
   })
 

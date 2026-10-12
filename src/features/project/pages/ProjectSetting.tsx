@@ -47,7 +47,7 @@ export default function ProjectSetting() {
 
   const { currentProject, isLoadingProject } = useCurrentProject(projectId)
 
-  const { data: projectMemberData, isLoading: projectMemberLoading } = useQuery({
+  const { data: projectMemberData, isPending: projectMemberLoading } = useQuery({
     queryKey: [QueryKey.ProjectMemberSelect, projectId],
     queryFn: () => ProjectMemberApi.getMemberForSelect(projectId),
     enabled: isAuthenticated,
@@ -81,8 +81,8 @@ export default function ProjectSetting() {
     updateProjectMutation.mutate(updateProjectData, {
       onSuccess: () => {
         toast.success(t('update_project_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectDetail, projectId])
-        queryClient.invalidateQueries([QueryKey.Projects])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectDetail, projectId] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Projects] })
         reset()
       },
       onError: (error) => {

@@ -59,7 +59,7 @@ export default function CompleteSprint(props: Props) {
     completeSprintMutation.mutate(completeSprintData, {
       onSuccess: () => {
         toast.success(t('completed_sprint'))
-        queryClient.invalidateQueries([QueryKey.AvailableSprint])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.AvailableSprint] })
         onClose()
       }
     })
@@ -68,7 +68,7 @@ export default function CompleteSprint(props: Props) {
   return (
     <Modal
       onSubmit={handleCompleteSprint}
-      isMutating={completeSprintMutation.isLoading}
+      isMutating={completeSprintMutation.isPending}
       closeLabel={t('cancle')}
       submittingLabel={t('completing...')}
       submitLabel={t('complete')}

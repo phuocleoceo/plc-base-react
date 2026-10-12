@@ -57,16 +57,16 @@ export default function DepositCredit(props: Props) {
   return (
     <Modal
       onSubmit={handleCreatePayment}
-      isMutating={createPaymentMutation.isLoading || isSubmitting}
+      isMutating={createPaymentMutation.isPending || isSubmitting}
       closeLabel={t('cancle')}
       submittingLabel={t('making_payment...')}
       submitLabel={t('make_payment')}
       {...{ isShowing, onClose }}
-      className='max-w-[25rem]'
+      className='max-w-100'
     >
       <>
         <div className='mb-4'>
-          <span className='text-[22px] font-[600] text-c-text'>{t('create_payment')}</span>
+          <span className='text-[22px] font-semibold text-c-text'>{t('create_payment')}</span>
         </div>
         <div className='flex flex-col gap-4'>
           <InputValidation

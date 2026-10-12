@@ -49,7 +49,7 @@ export default function ProjectMemberRow(props: Props) {
     deleteProjectMemberMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('delete_project_member_success'))
-        queryClient.invalidateQueries([QueryKey.ProjectMembers])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectMembers] })
         toggleDeleteMember()
       }
     })
@@ -84,7 +84,7 @@ export default function ProjectMemberRow(props: Props) {
         </div>
         <div className='w-64'>{projectMember.email}</div>
         <div className='w-64'>{getMemberRoles()}</div>
-        <div className='flex-grow flex'>
+        <div className='grow flex'>
           {hasPermission(MemberRolePermission.GetAll) && (
             <button title='edit_member_role' onClick={handleClickMemberRole} className='btn-icon bg-c-1'>
               <Icon width={22} icon='iconoir:agile' className='text-blue-500' />
@@ -105,7 +105,7 @@ export default function ProjectMemberRow(props: Props) {
             isShowing={isShowingDeleteMember}
             onClose={toggleDeleteMember}
             onSubmit={handleDeleteProjectMember}
-            isMutating={deleteProjectMemberMutation.isLoading}
+            isMutating={deleteProjectMemberMutation.isPending}
             confirmMessage={t(`submit_delete_project_member`) + `: ${projectMember.name}`}
             closeLabel={t('cancle')}
             submittingLabel={t('deleting_project_member...')}

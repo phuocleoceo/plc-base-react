@@ -46,10 +46,10 @@ export default function IssueBacklog(props: Props) {
                   return
                 }
               : hasPermission(IssuePermission.GetOne)
-              ? toggleIssueDetail
-              : () => {
-                  return
-                }
+                ? toggleIssueDetail
+                : () => {
+                    return
+                  }
           }
           onKeyDown={toggleIssueDetail}
           tabIndex={issue.id}

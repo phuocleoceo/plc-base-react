@@ -1,5 +1,5 @@
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -40,11 +40,11 @@ export default function ProjectBoard() {
   const queryClient = useQueryClient()
 
   // Sprint
-  const { data: sprintData, isLoading: isLoadingSprint } = useQuery({
+  const { data: sprintData, isPending: isLoadingSprint } = useQuery({
     queryKey: [QueryKey.AvailableSprint, projectId],
     queryFn: () => SprintApi.getAvailableSprint(projectId),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1 * 60 * 1000
   })
 
@@ -55,7 +55,7 @@ export default function ProjectBoard() {
     queryKey: [QueryKey.ProjectStatuses, projectId],
     queryFn: () => ProjectStatusApi.getProjectStatus(projectId),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1 * 60 * 1000
   })
 
@@ -129,7 +129,7 @@ export default function ProjectBoard() {
         }
       },
       {
-        onSuccess: () => queryClient.invalidateQueries([QueryKey.ProjectStatuses])
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKey.ProjectStatuses] })
       }
     )
   }
@@ -144,7 +144,7 @@ export default function ProjectBoard() {
     queryKey: [QueryKey.IssueInBoard, projectId, sprint, issueParams],
     queryFn: () => IssueApi.getIssuesInBoard(projectId, sprint?.id, issueParams),
     enabled: isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1 * 60 * 1000
   })
 
@@ -270,7 +270,7 @@ export default function ProjectBoard() {
         }
       },
       {
-        onSuccess: () => queryClient.invalidateQueries([QueryKey.IssueInBoard])
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: [QueryKey.IssueInBoard] })
       }
     )
   }

@@ -34,7 +34,7 @@ export default function DragDropIssue(props: Props) {
   return (
     <>
       <DraggableWrapper
-        className='hover:bg-c-4 mb-2 w-full rounded-sm bg-c-1 p-2 shadow-issue'
+        className='hover:bg-c-4 mb-2 w-full rounded-xs bg-c-1 p-2 shadow-issue'
         index={idx}
         draggableId={`issue-${issue.id}`}
         isDragDisabled={
@@ -50,10 +50,10 @@ export default function DragDropIssue(props: Props) {
                   return
                 }
               : hasPermission(IssuePermission.GetOne)
-              ? toggleIssueDetail
-              : () => {
-                  return
-                }
+                ? toggleIssueDetail
+                : () => {
+                    return
+                  }
           }
           onKeyDown={toggleIssueDetail}
           tabIndex={issue.id}

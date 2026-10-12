@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -48,8 +48,8 @@ export default function UpdateUser(props: Props) {
     updateUserMutation.mutate(userData, {
       onSuccess: () => {
         toast.success(t('update_user_success'))
-        queryClient.invalidateQueries([QueryKey.UserAccounts])
-        queryClient.invalidateQueries([QueryKey.UserAccountDetail, userId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.UserAccounts] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.UserAccountDetail, userId] })
         onClose()
       },
       onError: (error) => {
@@ -61,20 +61,20 @@ export default function UpdateUser(props: Props) {
     })
   })
 
-  const { data: userData, isLoading: isLoadingUser } = useQuery({
+  const { data: userData, isPending: isLoadingUser } = useQuery({
     queryKey: [QueryKey.UserAccountDetail, userId],
     queryFn: () => UserAccountApi.getUserAccountDetail(userId),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
 
   const user = userData?.data.data
 
-  const { data: roleData, isLoading: isLoadingRole } = useQuery({
+  const { data: roleData, isPending: isLoadingRole } = useQuery({
     queryKey: [QueryKey.Roles],
     queryFn: () => RoleApi.getRoles(),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: isAuthenticated,
     staleTime: 2 * 60 * 1000
   })
@@ -90,7 +90,7 @@ export default function UpdateUser(props: Props) {
       <Modal
         isLoading={isLoadingUser || isLoadingRole}
         onSubmit={handleUpdateUser}
-        isMutating={updateUserMutation.isLoading || isSubmitting}
+        isMutating={updateUserMutation.isPending || isSubmitting}
         closeLabel={t('cancle')}
         submittingLabel={t('updating_user...')}
         submitLabel={t('update_user')}

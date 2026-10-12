@@ -37,7 +37,7 @@ export default function ProjectRow(props: Props) {
       </div>
       <div className='w-40'>{project.key}</div>
       <div className='w-80'>{project.name}</div>
-      <div className='flex-grow flex'>
+      <div className='grow flex'>
         <Avatar
           title='Profile'
           src={project.leaderAvatar}

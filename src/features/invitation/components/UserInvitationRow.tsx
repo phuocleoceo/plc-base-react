@@ -41,8 +41,8 @@ export default function ProjectInvitationRow(props: Props) {
     acceptInvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('accept_invitation_success'))
-        queryClient.invalidateQueries([QueryKey.UserInvitations])
-        queryClient.invalidateQueries([QueryKey.Projects])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.UserInvitations] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Projects] })
         toggleAcceptInvitation()
       }
     })
@@ -61,8 +61,8 @@ export default function ProjectInvitationRow(props: Props) {
     declineInvitationMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success(t('decline_invitation_success'))
-        queryClient.invalidateQueries([QueryKey.UserInvitations])
-        queryClient.invalidateQueries([QueryKey.Projects])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.UserInvitations] })
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Projects] })
         toggleDeclineInvitation()
       }
     })
@@ -99,7 +99,7 @@ export default function ProjectInvitationRow(props: Props) {
           <span className='ml-3'>{invitation.projectName}</span>
         </div>
 
-        <div className='flex-grow flex'>
+        <div className='grow flex'>
           {invitation.acceptedAt && <span>{t('accepted')}</span>}
           {invitation.declinedAt && <span>{t('declined')}</span>}
 
@@ -123,7 +123,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingAcceptInvitation}
             onClose={toggleAcceptInvitation}
             onSubmit={handleAcceptInvitation}
-            isMutating={acceptInvitationMutation.isLoading}
+            isMutating={acceptInvitationMutation.isPending}
             confirmMessage={t('submit_accept_invitation') + `: ${invitation.projectName}`}
             closeLabel={t('cancle')}
             submittingLabel={t('accepting_invitation...')}
@@ -139,7 +139,7 @@ export default function ProjectInvitationRow(props: Props) {
             isShowing={isShowingDeclineInvitation}
             onClose={toggleDeclineInvitation}
             onSubmit={handleDeclineInvitation}
-            isMutating={declineInvitationMutation.isLoading}
+            isMutating={declineInvitationMutation.isPending}
             confirmMessage={t('submit_decline_invitation') + `: ${invitation.projectName}`}
             closeLabel={t('cancle')}
             submittingLabel={t('declining_invitation...')}

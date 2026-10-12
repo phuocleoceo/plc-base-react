@@ -39,7 +39,7 @@ export default function MemberRoleModal(props: Props) {
     if (isEnable) {
       createMemberRoleMutation.mutate(data, {
         onSuccess: () => {
-          queryClient.invalidateQueries([QueryKey.MemberRoles])
+          queryClient.invalidateQueries({ queryKey: [QueryKey.MemberRoles] })
         }
       })
       return
@@ -47,7 +47,7 @@ export default function MemberRoleModal(props: Props) {
 
     deleteMemberRoleMutation.mutate(data, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.MemberRoles])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.MemberRoles] })
       }
     })
   }

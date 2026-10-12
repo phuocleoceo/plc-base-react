@@ -1,6 +1,6 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Icon } from '@iconify/react'
 
 import {

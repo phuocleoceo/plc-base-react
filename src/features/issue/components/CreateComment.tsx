@@ -66,7 +66,7 @@ function CreateComment(props: Props) {
 
     createCommentMutation.mutate(commentData, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QueryKey.IssueComment, issueId])
+        queryClient.invalidateQueries({ queryKey: [QueryKey.IssueComment, issueId] })
         toggleCreateComment()
         reset()
       },
@@ -91,7 +91,7 @@ function CreateComment(props: Props) {
           <input
             onClick={toggleCreateComment}
             placeholder={t('add_your_comment...')}
-            className='block w-full rounded-sm border-2 px-3 py-1 text-sm outline-none duration-200 focus:border-chakra-blue 
+            className='block w-full rounded-xs border-2 px-3 py-1 text-sm outline-hidden duration-200 focus:border-chakra-blue
             bg-slate-100 hover:border-gray-400 border-transparent'
           />
         )}
@@ -99,7 +99,7 @@ function CreateComment(props: Props) {
           {isShowingCreateComment && (
             <>
               <button onClick={handleCreateProject} className='btn w-[4.5rem]'>
-                {createCommentMutation.isLoading || isSubmitting ? t('adding...') : t('add')}
+                {createCommentMutation.isPending || isSubmitting ? t('adding...') : t('add')}
               </button>
 
               <button onClick={toggleCreateComment} className='btn-alert w-[4.5rem]'>
